@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De camino al aprobado — Preparación individualizada Escala Básica Policía Nacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E1B2E;
+    --ink-soft:#16263F;
+    --paper:#F4F1E9;
+    --paper-dim:#E9E4D6;
+    --blue:#2B4C7E;
+    --signal:#3D7DFF;
+    --brass:#B8924A;
+    --line: rgba(244,241,233,0.18);
+    --line-dark: rgba(14,27,46,0.14);
+    --display: 'Barlow Condensed', sans-serif;
+    --body: 'Source Sans 3', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  a{color:inherit;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+
+  /* ===== top bar: dispatch strip ===== */
+  .dispatch-strip{
+    background:var(--ink);
+    color:var(--paper-dim);
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.06em;
+    padding:9px 0;
+    overflow:hidden;
+    border-bottom:1px solid var(--signal);
+  }
+  .dispatch-strip .wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .dispatch-strip .blink{color:var(--signal);}
+  .dispatch-strip .blink::before{
+    content:"●"; margin-right:6px; animation:pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+
+  /* ===== nav ===== */
+  nav{
+    background:var(--ink);
+    color:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    height:72px;
+  }
+  .brand{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:18px;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  .brand .azul{color:var(--signal);}
+  .brand small{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--brass);
+    font-weight:500;
+    letter-spacing:0.08em;
+  }
+  nav ul{
+    list-style:none;
+    display:flex;
+    gap:32px;
+    font-size:14px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+  nav a{text-decoration:none; opacity:.85; transition:opacity .2s;}
+  nav a:hover{opacity:1; color:var(--signal);}
+  .nav-toggle{display:none;}
+
+  /* ===== hero ===== */
+  .hero{
+    background:var(--ink);
+    color:var(--paper);
+    padding:88px 0 96px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  .hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(61,125,255,0.06) 0px, rgba(61,125,255,0.06) 1px, transparent 1px, transparent 64px),
+      repeating-linear-gradient(90deg, rgba(61,125,255,0.06) 0px, rgba(61,125,255,0.06) 1px, transparent 1px, transparent 64px);
+    pointer-events:none;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.2fr 0.8fr;
+    gap:56px;
+    align-items:center;
+    position:relative;
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--signal);
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{content:"›"; color:var(--brass);}
+  h1{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(42px, 6vw, 72px);
+    line-height:0.98;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+  }
+  h1 .azul{color:var(--signal);}
+  .hero p.lead{
+    margin-top:24px;
+    font-size:19px;
+    max-width:46ch;
+    color:rgba(244,241,233,0.82);
+  }
+  .hero-cta{
+    margin-top:36px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--body);
+    font-weight:700;
+    font-size:15px;
+    padding:15px 28px;
+    border-radius:2px;
+    text-decoration:none;
+    display:inline-block;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform .15s ease, background .2s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--signal); color:var(--ink);}
+  .btn-primary:hover{background:#5b91ff;}
+  .btn-ghost{border-color:rgba(244,241,233,0.35); color:var(--paper);}
+  .btn-ghost:hover{border-color:var(--signal); color:var(--signal);}
+
+  /* ===== ID card signature element ===== */
+  .id-card{
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:6px;
+    padding:0;
+    box-shadow:0 24px 60px rgba(0,0,0,0.45);
+    transform:rotate(2deg);
+    overflow:hidden;
+    border:1px solid rgba(0,0,0,0.08);
+  }
+  .id-card-top{
+    background:var(--ink);
+    color:var(--paper);
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    border-bottom:3px solid var(--signal);
+  }
+  .id-card-body{
+    padding:24px 22px 20px;
+    display:flex;
+    gap:18px;
+  }
+  .id-photo{
+    width:84px;
+    height:104px;
+    background:linear-gradient(160deg, var(--blue), var(--ink));
+    border-radius:3px;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:var(--display);
+    font-size:38px;
+    font-weight:800;
+    color:var(--paper);
+  }
+  .id-info .name{
+    font-family:var(--display);
+    font-size:24px;
+    font-weight:700;
+    text-transform:uppercase;
+    line-height:1.05;
+  }
+  .id-info .role{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--blue);
+    margin-top:4px;
+    letter-spacing:0.04em;
+  }
+  .id-info dl{
+    margin-top:12px;
+    font-size:12.5px;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:3px 10px;
+    font-family:var(--mono);
+    color:#46566E;
+  }
+  .id-info dt{color:var(--brass); text-transform:uppercase; font-size:10.5px; align-self:center;}
+  .id-card-strip{
+    background:var(--paper-dim);
+    padding:10px 22px;
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:#5a6a82;
+    letter-spacing:0.08em;
+    border-top:1px dashed rgba(0,0,0,0.15);
+  }
+
+  /* ===== section shells ===== */
+  section{padding:90px 0;}
+  .section-head{max-width:640px; margin-bottom:52px;}
+  .section-tag{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--blue);
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  h2{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(30px, 4vw, 44px);
+    text-transform:uppercase;
+    line-height:1.04;
+  }
+  .section-head p{margin-top:14px; font-size:17px; color:#3a4a63; max-width:54ch;}
+
+  /* ===== method / blocks ===== */
+  .blocks{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--line-dark);
+    border:1px solid var(--line-dark);
+  }
+  .block{
+    background:var(--paper);
+    padding:32px 28px;
+  }
+  .block .num{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--brass);
+    letter-spacing:0.08em;
+  }
+  .block h3{
+    font-family:var(--display);
+    font-size:23px;
+    font-weight:700;
+    text-transform:uppercase;
+    margin-top:10px;
+    margin-bottom:10px;
+  }
+  .block p{font-size:15px; color:#3a4a63;}
+
+  /* ===== who it's for: dispatch log style ===== */
+  .for-section{background:var(--ink); color:var(--paper);}
+  .log{
+    border-top:1px solid var(--line);
+  }
+  .log-row{
+    display:grid;
+    grid-template-columns:140px 1fr;
+    gap:24px;
+    padding:22px 0;
+    border-bottom:1px solid var(--line);
+    align-items:baseline;
+  }
+  .log-row .tag{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--signal);
+    letter-spacing:0.08em;
+  }
+  .log-row p{font-size:16px; color:rgba(244,241,233,0.85);}
+
+  /* ===== about section ===== */
+  .about{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:56px;
+    align-items:start;
+  }
+  .about-card{
+    background:var(--ink);
+    color:var(--paper);
+    padding:36px 30px;
+    border-radius:4px;
+    border-left:4px solid var(--signal);
+  }
+  .about-card .quote{
+    font-family:var(--display);
+    font-size:26px;
+    line-height:1.25;
+    font-weight:600;
+  }
+  .about-card .sig{
+    margin-top:18px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--brass);
+    letter-spacing:0.06em;
+  }
+  .about ul{list-style:none;}
+  .about li{
+    padding:16px 0;
+    border-bottom:1px solid var(--line-dark);
+    display:flex;
+    gap:14px;
+    font-size:16px;
+    color:#243149;
+  }
+  .about li .mk{font-family:var(--mono); color:var(--blue); font-weight:600; flex-shrink:0;}
+
+  /* ===== contact ===== */
+  .contact{background:var(--paper-dim);}
+  .contact-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:48px;
+  }
+  .report-header{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:var(--blue);
+    text-transform:uppercase;
+    border-bottom:1px dashed rgba(14,27,46,0.25);
+    padding-bottom:14px;
+    margin-bottom:22px;
+  }
+  .channels{margin-top:8px;}
+  .channel{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 0;
+    border-bottom:1px solid var(--line-dark);
+  }
+  .channel .label{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--brass);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    display:block;
+    margin-bottom:4px;
+  }
+  .channel .val{font-size:17px; font-weight:600;}
+  .channel a.cta-link{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--blue);
+    text-decoration:underline;
+  }
+
+  form{
+    background:var(--paper);
+    padding:32px;
+    border:1px solid var(--line-dark);
+    border-radius:4px;
+  }
+  .field{margin-bottom:20px;}
+  .field label{
+    display:block;
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.07em;
+    color:var(--blue);
+    margin-bottom:7px;
+  }
+  .field input, .field textarea, .field select{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid rgba(14,27,46,0.22);
+    border-radius:2px;
+    font-family:var(--body);
+    font-size:15px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  .field input:focus, .field textarea:focus, .field select:focus{
+    outline:2px solid var(--signal);
+    outline-offset:1px;
+  }
+  .field textarea{min-height:110px; resize:vertical;}
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .submit-row{display:flex; align-items:center; gap:16px; margin-top:8px;}
+  .submit-note{font-family:var(--mono); font-size:11.5px; color:#5a6a82;}
+
+  /* ===== footer ===== */
+  footer{
+    background:var(--ink);
+    color:rgba(244,241,233,0.6);
+    padding:36px 0;
+    font-family:var(--mono);
+    font-size:12px;
+    border-top:1px solid var(--line);
+  }
+  footer .wrap{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+
+  /* ===== RECURSOS ===== */
+  .recursos-section{background:var(--ink);color:var(--paper);padding:90px 0;}
+  .recursos-section .section-tag{color:var(--signal);}
+  .recursos-section h2{color:var(--paper);}
+  .recursos-section .section-head p{color:rgba(244,241,233,0.75);}
+  .recursos-bloque{margin-bottom:36px;}
+  .recursos-bloque-titulo{
+    font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--paper);background:var(--blue);padding:8px 14px;border-radius:2px;
+    display:inline-block;margin-bottom:14px;
+  }
+  .recursos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.07);}
+  .recurso-card{background:var(--ink-soft);padding:24px 22px;display:flex;flex-direction:column;gap:10px;transition:background .2s;}
+  .recurso-card:hover{background:#1e3052;}
+  .recurso-tipo{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);}
+  .recurso-titulo{font-family:var(--display);font-size:19px;font-weight:700;text-transform:uppercase;color:var(--paper);line-height:1.15;}
+  .recurso-desc{font-size:13.5px;color:rgba(244,241,233,.7);flex:1;}
+  .recurso-tema{font-family:var(--mono);font-size:10.5px;color:rgba(61,125,255,.9);}
+  .recurso-btn{
+    margin-top:6px;display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--signal);text-decoration:none;border-top:1px solid rgba(255,255,255,.1);padding-top:12px;
+  }
+  .recurso-btn:hover{color:#fff;}
+  .recurso-btn::before{content:"↓";font-size:15px;}
+  .recurso-btn.proximamente{color:#5a6a82;cursor:default;}
+  .recurso-btn.proximamente::before{content:"⏳";font-size:13px;}
+  .recursos-empty{padding:40px;text-align:center;font-family:var(--mono);font-size:13px;color:rgba(244,241,233,.35);border:1px dashed rgba(255,255,255,.1);border-radius:3px;}
+
+
+  /* STUDENT LOGIN GATE */
+  .recursos-gate{
+    background:var(--ink-soft);border:1px solid rgba(255,255,255,.1);border-radius:4px;
+    padding:40px 36px;max-width:440px;margin:0 auto;text-align:center;
+  }
+  .recursos-gate .gate-icon{font-size:32px;margin-bottom:16px;}
+  .recursos-gate h3{font-family:var(--display);font-size:24px;text-transform:uppercase;color:var(--paper);margin-bottom:8px;}
+  .recursos-gate p{font-size:14px;color:rgba(244,241,233,.6);margin-bottom:22px;font-family:var(--mono);}
+  .recursos-gate input{
+    width:100%;padding:12px 14px;border:1px solid rgba(255,255,255,.15);border-radius:2px;
+    background:rgba(0,0,0,.3);color:var(--paper);font-family:var(--mono);font-size:14px;
+    text-align:center;letter-spacing:.1em;margin-bottom:12px;
+  }
+  .recursos-gate input:focus{outline:2px solid var(--signal);outline-offset:1px;}
+  .recursos-gate input::placeholder{opacity:.4;letter-spacing:normal;}
+  .gate-error{font-family:var(--mono);font-size:12px;color:var(--bad);margin-top:6px;display:none;}
+  .gate-logout{font-family:var(--mono);font-size:11px;color:rgba(244,241,233,.3);text-decoration:underline;cursor:pointer;background:none;border:none;margin-top:16px;display:block;margin:16px auto 0;}
+
+  /* ADMIN PANEL */
+  .admin-overlay{display:none;position:fixed;inset:0;background:rgba(14,27,46,.96);z-index:100;overflow-y:auto;padding:40px 20px;}
+  .admin-overlay.open{display:block;}
+  .admin-box{max-width:700px;margin:0 auto;background:var(--paper);border-radius:4px;overflow:hidden;}
+  .admin-header{background:var(--ink);color:var(--paper);padding:20px 28px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--signal);}
+  .admin-header h3{font-family:var(--display);font-size:22px;font-weight:700;text-transform:uppercase;}
+  .admin-close{font-family:var(--mono);font-size:12px;color:var(--brass);background:none;border:none;cursor:pointer;letter-spacing:.06em;}
+  .admin-body{padding:28px;}
+  .admin-field{margin-bottom:16px;}
+  .admin-field label{display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--blue);margin-bottom:6px;letter-spacing:.06em;}
+  .admin-field input,.admin-field select,.admin-field textarea{
+    width:100%;padding:11px 13px;border:1px solid var(--line-dark);border-radius:2px;
+    font-family:var(--body);font-size:14.5px;background:var(--paper);color:var(--ink);
+  }
+  .admin-field input:focus,.admin-field select:focus,.admin-field textarea:focus{outline:2px solid var(--signal);outline-offset:1px;}
+  .admin-2col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .admin-list{margin-top:28px;border-top:2px solid var(--ink);padding-top:20px;}
+  .admin-list h4{font-family:var(--display);font-size:18px;text-transform:uppercase;margin-bottom:12px;}
+  .admin-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line-dark);font-size:13.5px;gap:10px;}
+  .admin-item-info{flex:1;}
+  .admin-item-tema{font-family:var(--mono);font-size:10px;color:var(--blue);}
+  .admin-del{font-family:var(--mono);font-size:11px;color:var(--bad);background:none;border:none;cursor:pointer;text-decoration:underline;flex-shrink:0;}
+  .admin-login{padding:40px 28px;}
+  .admin-login p{font-family:var(--mono);font-size:13px;color:#3a4a63;margin-bottom:16px;}
+  #adminToast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    background:var(--ink);color:var(--paper);padding:12px 22px;border-radius:4px;
+    font-family:var(--mono);font-size:13px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:200;
+  }
+  #adminToast.show{opacity:1;}
+
+  @media(max-width:700px){
+    .admin-2col{grid-template-columns:1fr;}
+    .recursos-grid{grid-template-columns:1fr;}
+  }
+
+  /* ===== responsive ===== */
+  @media (max-width: 860px){
+    nav ul{display:none;}
+    .hero-grid{grid-template-columns:1fr;}
+    .id-card{transform:rotate(0); max-width:380px;}
+    .blocks{grid-template-columns:1fr;}
+    .about{grid-template-columns:1fr;}
+    .contact-grid{grid-template-columns:1fr;}
+    .form-row{grid-template-columns:1fr;}
+    .log-row{grid-template-columns:1fr; gap:6px;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="dispatch-strip">
+    <div class="wrap">
+      <span class="blink">ACTIVO — PLAZAS OEP 2026 ABIERTAS A PREPARACIÓN</span>
+      <span>EQUIPO FCSE · PREPARACIÓN INDIVIDUALIZADA · ESCALA BÁSICA CNP</span>
+    </div>
+  </div>
+
+  <nav>
+    <div class="wrap">
+      <div class="brand">DE CAMINO <span class="azul">AL APROBADO</span><small></small></div>
+      <ul>
+        <li><a href="#metodo">Método</a></li>
+        <li><a href="#para-quien">Para quién</a></li>
+        <li><a href="tests-de-camino-al-aprobado.html" target="_blank" rel="noopener">Tests ↗</a></li>
+        <li><a href="#nosotros">Quiénes somos</a></li>
+        <li><a href="#recursos">Recursos</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Preparación 1 a 1 · Escala Básica Policía Nacional</div>
+        <h1>Tu plaza no se<br>improvisa, vas<br>de camino<br><span class="azul">al aprobado.</span></h1>
+        <p class="lead">Preparación individualizada para la oposición a la Escala Básica del Cuerpo Nacional de Policía. Plan de estudio a tu medida, seguimiento semanal y simulacros reales, con vosotros de principio a fin.</p>
+        <div class="hero-cta">
+          <a href="#contacto" class="btn btn-primary">Pedir primera sesión de diagnóstico</a>
+          <a href="#metodo" class="btn btn-ghost">Ver cómo trabajamos</a>
+        </div>
+      </div>
+
+      <div class="id-card">
+        <div class="id-card-top">
+          <span>CNP · ESCALA BÁSICA</span>
+          <span>ID 001</span>
+        </div>
+        <div class="id-card-body">
+          <div class="id-photo">CA</div>
+          <div class="id-info">
+            <div class="name">Código Azul</div>
+            <div class="role">Equipo FCSE · Preparadores</div>
+            <dl>
+              <dt>Modalidad</dt><dd>Individual · online/presencial</dd>
+              <dt>Cobertura</dt><dd>Temario · Físicas · Entrevista</dd>
+              <dt>Estado</dt><dd>Plazas de tutoría abiertas</dd>
+            </dl>
+          </div>
+        </div>
+        <div class="id-card-strip">EXPEDIDO PARA SEGUIMIENTO PERSONALIZADO DE OPOSITORES</div>
+      </div>
+    </div>
+  </header>
+
+  <section id="metodo">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-tag">Protocolo de preparación</div>
+        <h2>Un plan, no un temario suelto</h2>
+        <p>Cada opositor llega con un nivel y un tiempo distintos. El plan se construye sobre eso, no al revés.</p>
+      </div>
+
+      <div class="blocks">
+        <div class="block">
+          <div class="num">01 — Diagnóstico</div>
+          <h3>Punto de partida</h3>
+          <p>Evaluamos tu nivel actual en el temario, tu condición física y cómo te desenvuelves en una entrevista. De ahí sale tu plan, no de una plantilla genérica.</p>
+        </div>
+        <div class="block">
+          <div class="num">02 — Seguimiento</div>
+          <h3>Sesiones semanales</h3>
+          <p>Corrección de tests, repaso de fallos recurrentes y ajuste del plan según vas avanzando. Sabrás siempre en qué punto estás respecto al examen.</p>
+        </div>
+        <div class="block">
+          <div class="num">03 — Simulacro</div>
+          <h3>Condiciones reales</h3>
+          <p>Exámenes cronometrados, entrevista personal simulada y preparación específica del cuestionario de personalidad y biodata, donde mucha gente pierde su plaza sin saberlo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="para-quien" class="for-section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-tag" style="color:var(--signal)">¿Es para ti?</div>
+        <h2 style="color:var(--paper)">Para quién está pensado este seguimiento</h2>
+      </div>
+      <div class="log">
+        <div class="log-row">
+          <div class="tag">PERFIL A</div>
+          <p>Empiezas desde cero y necesitas una hoja de ruta clara hasta la convocatoria, sin perder meses averiguando por dónde empezar.</p>
+        </div>
+        <div class="log-row">
+          <div class="tag">PERFIL B</div>
+          <p>Ya llevas el temario avanzado pero te falla la entrevista personal, el psicotécnico o la organización del tiempo de estudio.</p>
+        </div>
+        <div class="log-row">
+          <div class="tag">PERFIL C</div>
+          <p>Has compaginado academia de grupo con trabajo o estudios y necesitas un refuerzo individual centrado en tus puntos débiles.</p>
+        </div>
+        <div class="log-row">
+          <div class="tag">PERFIL D</div>
+          <p>Te has presentado antes y quieres entender qué falló y corregirlo de forma específica para la próxima convocatoria.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="recursos" class="recursos-section">
+    <div class="wrap">
+      <div class="section-head" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;">
+        <div>
+          <div class="section-tag">Recursos gratuitos</div>
+          <h2>Material de estudio</h2>
+          <p style="color:rgba(244,241,233,0.75);margin-top:10px;">Resúmenes, esquemas y apuntes descargables organizados por tema. Actualizados periódicamente.</p>
+        </div>
+        <button class="btn btn-ghost" id="adminOpenBtn" style="border-color:rgba(255,255,255,.25);color:rgba(244,241,233,.6);font-size:12px;padding:10px 16px;">⚙ Gestionar recursos</button>
+      </div>
+      <div id="recursosContainer" style="margin-top:32px;">
+        <div class="recursos-gate" id="recursosGate">
+          <div class="gate-icon">🔒</div>
+          <h3>Área de alumnos</h3>
+          <p>Introduce la contraseña para acceder al material de descarga</p>
+          <input type="password" id="studentPass" placeholder="Contraseña de acceso">
+          <button class="btn btn-primary" id="studentLoginBtn" style="width:100%;">Acceder al material →</button>
+          <p class="gate-error" id="gateError">Contraseña incorrecta</p>
+        </div>
+        <div id="recursosInner" style="display:none;"></div>
+        <button class="gate-logout" id="gateLogoutBtn" style="display:none;">Cerrar sesión de alumno</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMIN PANEL -->
+  <div class="admin-overlay" id="adminOverlay">
+    <div class="admin-box">
+      <div class="admin-header">
+        <h3>Gestión de recursos</h3>
+        <button class="admin-close" id="adminCloseBtn">✕ Cerrar</button>
+      </div>
+      <div id="adminLoginSection" class="admin-login">
+        <p>Introduce la contraseña para gestionar los recursos.</p>
+        <div class="admin-field">
+          <label for="adminPass">Contraseña</label>
+          <input type="password" id="adminPass" placeholder="••••••••">
+        </div>
+        <button class="btn btn-primary" id="adminLoginBtn" style="margin-top:4px;">Entrar</button>
+        <p id="adminPassError" style="color:var(--bad);font-family:var(--mono);font-size:12px;margin-top:8px;display:none;">Contraseña incorrecta</p>
+      </div>
+      <div id="adminPanelSection" class="admin-body" style="display:none;">
+        <h4 style="font-family:var(--display);font-size:20px;text-transform:uppercase;margin-bottom:18px;">Añadir recurso</h4>
+        <div class="admin-2col">
+          <div class="admin-field">
+            <label for="rTitulo">Título</label>
+            <input type="text" id="rTitulo" placeholder="Ej: Resumen Constitución">
+          </div>
+          <div class="admin-field">
+            <label for="rTipo">Tipo</label>
+            <select id="rTipo">
+              <option>PDF</option>
+              <option>Esquema</option>
+              <option>Test</option>
+              <option>Apuntes</option>
+              <option>Tabla resumen</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-field">
+          <label for="rTema">Tema del temario</label>
+          <select id="rTema"></select>
+        </div>
+        <div class="admin-field">
+          <label for="rDesc">Descripción breve</label>
+          <textarea id="rDesc" rows="2" placeholder="Ej: Esquema completo de estructura y derechos fundamentales."></textarea>
+        </div>
+        <div class="admin-field">
+          <label for="rUrl">Enlace de descarga (Google Drive u otro)</label>
+          <input type="text" id="rUrl" placeholder="https://drive.google.com/...">
+        </div>
+        <button class="btn btn-primary" id="rSaveBtn">Guardar recurso</button>
+        <div class="admin-list">
+          <h4>Recursos publicados</h4>
+          <div id="adminList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="adminToast"></div>
+
+  <section id="nosotros">
+    <div class="wrap about">
+      <div class="about-card">
+        <div class="quote">"No preparamos opositores en bloque. Preparamos a cada persona para su propio examen."</div>
+        <div class="sig">— EQUIPO CÓDIGO AZUL · FCSE</div>
+      </div>
+      <div>
+        <div class="section-tag">Sobre nosotros</div>
+        <h2 style="margin-bottom:20px;">Cómo trabajamos contigo</h2>
+        <ul>
+          <li><span class="mk">→</span> Sesiones individuales, no clases de grupo: el ritmo lo marca tu progreso, no el del resto.</li>
+          <li><span class="mk">→</span> Plan de estudio actualizado conforme cambian bases y temario de cada convocatoria.</li>
+          <li><span class="mk">→</span> Os acompañamos también en la parte que menos se entrena: la entrevista y el cuestionario de personalidad.</li>
+          <li><span class="mk">→</span> Comunicación directa entre sesiones para resolver dudas, sin esperar a la próxima sesión.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" class="contact">
+    <div class="wrap contact-grid">
+      <div>
+        <div class="report-header">Solicitud de contacto — Código Azul</div>
+        <h2 style="margin-bottom:18px;">Hablad con nuestro equipo</h2>
+        <p style="color:#3a4a63; font-size:16px; margin-bottom:18px;">Contadnos en qué punto estáis y os respondemos con los próximos pasos para empezar vuestra preparación.</p>
+        <div class="channels">
+          <div class="channel">
+            <div><span class="label">Email</span><span class="val">info.codigoazul@gmail.com</span></div>
+            <a class="cta-link" href="mailto:info.codigoazul@gmail.com">Escribir</a>
+          </div>
+        </div>
+      </div>
+
+      <form action="mailto:info.codigoazul@gmail.com" method="post" enctype="text/plain">
+        <div class="form-row">
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" name="nombre" type="text" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="perfil">¿En qué punto estás?</label>
+          <select id="perfil" name="perfil">
+            <option>Empiezo desde cero</option>
+            <option>Temario avanzado, necesito reforzar entrevista/psicotécnico</option>
+            <option>Vengo de academia de grupo, busco refuerzo individual</option>
+            <option>Ya me presenté antes, quiero corregir para la próxima</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="mensaje">Cuéntanos más</label>
+          <textarea id="mensaje" name="mensaje" placeholder="Tiempo disponible, fecha objetivo, dudas concretas..."></textarea>
+        </div>
+        <div class="submit-row">
+          <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+          <span class="submit-note">Os respondemos en menos de 48h</span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <span>CÓDIGO AZUL · PREPARACIÓN INDIVIDUALIZADA ESCALA BÁSICA CNP</span>
+      <span>© 2026 CÓDIGO AZUL</span>
+    </div>
+  </footer>
+
+
+
+<script>
+/* ===== RECURSOS — GESTIÓN ADMIN ===== */
+
+const TEMAS_RECURSOS = [
+  "Tema 1. El Derecho: concepto, normas jurídicas y nacionalidad española",
+  "Tema 2. La Constitución Española (I): derechos y deberes fundamentales",
+  "Tema 3. La Constitución Española (II): Corona, Cortes, Gobierno, Poder Judicial",
+  "Tema 4. La Unión Europea e instituciones",
+  "Tema 5. Organización y funcionamiento de la AGE",
+  "Tema 6. Los funcionarios públicos",
+  "Tema 7. El Ministerio del Interior",
+  "Tema 8. La Dirección General de la Policía",
+  "Tema 9. Ley Orgánica 2/1986 de FCSE",
+  "Tema 10. Entrada, circulación y residencia de extranjeros",
+  "Tema 11. Infracciones en materia de extranjería",
+  "Tema 12. La protección internacional",
+  "Tema 13. Seguridad privada",
+  "Tema 14. Ley Orgánica 4/2015 de seguridad ciudadana",
+  "Tema 15. Protección de Infraestructuras Críticas y Ciberseguridad",
+  "Tema 16. Derecho Penal Parte General",
+  "Tema 17. Derecho Penal Especial: homicidio, lesiones, libertad sexual",
+  "Tema 18. Delitos contra el patrimonio",
+  "Tema 19. Delitos contra el orden público",
+  "Tema 20. Delitos informáticos",
+  "Tema 21. Derecho Procesal Penal y detención",
+  "Tema 22. Estatuto de la víctima del delito",
+  "Tema 23. Políticas de igualdad y violencia de género",
+  "Tema 24. Introducción a la PRL",
+  "Tema 25. Marco normativo de la PRL",
+  "Tema 26. Protección de datos personales",
+  "Tema 27. Derechos Humanos",
+  "Tema 28. Globalización y antiglobalización",
+  "Tema 29. Actitudes y valores sociales",
+  "Tema 30. Principios éticos y contravalores",
+  "Tema 31. Inmigración y movimientos migratorios",
+  "Tema 32. Geografía humana y demografía",
+  "Tema 33. La seguridad y la delincuencia",
+  "Tema 34. Drogodependencias",
+  "Tema 35. Desarrollo sostenible",
+  "Tema 36. Gramática de la lengua española",
+  "Tema 37. Ortografía de la lengua española",
+  "Tema 38. Fundamentos de sistemas operativos",
+  "Tema 39. Redes informáticas",
+  "Tema 40. Inteligencia y OSINT",
+  "Tema 41. Ciberdelincuencia",
+  "Tema 42. Armas de fuego y balística",
+  "Tema 43. El vehículo prioritario",
+  "Tema 44. Seguridad en la conducción de vehículos prioritarios",
+  "Tema 45. PRL en Seguridad Vial",
+  "General — varios temas"
+];
+
+// ← CAMBIA ESTA CONTRASEÑA por la que quieras
+const ADMIN_PASSWORD = "codigoazul2026";
+
+function getRecursos(){ try{ return JSON.parse(localStorage.getItem('ca-recursos')||'[]'); }catch(e){ return []; } }
+function saveRecursos(arr){ localStorage.setItem('ca-recursos', JSON.stringify(arr)); }
+
+function adminToast(msg){
+  const t=document.getElementById('adminToast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// Render recursos públicos
+function renderRecursos(){
+  const container=document.getElementById('recursosInner');
+  const recursos=getRecursos();
+  if(!recursos.length){
+    container.innerHTML='<div class="recursos-empty">Próximamente habrá recursos disponibles para descarga.</div>';
+    return;
+  }
+  // Agrupar por tema
+  const porTema={};
+  recursos.forEach(r=>{
+    if(!porTema[r.tema]) porTema[r.tema]=[];
+    porTema[r.tema].push(r);
+  });
+  container.innerHTML=Object.entries(porTema).map(([tema, items])=>`
+    <div class="recursos-bloque">
+      <div class="recursos-bloque-titulo">${tema}</div>
+      <div class="recursos-grid">
+        ${items.map(r=>`
+          <div class="recurso-card">
+            <div class="recurso-tipo">${r.tipo}</div>
+            <div class="recurso-titulo">${r.titulo}</div>
+            <div class="recurso-desc">${r.desc}</div>
+            <a class="recurso-btn${!r.url||r.url==='#'?' proximamente':''}" 
+               href="${r.url||'#'}" target="_blank" rel="noopener">
+              ${!r.url||r.url==='#'?'Próximamente':'Descargar'}
+            </a>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+// Populate topic select
+function buildTemaSelect(){
+  const sel=document.getElementById('rTema');
+  sel.innerHTML=TEMAS_RECURSOS.map(t=>`<option value="${t}">${t}</option>`).join('');
+}
+
+// Admin list
+function renderAdminList(){
+  const list=document.getElementById('adminList');
+  const recursos=getRecursos();
+  if(!recursos.length){ list.innerHTML='<p style="font-family:var(--mono);font-size:12px;color:#5a6a82;">Aún no hay recursos añadidos.</p>'; return; }
+  list.innerHTML=recursos.map((r,i)=>`
+    <div class="admin-item">
+      <div class="admin-item-info">
+        <strong>${r.titulo}</strong> <span style="font-family:var(--mono);font-size:11px;color:var(--brass);">${r.tipo}</span>
+        <div class="admin-item-tema">${r.tema}</div>
+      </div>
+      <button class="admin-del" data-idx="${i}">Eliminar</button>
+    </div>
+  `).join('');
+  list.querySelectorAll('.admin-del').forEach(b=>b.addEventListener('click',()=>{
+    const recursos=getRecursos();
+    recursos.splice(parseInt(b.dataset.idx),1);
+    saveRecursos(recursos);
+    renderAdminList();
+    renderRecursos();
+    adminToast('Recurso eliminado.');
+  }));
+}
+
+// Admin open/close
+document.getElementById('adminOpenBtn').addEventListener('click',()=>{
+  document.getElementById('adminOverlay').classList.add('open');
+  document.getElementById('adminLoginSection').style.display='block';
+  document.getElementById('adminPanelSection').style.display='none';
+  document.getElementById('adminPass').value='';
+  document.getElementById('adminPassError').style.display='none';
+});
+document.getElementById('adminCloseBtn').addEventListener('click',()=>{
+  document.getElementById('adminOverlay').classList.remove('open');
+});
+
+// Login
+document.getElementById('adminLoginBtn').addEventListener('click',()=>{
+  const pass=document.getElementById('adminPass').value;
+  if(pass===ADMIN_PASSWORD){
+    document.getElementById('adminLoginSection').style.display='none';
+    document.getElementById('adminPanelSection').style.display='block';
+    buildTemaSelect();
+    renderAdminList();
+  } else {
+    document.getElementById('adminPassError').style.display='block';
+  }
+});
+document.getElementById('adminPass').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('adminLoginBtn').click(); });
+
+// Save resource
+document.getElementById('rSaveBtn').addEventListener('click',()=>{
+  const titulo=document.getElementById('rTitulo').value.trim();
+  const tipo=document.getElementById('rTipo').value;
+  const tema=document.getElementById('rTema').value;
+  const desc=document.getElementById('rDesc').value.trim();
+  const url=document.getElementById('rUrl').value.trim();
+  if(!titulo||!desc){ adminToast('Rellena al menos el título y la descripción.'); return; }
+  const recursos=getRecursos();
+  recursos.push({titulo,tipo,tema,desc,url:url||'#'});
+  saveRecursos(recursos);
+  document.getElementById('rTitulo').value='';
+  document.getElementById('rDesc').value='';
+  document.getElementById('rUrl').value='';
+  renderAdminList();
+  renderRecursos();
+  adminToast('✓ Recurso publicado.');
+});
+
+// ← CAMBIA ESTA CONTRASEÑA por la que des a tus alumnos
+const STUDENT_PASSWORD = "aprobado2026";
+const STUDENT_KEY = "ca-student-auth";
+
+function isStudentLoggedIn(){ return localStorage.getItem(STUDENT_KEY)==='1'; }
+
+function showRecursos(){
+  document.getElementById('recursosGate').style.display='none';
+  document.getElementById('recursosInner').style.display='block';
+  document.getElementById('gateLogoutBtn').style.display='block';
+  renderRecursos();
+}
+function showGate(){
+  document.getElementById('recursosGate').style.display='block';
+  document.getElementById('recursosInner').style.display='none';
+  document.getElementById('gateLogoutBtn').style.display='none';
+}
+
+document.getElementById('studentLoginBtn').addEventListener('click',()=>{
+  const pass=document.getElementById('studentPass').value;
+  if(pass===STUDENT_PASSWORD){
+    localStorage.setItem(STUDENT_KEY,'1');
+    document.getElementById('gateError').style.display='none';
+    showRecursos();
+  } else {
+    document.getElementById('gateError').style.display='block';
+  }
+});
+document.getElementById('studentPass').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('studentLoginBtn').click(); });
+document.getElementById('gateLogoutBtn').addEventListener('click',()=>{
+  localStorage.removeItem(STUDENT_KEY);
+  showGate();
+});
+
+// Init
+if(isStudentLoggedIn()){ showRecursos(); } else { showGate(); }
+</script>
+
+</body>
+</html>

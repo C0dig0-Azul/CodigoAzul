@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tests — De camino al aprobado · Escala Básica CNP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E1B2E; --ink-soft:#16263F; --paper:#F4F1E9; --paper-dim:#E9E4D6;
+    --blue:#2B4C7E; --signal:#3D7DFF; --brass:#B8924A; --good:#2E8B57; --bad:#C1473A;
+    --line:rgba(14,27,46,0.14);
+    --display:'Barlow Condensed',sans-serif; --body:'Source Sans 3',sans-serif; --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+
+  /* TOP BAR */
+  .top-bar{background:var(--ink);color:var(--paper);padding:0;border-bottom:3px solid var(--signal);}
+  .top-bar .inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:64px;}
+  .brand{font-family:var(--display);font-weight:800;font-size:18px;text-transform:uppercase;letter-spacing:.02em;}
+  .brand span{color:var(--signal);}
+  .back-link{font-family:var(--mono);font-size:12px;color:var(--brass);letter-spacing:.06em;opacity:.8;}
+  .back-link:hover{opacity:1;}
+
+  /* TABS */
+  .tab-bar{background:var(--ink-soft);border-bottom:1px solid rgba(255,255,255,.08);}
+  .tab-bar .inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;gap:4px;}
+  .tab-btn{
+    font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.04em;
+    padding:14px 20px;border:none;background:transparent;color:rgba(244,241,233,.6);
+    cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px;
+  }
+  .tab-btn.active{color:var(--paper);border-bottom-color:var(--signal);}
+  .tab-btn:hover{color:var(--paper);}
+
+  /* PANELS */
+  .panel{display:none;max-width:1080px;margin:0 auto;padding:32px 24px 60px;}
+  .panel.active{display:block;}
+  h2{font-family:var(--display);font-size:32px;font-weight:700;text-transform:uppercase;margin-bottom:8px;}
+  .sub{font-size:15px;color:#3a4a63;margin-bottom:24px;}
+  .mono-tag{font-family:var(--mono);font-size:11px;color:var(--brass);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
+
+  /* CONFIG */
+  .bloque-title{
+    font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.07em;
+    color:var(--paper);background:var(--blue);padding:8px 14px;border-radius:2px;margin:20px 0 10px;
+  }
+  .topics-list{display:flex;flex-direction:column;gap:2px;margin-bottom:6px;}
+  .topic-row{border:1px solid var(--line);border-radius:3px;background:#fff;overflow:hidden;}
+  .topic-row:hover{border-color:rgba(61,125,255,.35);}
+  .topic-header{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:default;}
+  .topic-header input[type=checkbox]{accent-color:var(--signal);flex-shrink:0;cursor:pointer;}
+  .topic-label{font-size:13px;flex:1;cursor:pointer;line-height:1.4;}
+  .topic-count{font-family:var(--mono);font-size:10px;color:var(--blue);flex-shrink:0;}
+  .expand-btn{
+    font-family:var(--mono);font-size:11px;color:var(--blue);background:none;border:1px solid var(--line);
+    border-radius:2px;padding:3px 8px;cursor:pointer;flex-shrink:0;transition:transform .2s;
+  }
+  .expand-btn.open{transform:rotate(180deg);}
+  .subtemas-list{display:none;padding:0 14px 10px 32px;border-top:1px dashed var(--line);}
+  .subtemas-list.open{display:block;}
+  .subtema-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:12.5px;color:#3a4a63;cursor:pointer;}
+  .subtema-item input{accent-color:var(--signal);flex-shrink:0;margin-top:2px;}
+
+  .quick-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+  .quick-btn{font-family:var(--mono);font-size:11.5px;color:var(--blue);text-decoration:underline;cursor:pointer;background:none;border:none;}
+
+  .config-row{display:flex;gap:16px;align-items:flex-end;margin-top:20px;flex-wrap:wrap;}
+  .f-label{font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--blue);display:block;margin-bottom:5px;}
+  .f-num{width:90px;padding:10px 12px;border:1px solid var(--line);border-radius:2px;font-size:14px;}
+  .pool-info{font-family:var(--mono);font-size:12px;color:#3a4a63;margin-top:10px;}
+
+  /* BUTTONS */
+  .btn{font-family:var(--body);font-weight:700;font-size:14px;padding:13px 22px;border-radius:2px;border:1px solid transparent;cursor:pointer;display:inline-block;transition:transform .12s;}
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--signal);color:var(--ink);border-color:var(--signal);}
+  .btn-primary:hover{background:#5b91ff;}
+  .btn-ghost{background:transparent;border-color:var(--line);color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--signal);color:var(--signal);}
+  .btn-warn{background:#fff3e0;color:#8a4a00;border-color:#d4832a;}
+
+  /* QUIZ */
+  .q-meta{font-family:var(--mono);font-size:12px;color:var(--blue);margin-bottom:12px;display:flex;gap:20px;}
+  .q-card{background:#fff;border:1px solid var(--line);border-radius:4px;padding:28px;}
+  .q-topic-tag{font-family:var(--mono);font-size:11px;color:var(--brass);text-transform:uppercase;margin-bottom:8px;}
+  .q-text{font-size:17px;font-weight:600;margin-bottom:20px;line-height:1.45;}
+  .option{
+    display:block;width:100%;text-align:left;padding:13px 16px;margin-bottom:8px;
+    border:1px solid var(--line);border-radius:3px;background:var(--paper);cursor:pointer;font-size:15px;font-family:var(--body);
+    transition:border-color .15s;
+  }
+  .option:hover:not([disabled]){border-color:var(--signal);}
+  .option.correct{background:#e4f3ea;border-color:var(--good);font-weight:600;}
+  .option.wrong{background:#fbe7e4;border-color:var(--bad);font-weight:600;}
+  .option[disabled]{cursor:default;}
+  .feedback-line{margin-top:12px;font-family:var(--mono);font-size:13px;}
+  .feedback-line.ok{color:var(--good);}
+  .feedback-line.no{color:var(--bad);}
+  .explanation-box{
+    margin-top:12px;padding:14px 16px;background:#FFF8EC;border-left:3px solid var(--brass);
+    border-radius:2px;font-size:14.5px;color:#3a4a63;
+  }
+  .explanation-box strong{font-family:var(--mono);font-size:10.5px;color:var(--brass);text-transform:uppercase;display:block;margin-bottom:5px;}
+  .quiz-actions{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;}
+
+  /* RESULT */
+  .result-card{background:var(--ink);color:var(--paper);padding:32px;border-radius:4px;text-align:center;}
+  .result-score{font-family:var(--display);font-size:58px;font-weight:800;color:var(--signal);line-height:1;}
+  .result-pct{margin-top:6px;color:rgba(244,241,233,.8);font-size:16px;}
+  .result-detail{margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--brass);}
+
+  /* STATS */
+  .stat-head,.stat-row{
+    display:grid;grid-template-columns:1fr 72px 72px 90px;gap:10px;
+    padding:12px 0;border-bottom:1px solid var(--line);align-items:center;font-size:14px;
+  }
+  .stat-head{font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--blue);font-weight:700;}
+  .stat-name{font-weight:600;}
+  .bar-bg{height:6px;background:var(--paper-dim);border-radius:3px;overflow:hidden;margin-top:5px;}
+  .bar-fill{height:100%;border-radius:3px;}
+  .empty-state{font-family:var(--mono);font-size:13px;color:#5a6a82;padding:32px;text-align:center;border:1px dashed var(--line);border-radius:4px;}
+
+  /* ADD */
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--blue);margin-bottom:6px;}
+  .field input[type=text],.field select,.field textarea{
+    width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:2px;font-family:var(--body);font-size:14.5px;background:var(--paper);
+  }
+  .field input[type=text]:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--signal);outline-offset:1px;}
+  .opt-row{display:flex;gap:10px;align-items:center;margin-bottom:8px;}
+  .opt-row input[type=text]{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:2px;font-family:var(--body);font-size:14px;}
+  .opt-row input[type=radio]{accent-color:var(--good);}
+  .custom-list{margin-top:28px;}
+  .custom-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px;gap:10px;}
+  .del-btn{font-family:var(--mono);font-size:11px;color:var(--bad);background:none;border:none;cursor:pointer;text-decoration:underline;flex-shrink:0;}
+
+  #toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+    background:var(--ink);color:var(--paper);padding:12px 22px;border-radius:4px;
+    font-family:var(--mono);font-size:13px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:50;
+  }
+  #toast.show{opacity:1;}
+
+  @media(max-width:700px){
+    .topics-list{gap:1px;}
+    .stat-head,.stat-row{grid-template-columns:1fr 50px 60px;}
+    .stat-head span:nth-child(3),.stat-row span:nth-child(3){display:none;}
+  }
+
+
+  /* BOOKMARKS & COMMENTS */
+  .q-actions-bar{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;align-items:center;}
+  .q-action-btn{
+    font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;
+    padding:6px 12px;border-radius:2px;cursor:pointer;border:1px solid rgba(14,27,46,.2);
+    background:transparent;color:#3a4a63;transition:all .15s;
+  }
+  .q-action-btn:hover{border-color:var(--signal);color:var(--signal);}
+  .q-action-btn.bookmarked{background:var(--brass);color:#fff;border-color:var(--brass);}
+  .comment-area{margin-top:10px;display:none;}
+  .comment-area.open{display:block;}
+  .comment-area textarea{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:2px;
+    font-family:var(--body);font-size:14px;resize:vertical;min-height:70px;background:var(--paper);
+  }
+  .comment-area .save-comment{
+    margin-top:6px;font-family:var(--mono);font-size:11px;text-transform:uppercase;
+    padding:6px 14px;background:var(--signal);color:#fff;border:none;border-radius:2px;cursor:pointer;
+  }
+  .existing-comment{
+    margin-top:10px;padding:10px 14px;background:#fff8ec;border-left:3px solid var(--brass);
+    border-radius:2px;font-size:13.5px;color:#3a4a63;
+  }
+  .existing-comment .comment-label{font-family:var(--mono);font-size:10px;color:var(--brass);text-transform:uppercase;display:block;margin-bottom:4px;}
+
+  /* SAVED QUESTIONS PANEL */
+  .saved-empty{font-family:var(--mono);font-size:13px;color:#5a6a82;padding:32px;text-align:center;border:1px dashed var(--line);border-radius:4px;}
+  .saved-q-card{background:#fff;border:1px solid var(--line);border-radius:3px;padding:18px 20px;margin-bottom:10px;}
+  .saved-q-topic{font-family:var(--mono);font-size:10.5px;color:var(--brass);text-transform:uppercase;margin-bottom:6px;}
+  .saved-q-text{font-size:15px;font-weight:600;margin-bottom:10px;}
+  .saved-q-comment{font-size:13px;color:#3a4a63;font-style:italic;border-left:2px solid var(--brass);padding-left:10px;margin-bottom:10px;}
+  .saved-q-remove{font-family:var(--mono);font-size:11px;color:var(--bad);background:none;border:none;cursor:pointer;text-decoration:underline;}
+
+  /* DIFFICULTY / SUBTEMA */
+  .diff-row{display:flex;gap:12px;margin-top:4px;}
+  .diff-opt{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;padding:8px 14px;border:1px solid var(--line-dark);border-radius:2px;background:rgba(0,0,0,.15);color:var(--paper);}
+  .diff-opt input{accent-color:var(--signal);}
+  .diff-opt.facil{border-color:#2E8B57;}
+  .diff-opt.dificil{border-color:#C1473A;}
+
+  /* ADMIN ADD PANEL */
+  .admin-gate{
+    background:var(--ink-soft);border:1px solid rgba(255,255,255,.1);border-radius:4px;
+    padding:36px;max-width:400px;margin:0 auto;text-align:center;
+  }
+  .admin-gate h3{font-family:var(--display);font-size:22px;text-transform:uppercase;color:var(--paper);margin-bottom:8px;}
+  .admin-gate p{font-size:13px;color:rgba(244,241,233,.55);margin-bottom:18px;font-family:var(--mono);}
+  .admin-gate input{
+    width:100%;padding:12px;border:1px solid rgba(255,255,255,.15);border-radius:2px;
+    background:rgba(0,0,0,.3);color:var(--paper);font-family:var(--mono);font-size:14px;
+    text-align:center;letter-spacing:.1em;margin-bottom:12px;
+  }
+  .admin-gate input:focus{outline:2px solid var(--signal);outline-offset:1px;}
+  .admin-gate .gate-err{font-family:var(--mono);font-size:12px;color:var(--bad);display:none;margin-top:6px;}
+  .admin-logout{font-family:var(--mono);font-size:11px;color:rgba(244,241,233,.35);text-decoration:underline;cursor:pointer;background:none;border:none;display:block;margin:16px auto 0;}
+  /* REPASO FALLADAS PANEL */
+  .repaso-intro{
+    background:var(--ink-soft);border:1px solid rgba(255,255,255,.1);border-radius:4px;
+    padding:32px;text-align:center;max-width:500px;margin:0 auto;
+  }
+  .repaso-intro .rep-icon{font-size:36px;margin-bottom:12px;}
+  .repaso-intro h3{font-family:var(--display);font-size:24px;text-transform:uppercase;color:var(--paper);margin-bottom:8px;}
+  .repaso-intro p{font-size:14px;color:rgba(244,241,233,.6);margin-bottom:20px;}
+  .rep-count{font-family:var(--mono);font-size:13px;color:var(--brass);margin-bottom:18px;}
+
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="inner">
+    <div class="brand">CÓDIGO <span>AZUL</span></div>
+    <a href="index.html" class="back-link">← Volver a la web</a>
+  </div>
+</header>
+
+<div class="tab-bar">
+  <div class="inner">
+    <button class="tab-btn active" data-tab="config">Configurar test</button>
+    <button class="tab-btn" data-tab="quiz">Test en curso</button>
+    <button class="tab-btn" data-tab="repaso">Repaso de falladas</button>
+    <button class="tab-btn" data-tab="stats">Mi progreso</button>
+    <button class="tab-btn" data-tab="saved">Mis guardadas</button>
+    <button class="tab-btn" data-tab="add">Añadir preguntas</button>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<section class="panel active" id="panel-config">
+  <h2>Selecciona temas</h2>
+  <div class="quick-row">
+    <button class="quick-btn" id="selAll">Seleccionar todos</button>
+    <button class="quick-btn" id="selNone">Quitar selección</button>
+    <button class="quick-btn" id="selFailed">Solo mis temas más flojos</button>
+  </div>
+  <div class="bloque-title">Bloque I — Ciencias Jurídicas</div>
+  <div class="topics-list" id="grid-bloque1"></div>
+  <div class="bloque-title">Bloque II — Materias Específicas</div>
+  <div class="topics-list" id="grid-bloque2"></div>
+  <div class="bloque-title">Bloque III — Ciencias Sociales</div>
+  <div class="topics-list" id="grid-bloque3"></div>
+  <div class="config-row">
+    <div>
+      <label class="f-label" for="numQ">Nº de preguntas</label>
+      <input class="f-num" type="number" id="numQ" min="1" max="100" value="10">
+    </div>
+    <button class="btn btn-primary" id="startBtn">Empezar test →</button>
+  </div>
+  <p class="pool-info" id="poolInfo"></p>
+</section>
+
+<!-- QUIZ -->
+<section class="panel" id="panel-quiz">
+  <div id="quizArea"></div>
+</section>
+
+<!-- REPASO FALLADAS -->
+<section class="panel" id="panel-repaso" style="background:var(--ink);min-height:60vh;padding:48px 24px;">
+  <div id="repasoArea"></div>
+</section>
+
+<!-- STATS -->
+<section class="panel" id="panel-stats">
+  <h2>Tu progreso por tema</h2>
+  <p class="sub">Ordenado de peor a mejor. Los temas en rojo son los que más necesitas reforzar.</p>
+  <div id="statsArea"></div>
+</section>
+
+<!-- PREGUNTAS GUARDADAS -->
+<section class="panel" id="panel-saved">
+  <h2>Mis preguntas guardadas</h2>
+  <p class="sub">Preguntas que has marcado durante los tests. Puedes ver tus comentarios y eliminarlas cuando quieras.</p>
+  <div id="savedArea"></div>
+</section>
+
+<!-- ADD — con puerta de contraseña -->
+<section class="panel" id="panel-add" style="background:var(--ink);min-height:60vh;padding:48px 24px;">
+  <!-- LOGIN GATE -->
+  <div id="addGate" class="admin-gate">
+    <h3>🔐 Modo editor</h3>
+    <p>Introduce la contraseña de administración para añadir o eliminar preguntas</p>
+    <input type="password" id="addPass" placeholder="Contraseña">
+    <button class="btn btn-primary" id="addLoginBtn" style="width:100%;">Entrar →</button>
+    <p class="gate-err" id="addPassErr">Contraseña incorrecta</p>
+  </div>
+  <!-- PANEL REAL (oculto hasta login) -->
+  <div id="addPanel" style="display:none;">
+    <button class="admin-logout" id="addLogoutBtn">Cerrar sesión de editor</button>
+    <div style="max-width:700px;margin:24px auto 0;">
+      <h2 style="color:var(--paper);margin-bottom:6px;">Añadir pregunta</h2>
+      <p style="color:rgba(244,241,233,.6);font-size:14px;margin-bottom:24px;">Las preguntas que añadas entran en los tests junto a las de ejemplo.</p>
+      <div class="field">
+        <label for="newTopic" style="color:var(--brass);">Tema</label>
+        <select id="newTopic" style="background:var(--ink-soft);color:var(--paper);border-color:rgba(255,255,255,.15);"></select>
+      </div>
+      <div class="field">
+        <label for="newSubtema" style="color:var(--brass);">Epígrafe (opcional)</label>
+        <select id="newSubtema" style="background:var(--ink-soft);color:var(--paper);border-color:rgba(255,255,255,.15);">
+          <option value="">— Sin epígrafe específico —</option>
+        </select>
+      </div>
+      <div class="field">
+        <label style="color:var(--brass);">Dificultad</label>
+        <div class="diff-row">
+          <label class="diff-opt facil"><input type="radio" name="difficulty" value="facil" checked> Fácil</label>
+          <label class="diff-opt dificil"><input type="radio" name="difficulty" value="dificil"> Difícil</label>
+        </div
+      </div>
+      <div class="field">
+        <label for="newText" style="color:var(--brass);">Enunciado</label>
+        <textarea id="newText" rows="2" placeholder="Escribe aquí la pregunta..." style="background:var(--ink-soft);color:var(--paper);border-color:rgba(255,255,255,.15);"></textarea>
+      </div>
+      <div class="field">
+        <label style="color:var(--brass);">Opciones <span style="color:rgba(244,241,233,.4);font-size:10px;">(marca la correcta)</span></label>
+        <div class="opt-row"><input type="radio" name="correctOpt" value="0" checked><input type="text" id="opt0" placeholder="Opción A" style="background:var(--ink-soft);color:var(--paper);border-color:rgba(255,255,255,.15);"></div>
+        <div class="opt-row"><input type="radio" name="correctOpt" value="1"><input type="text" id="opt1" placeholder="Opción B" style="background:var(--ink-soft);color:var(--paper);border-color:rgba(255,255,255,.15);"></div>
+        <div class="opt-row"><input type="radio" name="correctOpt" value="2"><input type="text" id="opt2" placeholder="Opción C" style="background:var(--ink-soft);color:var(--paper);border-color:rgba(255,255,255,.15);"></div>
+        <div class="opt-row"><input type="radio" name="correctOpt" value="3"><input type="text" id="opt3" placeholder="Opción D (opcional)" style="background:var(--ink-soft);color:var(--paper);border-color:rgba(255,255,255,.15);"></div>
+      </div>
+      <div class="field">
+        <label for="newFeedback" style="color:var(--brass);">Retroalimentación / Explicación (opcional)</label>
+        <textarea id="newFeedback" rows="3" placeholder="Ej: Recuerda que el art. 17 CE establece un máximo de 72h de detención preventiva. Esta explicación aparecerá cuando el alumno falle la pregunta." style="background:var(--ink-soft);color:var(--paper);border-color:rgba(255,255,255,.15);"></textarea>
+      </div>
+      <button class="btn btn-primary" id="saveQBtn">Guardar pregunta</button>
+      <div style="margin-top:32px;border-top:1px solid rgba(255,255,255,.1);padding-top:24px;">
+        <h3 style="font-family:var(--display);font-size:20px;text-transform:uppercase;color:var(--paper);margin-bottom:14px;">Preguntas añadidas</h3>
+        <div id="customList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="toast"></div>
+
+<script>
+/* ===== BLOQUES TEMARIO OFICIAL ===== */
+const BLOQUES = {
+  juridicas: [
+    "Tema 1. El Derecho: concepto y acepciones. Las normas jurídicas: concepto, estructura, clases y caracteres. Principio de jerarquía normativa. La persona en sentido jurídico: capacidad jurídica y de obrar. Nacionalidad española. El domicilio. La vecindad civil.",
+    "Tema 2. La Constitución Española (I): estructura y caracteres. Valores y principios: Estado democrático, de derecho, social, Monarquía parlamentaria y Estado autonomista. Derechos y deberes fundamentales: libertades públicas y sus garantías. Suspensión de derechos. El Defensor del Pueblo.",
+    "Tema 3. La Constitución Española (II): La Corona. Las Cortes Generales. El Gobierno y la Administración. Relaciones Gobierno-Cortes. El Poder Judicial. Organización territorial del Estado. El Tribunal Constitucional. La reforma constitucional.",
+    "Tema 4. La Unión Europea: referencia histórica. El Derecho derivado. Instituciones de la UE. Cooperación policial internacional. El Tribunal Europeo de Derechos Humanos y el Tribunal de Justicia de la UE.",
+    "Tema 5. La organización y funcionamiento de la AGE: principios de organización, funcionamiento y relaciones con los ciudadanos; órganos superiores y directivos en la organización central. El Gobierno: composición, organización y funciones; el Gobierno en funciones.",
+    "Tema 6. Los funcionarios públicos: concepto y clases. Adquisición y pérdida de la condición de funcionario.",
+    "Tema 7. El Ministerio del Interior: estructura orgánica básica. La Secretaría de Estado de Seguridad: estructura y funciones.",
+    "Tema 8. La Dirección General de la Policía. Estructura orgánica y funciones de los servicios centrales y territoriales de la Policía Nacional. Funciones, escalas y categorías; sistemas de acceso; régimen disciplinario y situaciones administrativas.",
+    "Tema 9. La Ley Orgánica 2/1986, de FCSE: disposiciones generales; principios básicos de actuación; disposiciones estatutarias comunes. FCSE del Estado: derechos de representación colectiva; Consejo de Policía; Policía Judicial; Policías de CC.AA.; Policías Locales.",
+    "Tema 10. Entrada, libre circulación y residencia en España de ciudadanos de la UE y del EEE. Derechos y libertades de los extranjeros en España. La entrada y salida del territorio español. Autorización de estancia y de residencia.",
+    "Tema 11. Infracciones en materia de extranjería y régimen sancionador. Infracciones leves, graves y muy graves. Sanciones. Prescripción. Efectos de la expulsión, devolución y denegación de entrada.",
+    "Tema 12. La protección internacional. Reglas procedimentales para el reconocimiento. Menores y personas vulnerables. Centros de acogida a refugiados. Apátridas y desplazados.",
+    "Tema 13. Disposiciones generales en materia de seguridad privada. Coordinación. Empresas de seguridad privada y despachos de detectives privados. Personal de seguridad privada. Servicios y medidas de seguridad.",
+    "Tema 14. La Ley Orgánica 4/2015 de protección de la seguridad ciudadana. Disposiciones generales. Documentación e identificación personal. Mantenimiento y restablecimiento de la seguridad ciudadana. Potestades especiales de policía administrativa. Régimen sancionador.",
+    "Tema 15. Medidas para la Protección de Infraestructuras Críticas. El Catálogo Nacional de Infraestructuras Críticas. El Sistema de Protección de Infraestructuras Críticas. Ciberseguridad.",
+    "Tema 16. Derecho Penal Parte General: principios informadores. La infracción penal. Concepto material de delito. Grados de ejecución. Responsabilidad criminal. Consecuencias jurídicas. Vigencia temporal y espacial. Edad penal. Circunstancias modificativas.",
+    "Tema 17. Derecho Penal Especial: Del homicidio y sus formas. Del aborto. De las lesiones. Delitos contra la libertad. Torturas e integridad moral. Delitos contra la libertad sexual.",
+    "Tema 18. Delitos contra el patrimonio y orden socioeconómico. El hurto. El robo. La extorsión. Robo y hurto de uso de vehículos. Usurpación. Defraudaciones: estafas, apropiación indebida, defraudaciones de fluido.",
+    "Tema 19. Delitos contra el orden público: atentados contra la autoridad, sus agentes y funcionarios, resistencia y desobediencia. Desórdenes públicos. Tenencia, tráfico y depósito de armas, municiones o explosivos.",
+    "Tema 20. Delitos informáticos. Especial consideración al derecho a la intimidad. La prueba digital en el proceso penal.",
+    "Tema 21. Noción de Derecho Procesal Penal. Jurisdicción y competencia. Órganos de la jurisdicción penal. La denuncia. La detención: concepto, duración y derechos del detenido. Habeas corpus. Procedimiento integral de la detención policial. El Ministerio Fiscal. La Policía Judicial.",
+    "Tema 22. La Ley 4/2015 del Estatuto de la víctima del delito. Ámbito. Concepto de víctima. Derechos básicos. Protección de las víctimas. Medidas de protección.",
+    "Tema 23. Políticas de igualdad en la AGE. LO 3/2007 para la igualdad efectiva de mujeres y hombres. Planes para la igualdad. Políticas contra la violencia de género. LO 1/2004 de medidas de protección integral contra la violencia de género. Integración de personas con discapacidad. Ley 4/2023 para las personas trans y derechos LGTBI.",
+    "Tema 24. Introducción a la Prevención de Riesgos Laborales. Concepto de trabajo, salud y condiciones de trabajo. Riesgos laborales. Principios generales de la actividad preventiva. Prevención y protección. Consecuencias de los riesgos. Daños a la salud.",
+    "Tema 25. Marco normativo básico en prevención de riesgos laborales: Ley 31/1995; RD 39/1997; RD 2/2006 sobre PRL en el CNP; RD 67/2010 sobre adaptación en la AGE. Derechos y deberes básicos en materia de PRL.",
+    "Tema 26. Protección de datos de carácter personal: LO 3/2018 de Protección de Datos Personales y garantía de los derechos digitales. LO 7/2021 de protección de datos para fines de prevención, detección, investigación y enjuiciamiento de infracciones penales."
+  ],
+  sociales: [
+    "Tema 27. Derechos Humanos. Declaración Universal de Derechos Humanos. Convenio Europeo para la Protección de los Derechos Humanos. Convenio contra la Tortura. Protocolo facultativo de la Convención contra la tortura. Mecanismo Nacional de Prevención de la Tortura del Defensor del Pueblo.",
+    "Tema 28. Globalización y antiglobalización: conceptos, características y consecuencias. Reacciones a la globalización. El Movimiento Antiglobalización: organizaciones, objetivos e historia. El Foro Social Mundial.",
+    "Tema 29. Actitudes y valores sociales. Formación de actitudes: concepto, componentes y funciones. Estereotipos, prejuicios y discriminación. Actitudes de la personalidad autoritaria: xenofobia y dogmatismo. Los grupos sociales.",
+    "Tema 30. Principios éticos de la sociedad actual. Transmisión de valores: proceso de socialización. Libertad-responsabilidad. Igualdad-solidaridad. Tolerancia. Contravalores: racismo, fanatismo, fundamentalismo, sectarismo, hooliganismo. Delitos de odio.",
+    "Tema 31. Inmigración. Movimientos migratorios: concepto y causas. Tipos y efectos. Las grandes migraciones en la historia. Las migraciones en la actualidad. Integración social como factor de cohesión social.",
+    "Tema 32. Concepto de geografía humana. La ciudad. Población, estructura y grupos sociales. La demografía: densidad, tasas de natalidad y mortalidad, crecimiento vegetativo. La sociedad de masas. Contaminación y protección del medio ambiente.",
+    "Tema 33. La seguridad: concepto. Seguridad individual y colectiva. Seguridad pública y privada. La inseguridad. Teorías explicativas de la delincuencia: modelos explicativos y clases de delincuencia.",
+    "Tema 34. Drogodependencias. Conceptos de droga, consumidor, métodos de administración, adicción, dependencia, tolerancia, politoxicomanías. Clasificación de las drogas. Últimas tendencias en el consumo de drogas en nuestra sociedad.",
+    "Tema 35. El desarrollo sostenible: concepto. Coordinación y cooperación internacional. Sociedad y desarrollo sostenible. Instrumentos de gestión ambiental.",
+    "Tema 36. Gramática de la lengua española. Morfología: sufijos, sustantivos, pronombres, adjetivos, adverbios, verbos, preposiciones y conjunciones. Sintaxis: la oración, sus partes y tipos. Análisis sintáctico.",
+    "Tema 37. Ortografía de la lengua española. Reglas ortográficas. Uso de las letras o grafemas. Uso de la tilde, signos ortográficos y letras mayúsculas y minúsculas. Representación gráfica de las unidades léxicas. Ortografía de expresiones de otras lenguas, nombres propios y expresiones numéricas."
+  ],
+  tecnicas: [
+    "Tema 38. Fundamentos de sistemas operativos: funciones. Tipologías: MS/DOS, UNIX, Linux, Windows, MAC OS. Sistemas operativos móviles: iOS, Android. Sistemas de almacenamiento. Sistemas de archivos.",
+    "Tema 39. Redes informáticas: Modelo OSI. Modelo TCP/IP. Dispositivos de red: hubs, switches, routers, firewall, DHCP, DNS, proxy. Direccionamiento IP: clases de redes; IPv4; IPv6.",
+    "Tema 40. Inteligencia: dato, información e inteligencia. Tipologías de Inteligencia. Ciclo de la Inteligencia. Inteligencia de Fuentes Abiertas (OSINT). Surface Web. Deep Web. Dark Web. Dark Net.",
+    "Tema 41. Ciberdelincuencia y agentes de la amenaza: Botnet, Business E-mail Compromise, cartas nigerianas, Cryptojacking, denegación de servicio, ingeniería social, inyección SQL, malware, pharming, phishing, spear phishing, ransomware, skimming, spoofing, spyware, troyano, XSS, Zero-day. Cibercriminales. Crimen as Service. Hacktivistas. Insider threat. APTs. Cyber Kill Chain.",
+    "Tema 42. Origen de las armas de fuego. Definición, clasificación, categorías y funcionamiento. Reglamento de armas. Cartucho: definición y componentes. Armas prohibidas. Documentación para tenencia y porte. Balística forense.",
+    "Tema 43. El vehículo prioritario: definición. Facultades de los conductores. Comportamiento de los demás conductores ante vehículos prioritarios. La conducción en situación de emergencia. Utilización de las señales de emergencia.",
+    "Tema 44. La seguridad en la conducción de vehículos prioritarios. Seguridad Activa y Pasiva: definición y sistemas en turismo y motocicleta. Influencia de los sistemas de seguridad en los accidentes. Repercusión en la conducción policial y traslado de detenidos.",
+    "Tema 45. Prevención de Riesgos Laborales en Seguridad Vial. Factores del tráfico y siniestralidad vial: factor humano, ambiental y vehículo. Riesgos laborales en la conducción de vehículos prioritarios. Equipos de Protección Individual. Estrategias y mantenimiento preventivo."
+  ]
+};
+const ALL_TOPICS = [...BLOQUES.juridicas, ...BLOQUES.sociales, ...BLOQUES.tecnicas];
+
+/* ===== SEED QUESTIONS ===== */
+const SEED = [
+  // BLOQUE I — CIENCIAS JURÍDICAS
+  // Tema 2 - Constitución I
+  {id:"s1", topic:BLOQUES.juridicas[1], text:"La Constitución Española de 1978 define España como un Estado social y democrático de Derecho que propugna como valores superiores de su ordenamiento jurídico:", options:["La libertad, la justicia, la igualdad y el pluralismo político","La libertad, la seguridad, el bienestar y la igualdad","La paz, la justicia, la libertad y la fraternidad"], correct:0},
+  {id:"s2", topic:BLOQUES.juridicas[1], text:"El Defensor del Pueblo es elegido por:", options:["El Congreso de los Diputados únicamente","Las Cortes Generales (Congreso y Senado)","El Presidente del Gobierno"], correct:1},
+  // Tema 3 - Constitución II
+  {id:"s3", topic:BLOQUES.juridicas[2], text:"Según la Constitución Española, la sucesión a la Corona seguirá el orden regular de:", options:["Primogenitura y representación, siendo preferida la línea anterior a las posteriores","Designación directa del Rey en ejercicio","Elección por las Cortes Generales en cada caso"], correct:0},
+  {id:"s4", topic:BLOQUES.juridicas[2], text:"Las Cortes Generales están formadas por:", options:["El Congreso de los Diputados y el Senado","El Congreso de los Diputados, el Senado y el Gobierno","Solo el Congreso de los Diputados"], correct:0},
+  {id:"s5", topic:BLOQUES.juridicas[2], text:"El Tribunal Constitucional conoce del recurso de amparo por violación de los derechos y libertades reconocidos en los artículos:", options:["14 a 29 y el 30.2 de la Constitución","1 a 9 de la Constitución","39 a 52 de la Constitución"], correct:0},
+  // Tema 4 - UE
+  {id:"s6", topic:BLOQUES.juridicas[3], text:"El Tribunal de Justicia de la Unión Europea tiene su sede en:", options:["Bruselas","Luxemburgo","Estrasburgo"], correct:1},
+  {id:"s7", topic:BLOQUES.juridicas[3], text:"El Parlamento Europeo es elegido por sufragio universal directo cada:", options:["4 años","5 años","6 años"], correct:1},
+  // Tema 5 - AGE
+  {id:"s8", topic:BLOQUES.juridicas[4], text:"El Gobierno en funciones limitará su gestión al despacho ordinario de los asuntos públicos y se abstendrá de:", options:["Aprobar el Presupuesto General del Estado","Adoptar programas o decisiones que condicionen, comprometan o impidan las del Gobierno entrante","Nombrar Secretarios de Estado"], correct:1},
+  // Tema 8 - DGP
+  {id:"s9", topic:BLOQUES.juridicas[7], text:"La Policía Nacional se estructura en las siguientes escalas:", options:["Básica, Ejecutiva, de Inspección y Superior","Básica, Técnica y Superior","Básica, Subinspección y Superior"], correct:0},
+  // Tema 9 - LOFCS
+  {id:"s10", topic:BLOQUES.juridicas[8], text:"La Ley Orgánica 2/1986, de 13 de marzo, regula las:", options:["Fuerzas Armadas","Fuerzas y Cuerpos de Seguridad","Policías Locales exclusivamente"], correct:1},
+  {id:"s11", topic:BLOQUES.juridicas[8], text:"Según la LO 2/1986, son principios básicos de actuación de las FCSE, entre otros:", options:["Adecuación al ordenamiento jurídico, relaciones con la comunidad y principios básicos de actuación","Disciplina, jerarquía y obediencia debida en todo caso","Secreto de las actuaciones y discrecionalidad absoluta"], correct:0},
+  // Tema 10 - Extranjería entrada
+  {id:"s12", topic:BLOQUES.juridicas[9], text:"Los ciudadanos de la Unión Europea tienen reconocido el derecho a circular y residir libremente en España por un período de hasta:", options:["3 meses sin condiciones ni trámites","6 meses sin condiciones ni trámites","1 año sin condiciones ni trámites"], correct:0},
+  // Tema 14 - Seguridad ciudadana
+  {id:"s13", topic:BLOQUES.juridicas[13], text:"La Ley Orgánica 4/2015, de 30 de marzo, es la Ley de protección de la seguridad ciudadana, conocida popularmente como:", options:["Ley Corcuera","Ley Mordaza","Ley Orgánica de Orden Público"], correct:1},
+  // Tema 16 - Penal general
+  {id:"s14", topic:BLOQUES.juridicas[15], text:"En Derecho Penal, actúa con dolo quien:", options:["Obra con la debida diligencia","Conoce y quiere la realización del tipo objetivo","Causa el resultado por imprudencia grave"], correct:1},
+  {id:"s15", topic:BLOQUES.juridicas[15], text:"Son circunstancias atenuantes de la responsabilidad criminal, entre otras:", options:["La reincidencia y la alevosía","La grave adicción a sustancias tóxicas y la confesión a las autoridades","El precio, recompensa o promesa"], correct:1},
+  // Tema 17 - Homicidio
+  {id:"s16", topic:BLOQUES.juridicas[16], text:"El asesinato se diferencia del homicidio en que concurre:", options:["Únicamente premeditación","Alevosía, precio/recompensa/promesa o ensañamiento","El lugar donde se comete el hecho"], correct:1},
+  // Tema 18 - Patrimonio
+  {id:"s17", topic:BLOQUES.juridicas[17], text:"El robo con fuerza en las cosas se diferencia del hurto en que:", options:["En el hurto siempre hay violencia","El robo emplea fuerza en las cosas o violencia/intimidación en las personas","No hay diferencia penológica entre ambos"], correct:1},
+  // Tema 19 - Orden público
+  {id:"s18", topic:BLOQUES.juridicas[18], text:"El delito de atentado del art. 550 CP puede cometerse contra:", options:["Solo miembros de las FCSE","La autoridad, sus agentes y funcionarios públicos en el ejercicio de sus funciones","Exclusivamente contra agentes de la autoridad"], correct:1},
+  // Tema 21 - Procesal penal / detención
+  {id:"s19", topic:BLOQUES.juridicas[20], text:"Según el art. 17.2 CE, la detención preventiva no podrá durar más del tiempo estrictamente necesario para la realización de las averiguaciones tendentes al esclarecimiento de los hechos, y en todo caso, en el plazo máximo de:", options:["24 horas","48 horas","72 horas"], correct:2},
+  {id:"s20", topic:BLOQUES.juridicas[20], text:"El procedimiento de habeas corpus está regulado en la LO 6/1984 y tiene por objeto:", options:["La revisión de sentencias firmes","La inmediata puesta a disposición judicial de toda persona detenida ilegalmente","La excarcelación de presos preventivos"], correct:1},
+  // Tema 23 - Igualdad
+  {id:"s21", topic:BLOQUES.juridicas[22], text:"La Ley Orgánica 3/2007, de 22 de marzo, tiene por objeto hacer efectivo el principio de igualdad de trato entre:", options:["Solo en el ámbito laboral","Mujeres y hombres en todos los ámbitos de la vida","Ciudadanos nacionales y extranjeros"], correct:1},
+  {id:"s22", topic:BLOQUES.juridicas[22], text:"La LO 1/2004 de medidas de protección integral contra la violencia de género define la violencia de género como la ejercida sobre la mujer por parte de:", options:["Cualquier persona, independientemente de la relación","Quien sea o haya sido su cónyuge o tenga o haya tenido análoga relación de afectividad","Solo el cónyuge en matrimonio vigente"], correct:1},
+  // Tema 26 - Protección datos
+  {id:"s23", topic:BLOQUES.juridicas[25], text:"El Reglamento (UE) 2016/679 General de Protección de Datos (RGPD) establece que el responsable del tratamiento deberá aplicar medidas técnicas y organizativas apropiadas para garantizar:", options:["El acceso libre de los ciudadanos a todos los datos","Un nivel de seguridad adecuado al riesgo","La publicación de todos los datos tratados"], correct:1},
+  // BLOQUE III — CIENCIAS SOCIALES
+  {id:"s24", topic:BLOQUES.sociales[0], text:"La Declaración Universal de Derechos Humanos fue adoptada y proclamada por la Asamblea General de las Naciones Unidas el:", options:["10 de diciembre de 1948","26 de junio de 1945","4 de noviembre de 1950"], correct:0},
+  {id:"s25", topic:BLOQUES.sociales[2], text:"Los estereotipos son:", options:["Actitudes científicamente contrastadas sobre grupos sociales","Generalizaciones simplificadas, rígidas y generalmente negativas sobre un grupo","Normas jurídicas de no discriminación"], correct:1},
+  {id:"s26", topic:BLOQUES.sociales[7], text:"Según la Ley Orgánica 4/2015 de Seguridad Ciudadana, el consumo o tenencia ilícita de drogas en lugares o establecimientos públicos constituye:", options:["Delito menos grave","Infracción administrativa grave","Infracción administrativa leve"], correct:1},
+  {id:"s27", topic:BLOQUES.sociales[10], text:"Señala cuál de las siguientes palabras está escrita correctamente:", options:["Exhuberante","Exuberante","Esuberante"], correct:1},
+  {id:"s28", topic:BLOQUES.sociales[10], text:"¿Cuál de las siguientes expresiones está correctamente acentuada?", options:["Solo (adverbio, sin tilde, según RAE 2010)","Sólo (con tilde en todos los casos)","Solo y sólo son incorrectas"], correct:0},
+  // BLOQUE II — MATERIAS ESPECÍFICAS
+  {id:"s29", topic:BLOQUES.tecnicas[1], text:"En el modelo TCP/IP, ¿cuántas capas tiene?", options:["4 capas","5 capas","7 capas"], correct:0},
+  {id:"s30", topic:BLOQUES.tecnicas[1], text:"El protocolo IP es responsable de:", options:["El cifrado de las comunicaciones","El direccionamiento y encaminamiento de paquetes entre redes","La autenticación de usuarios"], correct:1},
+  {id:"s31", topic:BLOQUES.tecnicas[2], text:"OSINT (Open Source Intelligence) se define como:", options:["Inteligencia obtenida de fuentes abiertas y públicamente disponibles","Operaciones secretas de intercepción de comunicaciones","Técnica de hackeo ético"], correct:0},
+  {id:"s32", topic:BLOQUES.tecnicas[2], text:"La Dark Web requiere para su acceso:", options:["Un navegador convencional como Chrome o Firefox","Software especial como el navegador Tor","Una contraseña gubernamental de acceso"], correct:1},
+  {id:"s33", topic:BLOQUES.tecnicas[3], text:"El phishing es una técnica de ciberdelincuencia que consiste en:", options:["Introducir código malicioso en un sistema","Suplantar la identidad de una entidad legítima para engañar al usuario y obtener datos confidenciales","Interceptar comunicaciones cifradas"], correct:1},
+  {id:"s34", topic:BLOQUES.tecnicas[3], text:"El ransomware es un tipo de malware cuya principal característica es:", options:["Robar contraseñas silenciosamente y enviarlas al atacante","Cifrar los archivos de la víctima y exigir un rescate económico para su liberación","Controlar remotamente el dispositivo sin que el usuario lo perciba"], correct:1},
+  {id:"s35", topic:BLOQUES.tecnicas[4], text:"La balística forense se encarga de:", options:["El diseño y fabricación de nuevas armas de fuego","El estudio de los efectos de los proyectiles para reconstruir hechos en investigaciones criminales","El control del armamento en los cuerpos policiales"], correct:1},
+  {id:"s36", topic:BLOQUES.tecnicas[5], text:"Un vehículo de emergencia con señales luminosas y acústicas en servicio de urgencia:", options:["Puede incumplir todas las normas de tráfico sin limitación alguna","Tiene preferencia de paso pero debe actuar con la diligencia exigible","Solo puede superar el límite de velocidad en autopista"], correct:1},
+];
+
+/* ===== STORAGE (localStorage para GitHub Pages) ===== */
+function getCustom(){ try{ return JSON.parse(localStorage.getItem('ca-custom-q')||'[]'); }catch(e){ return []; } }
+function saveCustom(a){ localStorage.setItem('ca-custom-q', JSON.stringify(a)); }
+function getStats(){ try{ return JSON.parse(localStorage.getItem('ca-stats')||'{}'); }catch(e){ return {}; } }
+function saveStats(o){ localStorage.setItem('ca-stats', JSON.stringify(o)); }
+function getFailed(){ try{ return JSON.parse(localStorage.getItem('ca-failed')||'[]'); }catch(e){ return []; } }
+function saveFailed(a){ localStorage.setItem('ca-failed', JSON.stringify(a)); }
+
+function getBookmarks(){ try{ return JSON.parse(localStorage.getItem('ca-bookmarks')||'[]'); }catch(e){ return []; } }
+function saveBookmarks(a){ localStorage.setItem('ca-bookmarks', JSON.stringify(a)); }
+function getComments(){ try{ return JSON.parse(localStorage.getItem('ca-comments')||'{}'); }catch(e){ return {}; } }
+function saveComments(o){ localStorage.setItem('ca-comments', JSON.stringify(o)); }
+function getDismissed(){ try{ return JSON.parse(localStorage.getItem('ca-dismissed')||'[]'); }catch(e){ return []; } }
+function saveDismissed(a){ localStorage.setItem('ca-dismissed', JSON.stringify(a)); }
+function getActiveFailed(){ const d=getDismissed(); return getFailed().filter(q=>!d.includes(q.id)); }
+
+/* ===== ESTADO ===== */
+const ADMIN_PASSWORD = "codigoazul2026";
+let customQ=[], stats={};
+let quiz=[], qIdx=0, qScore=0, qAnswered=false, sessionFailed=[];
+let repasoQuiz=[], repasoIdx=0, repasoScore=0, repasoAnswered=false;
+let adminLoggedIn = false;
+
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
+function allQ(){ return SEED.concat(customQ); }
+
+/* ===== TABS ===== */
+document.querySelectorAll('.tab-btn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('panel-'+b.dataset.tab).classList.add('active');
+    if(b.dataset.tab==='stats') renderStats();
+    if(b.dataset.tab==='saved') renderSaved();
+    if(b.dataset.tab==='add'){ if(adminLoggedIn) showAddPanel(); else showAddGate(); }
+    if(b.dataset.tab==='repaso') renderRepasoIntro();
+  });
+});
+
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+  document.querySelector(`.tab-btn[data-tab="${name}"]`).classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+}
+
+/* ===== CONFIG ===== */
+// Nueva distribución de bloques
+const DISPLAY_BLOQUES = {
+  bloque1: [...BLOQUES.juridicas.slice(0,6), ...BLOQUES.juridicas.slice(15,26)],
+  bloque2: [...BLOQUES.juridicas.slice(6,15), ...BLOQUES.sociales.slice(9,11), ...BLOQUES.tecnicas],
+  bloque3: BLOQUES.sociales.slice(0,9)
+};
+
+/* Parser de subepígrafes: separa por ". " seguido de mayúscula */
+function parseSubtemas(topicStr){
+  const sinNum = topicStr.replace(/^Tema \d+\.\s*/, '');
+  const parts = sinNum.split(/\.\s+(?=[A-ZÁÉÍÓÚÜÑ"«])/);
+  return parts.map(p=>p.replace(/\.$/, '').trim()).filter(p=>p.length>3);
+}
+
+function buildGrid(containerId, topics, showCount){
+  const g=document.getElementById(containerId);
+  g.innerHTML='';
+  topics.forEach(t=>{
+    const count=allQ().filter(q=>q.topic===t).length;
+    const subtemas=parseSubtemas(t);
+    const shortTitle=t.replace(/^(Tema \d+\.)\s*/,'$1 ').replace(/\.\s+[A-Z].*/,'…');
+    const row=document.createElement('div');
+    row.className='topic-row';
+    row.innerHTML=`
+      <div class="topic-header">
+        <input type="checkbox" class="topic-main-cb" value="${t}">
+        <span class="topic-label" title="${t}">${t.split('. ')[0]}. ${t.split('. ')[1]||''}</span>
+        ${showCount?`<span class="topic-count">${count} preg.</span>`:''}
+        ${subtemas.length>1?`<button class="expand-btn" title="Ver epígrafes">▼</button>`:''}
+      </div>
+      ${subtemas.length>1?`<div class="subtemas-list">
+        ${subtemas.map((s,i)=>`<label class="subtema-item">
+          <input type="checkbox" class="subtema-cb" data-topic="${t}" value="${s}">
+          <span>${i+1}. ${s}</span>
+        </label>`).join('')}
+      </div>`:''}`;
+    // expand toggle
+    const btn=row.querySelector('.expand-btn');
+    if(btn){
+      btn.addEventListener('click',e=>{
+        e.stopPropagation();
+        const list=row.querySelector('.subtemas-list');
+        list.classList.toggle('open');
+        btn.classList.toggle('open');
+      });
+    }
+    g.appendChild(row);
+  });
+  g.addEventListener('change', updatePool);
+}
+function buildAllGrids(showCount=false){
+  buildGrid('grid-bloque1', DISPLAY_BLOQUES.bloque1, showCount);
+  buildGrid('grid-bloque2', DISPLAY_BLOQUES.bloque2, showCount);
+  buildGrid('grid-bloque3', DISPLAY_BLOQUES.bloque3, showCount);
+  updatePool();
+}
+function selectedTopics(){
+  return Array.from(document.querySelectorAll('.topic-main-cb:checked')).map(i=>i.value);
+}
+function selectedSubtemasByTopic(){
+  const map={};
+  document.querySelectorAll('.subtema-cb:checked').forEach(cb=>{
+    const t=cb.dataset.topic;
+    if(!map[t]) map[t]=[];
+    map[t].push(cb.value);
+  });
+  return map;
+}
+function buildPool(){
+  const topics=selectedTopics();
+  const subMap=selectedSubtemasByTopic();
+  return allQ().filter(q=>{
+    if(!topics.includes(q.topic)) return false;
+    const subs=subMap[q.topic];
+    if(!subs||subs.length===0) return true;       // sin filtro de epígrafe
+    if(!q.subtema) return true;                    // sin etiqueta → siempre incluir
+    return subs.includes(q.subtema);
+  });
+}
+function updatePool(){
+  const pool=buildPool();
+  const sel=selectedTopics();
+  document.getElementById('poolInfo').textContent=sel.length?`Preguntas disponibles: ${pool.length}`:'Elige al menos un tema.';
+}
+document.getElementById('selAll').addEventListener('click',()=>{ document.querySelectorAll('.topic-main-cb').forEach(i=>i.checked=true); updatePool(); });
+document.getElementById('selNone').addEventListener('click',()=>{ document.querySelectorAll('.topic-main-cb,.subtema-cb').forEach(i=>i.checked=false); updatePool(); });
+document.getElementById('selFailed').addEventListener('click',()=>{
+  const worst=topicRanking().filter(r=>r.attempts>0).slice(0,5).map(r=>r.topic);
+  document.querySelectorAll('.topic-main-cb').forEach(i=>{ i.checked=worst.includes(i.value); });
+  if(!worst.length) toast('Aún no tienes intentos registrados. Haz algún test primero.');
+  updatePool();
+});
+document.getElementById('startBtn').addEventListener('click',()=>{
+  const sel=selectedTopics();
+  if(!sel.length){ toast('Selecciona al menos un tema.'); return; }
+  let pool=buildPool();
+  if(!pool.length){ toast('No hay preguntas disponibles en esos temas.'); return; }
+  pool=pool.slice().sort(()=>Math.random()-.5);
+  const n=Math.min(parseInt(document.getElementById('numQ').value)||10, pool.length);
+  quiz=pool.slice(0,n); qIdx=0; qScore=0; sessionFailed=[];
+  switchTab('quiz');
+  renderQuestion();
+});
+
+/* ===== QUIZ ===== */
+function renderQuestion(){
+  qAnswered=false;
+  const area=document.getElementById('quizArea');
+  if(qIdx>=quiz.length){ renderResult(); return; }
+  const q=quiz[qIdx];
+  area.innerHTML=`
+    <div class="q-meta"><span>Pregunta ${qIdx+1} / ${quiz.length}</span><span>Aciertos: ${qScore}</span></div>
+    <div class="q-card">
+      <div class="q-topic-tag">${q.topic.split('.')[0]}</div>
+      <div class="q-text">${q.text}</div>
+      <div id="optsHolder"></div>
+      <div class="feedback-line" id="fb"></div>
+      <div class="q-actions-bar">
+        <button class="q-action-btn ${getBookmarks().includes(q.id)?'bookmarked':''}" id="bmBtn">
+          ${getBookmarks().includes(q.id)?'★ Guardada':'☆ Guardar pregunta'}
+        </button>
+        <button class="q-action-btn" id="cmtBtn">💬 Mi comentario</button>
+      </div>
+      <div class="comment-area" id="cmtArea">
+        ${getComments()[q.id]?`<div class="existing-comment"><span class="comment-label">Tu comentario</span>${getComments()[q.id]}</div>`:''}
+        <textarea id="cmtText" placeholder="Escribe aquí tu comentario, duda o anotación sobre esta pregunta...">${getComments()[q.id]||''}</textarea>
+        <button class="save-comment" id="saveCmtBtn">Guardar comentario</button>
+      </div>
+      <div class="quiz-actions"><button class="btn btn-primary" id="nextBtn" style="display:none;">${qIdx+1===quiz.length?'Ver resultado':'Siguiente →'}</button></div>
+    </div>`;
+  // bookmark toggle
+  document.getElementById('bmBtn').addEventListener('click',()=>{
+    const bm=getBookmarks();
+    const idx=bm.indexOf(q.id);
+    if(idx===-1){
+      // save full question object
+      const saved=JSON.parse(localStorage.getItem('ca-saved-qs')||'[]');
+      if(!saved.find(x=>x.id===q.id)) saved.push(q);
+      localStorage.setItem('ca-saved-qs', JSON.stringify(saved));
+      bm.push(q.id);
+    } else {
+      bm.splice(idx,1);
+      const saved=JSON.parse(localStorage.getItem('ca-saved-qs')||'[]');
+      localStorage.setItem('ca-saved-qs', JSON.stringify(saved.filter(x=>x.id!==q.id)));
+    }
+    saveBookmarks(bm);
+    const btn=document.getElementById('bmBtn');
+    const isNowSaved=getBookmarks().includes(q.id);
+    btn.textContent=isNowSaved?'★ Guardada':'☆ Guardar pregunta';
+    btn.className='q-action-btn'+(isNowSaved?' bookmarked':'');
+    toast(isNowSaved?'✓ Pregunta guardada':'Pregunta eliminada de guardadas');
+  });
+  // comment toggle
+  document.getElementById('cmtBtn').addEventListener('click',()=>{
+    document.getElementById('cmtArea').classList.toggle('open');
+  });
+  document.getElementById('saveCmtBtn').addEventListener('click',()=>{
+    const txt=document.getElementById('cmtText').value.trim();
+    const cmts=getComments();
+    if(txt){ cmts[q.id]=txt; } else { delete cmts[q.id]; }
+    saveComments(cmts);
+    toast(txt?'✓ Comentario guardado':'Comentario eliminado');
+    document.getElementById('cmtArea').classList.remove('open');
+  });
+  const h=document.getElementById('optsHolder');
+  q.options.forEach((opt,idx)=>{
+    if(!opt) return;
+    const b=document.createElement('button');
+    b.className='option'; b.textContent=opt;
+    b.addEventListener('click',()=>selectOpt(q,idx,false));
+    h.appendChild(b);
+  });
+}
+
+function selectOpt(q,idx,isRepaso){
+  if(isRepaso?repasoAnswered:qAnswered) return;
+  if(isRepaso) repasoAnswered=true; else qAnswered=true;
+  const ok=idx===q.correct;
+  const holder=document.getElementById(isRepaso?'repOpts':'optsHolder');
+  holder.querySelectorAll(isRepaso?'.option':'.option').forEach((el,i)=>{
+    el.setAttribute('disabled','true');
+    if(i===q.correct) el.classList.add('correct');
+    if(i===idx && !ok) el.classList.add('wrong');
+  });
+  const fb=document.getElementById(isRepaso?'repFb':'fb');
+  if(ok){
+    if(!isRepaso) qScore++;
+    else repasoScore++;
+    fb.textContent='✓ Correcto'; fb.className='feedback-line ok';
+  } else {
+    if(!isRepaso){ sessionFailed.push(q); }
+    // Las falladas en repaso ya están en el banco, no hace falta volver a añadirlas
+    fb.textContent='✗ Incorrecto — correcta: '+q.options[q.correct]; fb.className='feedback-line no';
+  }
+  // Las preguntas se mantienen en el banco siempre; solo se eliminan si el alumno las descarta
+  if(q.feedback){
+    const ex=document.createElement('div'); ex.className='explanation-box';
+    ex.innerHTML=`<strong>Nota del equipo</strong>${q.feedback}`; fb.after(ex);
+  }
+  const nb=document.getElementById(isRepaso?'repNextBtn':'nextBtn');
+  nb.style.display='inline-block';
+  nb.onclick=()=>{ if(isRepaso){ repasoIdx++; renderRepasoQuestion(); } else { qIdx++; renderQuestion(); } };
+  // Stats
+  if(!stats[q.topic]) stats[q.topic]={attempts:0,correct:0};
+  stats[q.topic].attempts++; if(ok) stats[q.topic].correct++;
+  saveStats(stats);
+}
+
+function renderResult(){
+  const area=document.getElementById('quizArea');
+  const pct=Math.round((qScore/quiz.length)*100);
+  const hf=sessionFailed.length>0;
+  // Guardar falladas acumuladas
+  if(hf){
+    const prevFailed=getFailed();
+    const prevIds=prevFailed.map(x=>x.id);
+    const nuevas=sessionFailed.filter(x=>!prevIds.includes(x.id));
+    saveFailed([...prevFailed,...nuevas]);
+  }
+  const totalFailed=getFailed().length;
+  area.innerHTML=`
+    <div class="result-card">
+      <div class="result-score">${qScore}/${quiz.length}</div>
+      <div class="result-pct">${pct}% de aciertos</div>
+      ${hf?`<div class="result-detail">${sessionFailed.length} fallada${sessionFailed.length>1?'s':''} en este test</div>`:'<div class="result-detail" style="color:#2E8B57">¡Sin fallos! 🎯</div>'}
+      ${totalFailed>0?`<div class="result-detail" style="margin-top:4px;">Banco de repaso: ${totalFailed} pregunta${totalFailed>1?'s':''} acumulada${totalFailed>1?'s':''}</div>`:''}
+    </div>
+    <div class="quiz-actions" style="margin-top:22px;">
+      <button class="btn btn-ghost" id="statsBtn">Ver mi progreso</button>
+      <button class="btn btn-ghost" id="newBtn">Nuevo test</button>
+    </div>`;
+  document.getElementById('statsBtn').addEventListener('click',()=>{ switchTab('stats'); renderStats(); });
+  document.getElementById('newBtn').addEventListener('click',()=>{ switchTab('config'); buildAllGrids(); });
+}
+
+/* ===== REPASO DE FALLADAS ===== */
+function renderRepasoIntro(){
+  const area=document.getElementById('repasoArea');
+  const active=getActiveFailed();
+  const total=getFailed().length;
+  const dismissed=getDismissed().length;
+  if(!total){
+    area.innerHTML=`<div class="repaso-intro">
+      <div class="rep-icon">✅</div>
+      <h3>Sin pendientes</h3>
+      <p style="color:rgba(244,241,233,.6);">No tienes preguntas en el banco de repaso. Las preguntas que falles en los tests aparecerán aquí automáticamente.</p>
+    </div>`;
+    return;
+  }
+  area.innerHTML=`<div class="repaso-intro">
+    <div class="rep-icon">🎯</div>
+    <h3>Banco de repaso</h3>
+    <p style="color:rgba(244,241,233,.6);">Practica las preguntas que has fallado. Puedes marcar las que ya domines para que no vuelvan a aparecer.</p>
+    <div class="rep-count">
+      ${active.length} pregunta${active.length>1?'s':''} activa${active.length>1?'s':''}
+      ${dismissed>0?` · <span style="color:rgba(244,241,233,.4)">${dismissed} descartada${dismissed>1?'s':''}</span>`:''}
+    </div>
+    ${active.length>0?`<button class="btn btn-primary" id="startRepasoBtn">Empezar repaso →</button>`:'<p style="color:#2E8B57;font-family:var(--mono);font-size:13px;">¡Todas las activas están dominadas!</p>'}
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
+      ${dismissed>0?`<button class="btn btn-ghost" id="restoreBtn" style="font-size:12px;">Restaurar descartadas (${dismissed})</button>`:''}
+      <button class="btn btn-ghost" id="clearFailedBtn" style="font-size:12px;">Limpiar todo el banco</button>
+    </div>
+  </div>`;
+  if(active.length) document.getElementById('startRepasoBtn').addEventListener('click',()=>{
+    repasoQuiz=active.slice().sort(()=>Math.random()-.5);
+    repasoIdx=0; repasoScore=0;
+    renderRepasoQuestion();
+  });
+  const rb=document.getElementById('restoreBtn');
+  if(rb) rb.addEventListener('click',()=>{ saveDismissed([]); toast('Preguntas restauradas.'); renderRepasoIntro(); });
+  document.getElementById('clearFailedBtn').addEventListener('click',()=>{
+    saveFailed([]); saveDismissed([]); toast('Banco limpiado.'); renderRepasoIntro();
+  });
+}
+
+function renderRepasoQuestion(){
+  repasoAnswered=false;
+  const area=document.getElementById('repasoArea');
+  if(repasoIdx>=repasoQuiz.length){ renderRepasoResult(); return; }
+  const q=repasoQuiz[repasoIdx];
+  area.innerHTML=`
+    <div class="q-meta" style="color:var(--brass);display:flex;justify-content:space-between;align-items:center;">
+      <span>Repaso ${repasoIdx+1} / ${repasoQuiz.length} · Aciertos: ${repasoScore}</span>
+      <button id="dismissBtn" style="font-family:var(--mono);font-size:11px;color:rgba(244,241,233,.4);background:none;border:1px solid rgba(255,255,255,.15);border-radius:2px;padding:5px 10px;cursor:pointer;">✓ Ya la sé — no mostrar más</button>
+    </div>
+    <div class="q-card" style="border-color:rgba(184,146,74,.3);">
+      <div class="q-topic-tag">${q.topic.split('.')[0]}</div>
+      <div class="q-text">${q.text}</div>
+      <div id="repOpts"></div>
+      <div class="feedback-line" id="repFb"></div>
+      <div class="quiz-actions"><button class="btn btn-primary" id="repNextBtn" style="display:none;">${repasoIdx+1===repasoQuiz.length?'Ver resultado':'Siguiente →'}</button></div>
+    </div>`;
+  document.getElementById('dismissBtn').addEventListener('click',()=>{
+    const d=getDismissed(); if(!d.includes(q.id)){ d.push(q.id); saveDismissed(d); }
+    toast('Pregunta descartada del banco de repaso.');
+    repasoIdx++; renderRepasoQuestion();
+  });
+  const h=document.getElementById('repOpts');
+  q.options.forEach((opt,idx)=>{
+    if(!opt) return;
+    const b=document.createElement('button');
+    b.className='option'; b.textContent=opt;
+    b.addEventListener('click',()=>selectOpt(q,idx,true));
+    h.appendChild(b);
+  });
+}
+
+function renderRepasoResult(){
+  const area=document.getElementById('repasoArea');
+  const pct=Math.round((repasoScore/repasoQuiz.length)*100);
+  const remaining=getActiveFailed().length;
+  area.innerHTML=`
+    <div class="result-card" style="border-left:3px solid var(--brass);">
+      <div class="result-score">${repasoScore}/${repasoQuiz.length}</div>
+      <div class="result-pct">${pct}% de aciertos en el repaso</div>
+      ${remaining>0?`<div class="result-detail">Quedan ${remaining} pregunta${remaining>1?'s':''} en el banco</div>`:'<div class="result-detail" style="color:#2E8B57">¡Banco vacío! Todas superadas 🎯</div>'}
+    </div>
+    <div class="quiz-actions" style="margin-top:22px;">
+      <button class="btn btn-ghost" id="repAgainBtn">Volver al banco</button>
+      <button class="btn btn-ghost" id="repNewBtn">Nuevo test</button>
+    </div>`;
+  document.getElementById('repAgainBtn').addEventListener('click',()=>renderRepasoIntro());
+  document.getElementById('repNewBtn').addEventListener('click',()=>{ switchTab('config'); buildAllGrids(); });
+}
+
+/* ===== STATS ===== */
+function topicRanking(){
+  return ALL_TOPICS.map(t=>{
+    const s=stats[t]||{attempts:0,correct:0};
+    const pct=s.attempts?Math.round((s.correct/s.attempts)*100):null;
+    return {topic:t,attempts:s.attempts,correct:s.correct,pct};
+  }).sort((a,b)=>{ if(!a.attempts&&!b.attempts) return 0; if(!a.attempts) return 1; if(!b.attempts) return -1; return a.pct-b.pct; });
+}
+function renderStats(){
+  const area=document.getElementById('statsArea');
+  const r=topicRanking(), w=r.filter(x=>x.attempts>0);
+  if(!w.length){ area.innerHTML='<div class="empty-state">Aún no tienes estadísticas. Haz algún test primero.</div>'; return; }
+  let h=`<div class="stat-head"><span>Tema</span><span>Intentos</span><span>Aciertos</span><span>% acierto</span></div>`;
+  r.forEach(x=>{
+    if(!x.attempts){ h+=`<div class="stat-row"><span class="stat-name" style="color:#9aa6b8;">${x.topic.split('.')[0]}.</span><span>—</span><span>—</span><span>sin datos</span></div>`; }
+    else {
+      const col=x.pct<50?'var(--bad)':x.pct<75?'var(--brass)':'var(--good)';
+      h+=`<div class="stat-row"><span class="stat-name">${x.topic}<div class="bar-bg"><div class="bar-fill" style="width:${x.pct}%;background:${col};"></div></div></span><span>${x.attempts}</span><span>${x.correct}</span><span>${x.pct}%</span></div>`;
+    }
+  });
+  area.innerHTML=h;
+}
+
+/* ===== ADD — con contraseña ===== */
+function showAddGate(){
+  document.getElementById('addGate').style.display='block';
+  document.getElementById('addPanel').style.display='none';
+}
+function showAddPanel(){
+  document.getElementById('addGate').style.display='none';
+  document.getElementById('addPanel').style.display='block';
+  buildTopicSelect();
+  renderCustomList();
+  buildAllGrids(true); // muestra contadores solo en modo admin
+}
+
+document.getElementById('addLoginBtn').addEventListener('click',()=>{
+  const pass=document.getElementById('addPass').value;
+  if(pass===ADMIN_PASSWORD){
+    adminLoggedIn=true;
+    document.getElementById('addPassErr').style.display='none';
+    showAddPanel();
+  } else {
+    document.getElementById('addPassErr').style.display='block';
+  }
+});
+document.getElementById('addPass').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('addLoginBtn').click(); });
+document.getElementById('addLogoutBtn').addEventListener('click',()=>{
+  adminLoggedIn=false;
+  buildAllGrids(false); // ocultar contadores al salir
+  showAddGate();
+});
+
+function buildTopicSelect(){
+  const s=document.getElementById('newTopic');
+  const allGroups=[
+    {label:'Ciencias Jurídicas', topics:BLOQUES.juridicas},
+    {label:'Ciencias Sociales', topics:BLOQUES.sociales},
+    {label:'Materias Técnico-Científicas', topics:BLOQUES.tecnicas}
+  ];
+  s.innerHTML=allGroups.map(g=>`<optgroup label="${g.label}">${g.topics.map(t=>`<option value="${t}">${t.split('.')[0]}.${t.split('.')[1]?.slice(0,55)||''}</option>`).join('')}</optgroup>`).join('');
+  s.addEventListener('change',()=>updateSubtemaSelect(s.value));
+  updateSubtemaSelect(s.value);
+}
+function updateSubtemaSelect(topicVal){
+  const sel=document.getElementById('newSubtema');
+  const subs=parseSubtemas(topicVal);
+  sel.innerHTML='<option value="">— Sin epígrafe específico —</option>'
+    +subs.map((s,i)=>`<option value="${s}">${i+1}. ${s}</option>`).join('');
+}
+document.getElementById('saveQBtn').addEventListener('click',()=>{
+  const topic=document.getElementById('newTopic').value;
+  const text=document.getElementById('newText').value.trim();
+  const opts=[0,1,2,3].map(i=>document.getElementById('opt'+i).value.trim());
+  const ci=parseInt(document.querySelector('input[name=correctOpt]:checked').value);
+  const feedback=document.getElementById('newFeedback').value.trim();
+  const subtema=document.getElementById('newSubtema').value.trim();
+  const difficulty=document.querySelector('input[name=difficulty]:checked').value;
+  if(!text||!opts[0]||!opts[1]){ toast('Escribe al menos la pregunta y dos opciones.'); return; }
+  if(!opts[ci]){ toast('La opción marcada como correcta está vacía.'); return; }
+  const q={id:'c-'+Date.now(), topic, text, options:opts.filter((o,i)=>i<2||o!==''), correct:ci, difficulty,
+    ...(feedback&&{feedback}), ...(subtema&&{subtema})};
+  customQ.push(q); saveCustom(customQ);
+  document.getElementById('newText').value='';
+  document.getElementById('newFeedback').value='';
+  [0,1,2,3].forEach(i=>document.getElementById('opt'+i).value='');
+  document.querySelector('input[name=correctOpt][value="0"]').checked=true;
+  document.querySelector('input[name=difficulty][value="facil"]').checked=true;
+  toast('✓ Pregunta guardada.');
+  buildAllGrids(true); renderCustomList();
+});
+function renderCustomList(){
+  const el=document.getElementById('customList');
+  if(!customQ.length){ el.innerHTML='<p style="font-family:var(--mono);font-size:12px;color:rgba(244,241,233,.4);">Aún no has añadido preguntas propias.</p>'; return; }
+  el.innerHTML=customQ.map(q=>`
+    <div class="custom-item" style="border-color:rgba(255,255,255,.1);flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+        <span style="color:var(--paper);">${q.topic.split('.')[0]} — ${q.text.slice(0,55)}${q.text.length>55?'…':''}</span>
+        <button class="del-btn" data-id="${q.id}">Eliminar</button>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        ${q.subtema?`<span style="font-family:var(--mono);font-size:10px;background:rgba(61,125,255,.2);color:#7eb5ff;padding:2px 7px;border-radius:2px;">${q.subtema.slice(0,40)}</span>`:''}
+        ${q.difficulty?`<span style="font-family:var(--mono);font-size:10px;background:${q.difficulty==='dificil'?'rgba(193,71,58,.25)':'rgba(46,139,87,.25)'};color:${q.difficulty==='dificil'?'#f08080':'#90ee90'};padding:2px 7px;border-radius:2px;">${q.difficulty==='dificil'?'Difícil':'Fácil'}</span>`:''}
+      </div>
+    </div>`).join('');
+  el.querySelectorAll('.del-btn').forEach(b=>b.addEventListener('click',()=>{
+    customQ=customQ.filter(q=>q.id!==b.dataset.id);
+    saveCustom(customQ); renderCustomList(); buildAllGrids(true);
+  }));
+}
+
+
+function renderSaved(){
+  const area=document.getElementById('savedArea');
+  const saved=JSON.parse(localStorage.getItem('ca-saved-qs')||'[]');
+  const cmts=getComments();
+  if(!saved.length){
+    area.innerHTML='<div class="saved-empty">Aún no has guardado ninguna pregunta. Usa el botón ☆ Guardar durante los tests.</div>';
+    return;
+  }
+  area.innerHTML=saved.map(q=>`
+    <div class="saved-q-card" id="sq-${q.id}">
+      <div class="saved-q-topic">${q.topic.split('.')[0]}</div>
+      <div class="saved-q-text">${q.text}</div>
+      ${cmts[q.id]?`<div class="saved-q-comment">${cmts[q.id]}</div>`:''}
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;">
+        <span style="font-family:var(--mono);font-size:11px;color:#5a6a82;">✓ ${q.options[q.correct]}</span>
+        <button class="saved-q-remove" data-id="${q.id}">Eliminar de guardadas</button>
+      </div>
+    </div>`).join('');
+  area.querySelectorAll('.saved-q-remove').forEach(b=>b.addEventListener('click',()=>{
+    const bm=getBookmarks().filter(id=>id!==b.dataset.id);
+    saveBookmarks(bm);
+    const saved=JSON.parse(localStorage.getItem('ca-saved-qs')||'[]');
+    localStorage.setItem('ca-saved-qs', JSON.stringify(saved.filter(x=>x.id!==b.dataset.id)));
+    document.getElementById('sq-'+b.dataset.id)?.remove();
+    if(!document.querySelectorAll('.saved-q-card').length)
+      area.innerHTML='<div class="saved-empty">No tienes preguntas guardadas.</div>';
+  }));
+}
+
+/* ===== INIT ===== */
+customQ=getCustom(); stats=getStats();
+buildAllGrids(false);
+showAddGate();
+</script>
+</body>
+</html>
