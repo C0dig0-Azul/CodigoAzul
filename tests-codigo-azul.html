@@ -216,14 +216,154 @@
   .repaso-intro p{font-size:14px;color:rgba(244,241,233,.6);margin-bottom:20px;}
   .rep-count{font-family:var(--mono);font-size:13px;color:var(--brass);margin-bottom:18px;}
 
+  /* ===== ENTRY / LOGIN GATE ===== */
+  #entryGate{
+    position:fixed;inset:0;background:var(--ink);z-index:200;
+    display:flex;align-items:center;justify-content:center;padding:24px;
+  }
+  .entry-box{max-width:480px;width:100%;text-align:center;}
+  .entry-brand{font-family:var(--display);font-weight:800;font-size:30px;text-transform:uppercase;letter-spacing:.03em;color:var(--paper);margin-bottom:6px;}
+  .entry-brand span{color:var(--signal);}
+  .entry-sub{font-family:var(--mono);font-size:12px;color:rgba(244,241,233,.5);text-transform:uppercase;letter-spacing:.08em;margin-bottom:36px;}
+  .entry-choices{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;}
+  .entry-card{
+    flex:1;min-width:180px;background:var(--ink-soft);border:1px solid rgba(255,255,255,.1);border-radius:6px;
+    padding:26px 18px;cursor:pointer;transition:border-color .15s,transform .12s;
+  }
+  .entry-card:hover{border-color:var(--signal);transform:translateY(-2px);}
+  .entry-card .entry-icon{font-size:30px;margin-bottom:10px;}
+  .entry-card h4{font-family:var(--display);font-size:18px;text-transform:uppercase;color:var(--paper);margin-bottom:4px;}
+  .entry-card p{font-family:var(--mono);font-size:11px;color:rgba(244,241,233,.45);}
+  .entry-form{display:none;max-width:340px;margin:22px auto 0;text-align:left;}
+  .entry-form.open{display:block;}
+  .entry-form label{display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;color:var(--brass);margin-bottom:6px;}
+  .entry-form input{
+    width:100%;padding:12px;border:1px solid rgba(255,255,255,.15);border-radius:2px;
+    background:rgba(0,0,0,.3);color:var(--paper);font-family:var(--body);font-size:14px;margin-bottom:10px;
+  }
+  .entry-form input:focus{outline:2px solid var(--signal);outline-offset:1px;}
+  .entry-err{font-family:var(--mono);font-size:12px;color:var(--bad);display:none;margin-bottom:8px;}
+  .entry-back{font-family:var(--mono);font-size:11px;color:rgba(244,241,233,.4);text-decoration:underline;cursor:pointer;background:none;border:none;display:block;margin:14px auto 0;}
+
+  /* Role badge in top bar */
+  .role-badge{
+    font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.04em;
+    padding:5px 10px;border-radius:2px;margin-right:12px;
+  }
+  .role-badge.profesora{background:rgba(184,146,74,.25);color:var(--brass);}
+  .role-badge.alumno{background:rgba(61,125,255,.2);color:#7eb5ff;}
+  .top-right{display:flex;align-items:center;gap:4px;}
+  .logout-link{font-family:var(--mono);font-size:11px;color:rgba(244,241,233,.4);text-decoration:underline;cursor:pointer;background:none;border:none;margin-left:10px;}
+  .logout-link:hover{color:var(--paper);}
+  .tab-btn.teacher-tab{border-left:1px dashed rgba(255,255,255,.15);}
+
+  /* Impugnar pregunta */
+  .imp-btn{border-color:rgba(193,71,58,.4)!important;color:#e08c80!important;}
+  .imp-btn:hover{border-color:var(--bad)!important;color:var(--bad)!important;}
+  .imp-area{margin-top:10px;display:none;}
+  .imp-area.open{display:block;}
+  .imp-area textarea{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:2px;
+    font-family:var(--body);font-size:14px;resize:vertical;min-height:70px;background:var(--paper);
+  }
+  .imp-area .imp-send{
+    margin-top:6px;font-family:var(--mono);font-size:11px;text-transform:uppercase;
+    padding:6px 14px;background:var(--bad);color:#fff;border:none;border-radius:2px;cursor:pointer;
+  }
+  .imp-area .imp-hint{font-family:var(--mono);font-size:10.5px;color:#5a6a82;margin-top:6px;}
+
+  /* Panel impugnaciones (profesora) */
+  .imp-card{background:#fff;border:1px solid var(--line);border-left:3px solid var(--bad);border-radius:3px;padding:16px 20px;margin-bottom:12px;}
+  .imp-card-topic{font-family:var(--mono);font-size:10.5px;color:var(--brass);text-transform:uppercase;margin-bottom:6px;}
+  .imp-card-text{font-size:14.5px;font-weight:600;margin-bottom:8px;}
+  .imp-card-motivo{font-size:13.5px;color:#3a4a63;font-style:italic;border-left:2px solid var(--bad);padding-left:10px;margin-bottom:8px;}
+  .imp-card-meta{font-family:var(--mono);font-size:11px;color:#5a6a82;margin-bottom:10px;}
+  .imp-card-actions{display:flex;gap:8px;}
+  .imp-resolve-btn,.imp-del-btn{font-family:var(--mono);font-size:11px;background:none;border:1px solid var(--line);border-radius:2px;padding:5px 10px;cursor:pointer;}
+  .imp-resolve-btn{color:var(--good);}
+  .imp-resolve-btn:hover{border-color:var(--good);}
+  .imp-del-btn{color:var(--bad);}
+  .imp-del-btn:hover{border-color:var(--bad);}
+
+  /* Modal cambiar contraseña */
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:150;display:none;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--ink-soft);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:28px;max-width:360px;width:100%;}
+  .modal-box h3{font-family:var(--display);font-size:20px;text-transform:uppercase;color:var(--paper);margin-bottom:16px;}
+  .modal-box .field label{color:var(--brass);}
+  .modal-box .field input{background:var(--ink);color:var(--paper);border-color:rgba(255,255,255,.15);}
+  .modal-actions{display:flex;gap:10px;margin-top:6px;}
+  .modal-actions .btn{flex:1;}
+
+  /* Gestión de alumnos */
+  .alumno-item{border:1px solid var(--line);border-radius:3px;background:#fff;padding:14px 18px;margin-bottom:10px;}
+  .alumno-item-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+  .alumno-item-name{font-weight:600;font-size:14.5px;}
+  .alumno-item-email{font-family:var(--mono);font-size:12px;color:var(--blue);}
+  .alumno-item-meta{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap;}
+  .alumno-mini-btn{font-family:var(--mono);font-size:11px;background:none;border:1px solid var(--line);border-radius:2px;padding:4px 9px;cursor:pointer;}
+  .alumno-mini-btn.reset{color:var(--blue);}
+  .alumno-mini-btn.reset:hover{border-color:var(--blue);}
+  .alumno-mini-btn.del{color:var(--bad);}
+  .alumno-mini-btn.del:hover{border-color:var(--bad);}
+  .reset-result{display:none;margin-top:8px;font-family:var(--mono);font-size:12px;background:#FFF8EC;border-left:3px solid var(--brass);padding:8px 12px;border-radius:2px;}
+
 </style>
 </head>
 <body>
 
+<!-- ===== ENTRADA / INICIO DE SESIÓN ===== -->
+<div id="entryGate">
+  <div class="entry-box">
+    <div class="entry-brand">CÓDIGO <span>AZUL</span></div>
+    <div class="entry-sub">Inicia sesión para continuar</div>
+
+    <div class="entry-choices" id="entryChoices">
+      <div class="entry-card" id="cardAlumno">
+        <div class="entry-icon">🎓</div>
+        <h4>Soy alumno/a</h4>
+        <p>Acceder a los tests y mi progreso</p>
+      </div>
+      <div class="entry-card" id="cardProfesora">
+        <div class="entry-icon">🔑</div>
+        <h4>Soy profesor</h4>
+        <p>Acceso con contraseña de gestión</p>
+      </div>
+    </div>
+
+    <!-- Formulario alumno -->
+    <div class="entry-form" id="formAlumno">
+      <label for="alumnoEmail">Tu email</label>
+      <input type="text" id="alumnoEmail" placeholder="tu-email@ejemplo.com">
+      <label for="alumnoPass">Tu contraseña</label>
+      <input type="password" id="alumnoPass" placeholder="Contraseña">
+      <p class="entry-err" id="alumnoErr">Email o contraseña incorrectos. Pide tus credenciales a tu profesor.</p>
+      <button class="btn btn-primary" id="entrarAlumnoBtn" style="width:100%;">Entrar →</button>
+      <button class="entry-back" data-back="alumno">← Volver</button>
+    </div>
+
+    <!-- Formulario profesora -->
+    <div class="entry-form" id="formProfesora">
+      <label for="profPass">Contraseña de profesor</label>
+      <input type="password" id="profPass" placeholder="Contraseña">
+      <p class="entry-err" id="profPassErr">Contraseña incorrecta</p>
+      <button class="btn btn-primary" id="entrarProfBtn" style="width:100%;">Entrar como profesor →</button>
+      <button class="entry-back" data-back="profesora">← Volver</button>
+    </div>
+  </div>
+</div>
+
+<div id="appShell" style="display:none;">
+
 <header class="top-bar">
   <div class="inner">
     <div class="brand">CÓDIGO <span>AZUL</span></div>
-    <a href="index.html" class="back-link">← Volver a la web</a>
+    <div class="top-right">
+      <span class="role-badge" id="roleBadge"></span>
+      <button class="logout-link" id="changePassLink" style="display:none;">Cambiar contraseña</button>
+      <a href="index.html" class="back-link">← Volver a la web</a>
+      <button class="logout-link" id="logoutBtn">Cerrar sesión</button>
+    </div>
   </div>
 </header>
 
@@ -234,7 +374,9 @@
     <button class="tab-btn" data-tab="repaso">Repaso de falladas</button>
     <button class="tab-btn" data-tab="stats">Mi progreso</button>
     <button class="tab-btn" data-tab="saved">Mis guardadas</button>
-    <button class="tab-btn" data-tab="add">Añadir preguntas</button>
+    <button class="tab-btn teacher-tab" data-tab="alumnos" id="tabAlumnos">👥 Alumnos</button>
+    <button class="tab-btn teacher-tab" data-tab="impugnaciones" id="tabImpugnaciones">🚩 Impugnaciones</button>
+    <button class="tab-btn teacher-tab" data-tab="add" id="tabAdd">Añadir preguntas</button>
   </div>
 </div>
 
@@ -259,7 +401,6 @@
     </div>
     <button class="btn btn-primary" id="startBtn">Empezar test →</button>
   </div>
-  <p class="pool-info" id="poolInfo"></p>
 </section>
 
 <!-- QUIZ -->
@@ -284,6 +425,47 @@
   <h2>Mis preguntas guardadas</h2>
   <p class="sub">Preguntas que has marcado durante los tests. Puedes ver tus comentarios y eliminarlas cuando quieras.</p>
   <div id="savedArea"></div>
+</section>
+
+<!-- GESTIÓN DE ALUMNOS (solo profesora) -->
+<section class="panel" id="panel-alumnos">
+  <h2>Gestión de alumnos</h2>
+  <p class="sub">Crea una cuenta para cada alumno/a con su email y una contraseña inicial. Podrán entrar a los tests y ver su progreso con esas credenciales, y cambiar la contraseña ellos mismos desde su sesión.</p>
+  <div class="explanation-box" style="margin-bottom:24px;">
+    <strong>Importante</strong>
+    Estas cuentas se guardan en este navegador (localStorage), no en un servidor central. Si publicas la web como página estática, cada alumno necesitará que su dispositivo tenga cargado este mismo listado. Usa «Exportar listado» para descargar las cuentas en un archivo y «Importar listado» para cargarlas en otro dispositivo o navegador.
+  </div>
+
+  <div class="bloque-title">Nueva cuenta</div>
+  <div class="field"><label for="newAlName">Nombre</label><input type="text" id="newAlName" placeholder="Ej: Laura García"></div>
+  <div class="field"><label for="newAlEmail">Email</label><input type="text" id="newAlEmail" placeholder="alumno@ejemplo.com"></div>
+  <div class="config-row" style="align-items:flex-end;margin-top:0;">
+    <div style="flex:1;min-width:200px;">
+      <label class="f-label" for="newAlPass">Contraseña inicial</label>
+      <input class="f-num" style="width:100%;" type="text" id="newAlPass" placeholder="Déjalo en blanco para generar una">
+    </div>
+    <button class="btn btn-ghost" id="genPassBtn" type="button">Generar</button>
+  </div>
+  <button class="btn btn-primary" id="createAlBtn" style="margin-top:16px;">Crear cuenta de alumno/a</button>
+
+  <div class="custom-list">
+    <h3 style="font-family:var(--display);font-size:20px;text-transform:uppercase;margin-bottom:14px;">Alumnos registrados (<span id="alCount">0</span>)</h3>
+    <div id="alumnosList"></div>
+  </div>
+
+  <div style="margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;">
+    <button class="btn btn-ghost" id="exportAlBtn">⬇ Exportar listado (.json)</button>
+    <label class="btn btn-ghost" style="cursor:pointer;">⬆ Importar listado
+      <input type="file" id="importAlFile" accept="application/json" style="display:none;">
+    </label>
+  </div>
+</section>
+
+<!-- IMPUGNACIONES (solo profesora) -->
+<section class="panel" id="panel-impugnaciones">
+  <h2>🚩 Impugnaciones de alumnos</h2>
+  <p class="sub">Preguntas que los alumnos han marcado como dudosas o incorrectas. Se envían automáticamente por correo a <strong id="profEmailShow"></strong> y quedan también guardadas aquí, en este dispositivo, como copia de seguridad.</p>
+  <div id="impugnacionesArea"></div>
 </section>
 
 <!-- ADD — con puerta de contraseña -->
@@ -344,6 +526,22 @@
 </section>
 
 <div id="toast"></div>
+
+<div class="modal-overlay" id="pwdModal">
+  <div class="modal-box">
+    <h3>Cambiar contraseña</h3>
+    <div class="field"><label>Contraseña actual</label><input type="password" id="curPass"></div>
+    <div class="field"><label>Nueva contraseña</label><input type="password" id="newPass1"></div>
+    <div class="field"><label>Repite la nueva contraseña</label><input type="password" id="newPass2"></div>
+    <p class="entry-err" id="pwdErr">Revisa los datos.</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="savePwdBtn">Guardar</button>
+      <button class="btn btn-ghost" id="closePwdBtn">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /appShell -->
 
 <script>
 /* ===== BLOQUES TEMARIO OFICIAL ===== */
@@ -458,33 +656,303 @@ const SEED = [
   {id:"s34", topic:BLOQUES.tecnicas[3], text:"El ransomware es un tipo de malware cuya principal característica es:", options:["Robar contraseñas silenciosamente y enviarlas al atacante","Cifrar los archivos de la víctima y exigir un rescate económico para su liberación","Controlar remotamente el dispositivo sin que el usuario lo perciba"], correct:1},
   {id:"s35", topic:BLOQUES.tecnicas[4], text:"La balística forense se encarga de:", options:["El diseño y fabricación de nuevas armas de fuego","El estudio de los efectos de los proyectiles para reconstruir hechos en investigaciones criminales","El control del armamento en los cuerpos policiales"], correct:1},
   {id:"s36", topic:BLOQUES.tecnicas[5], text:"Un vehículo de emergencia con señales luminosas y acústicas en servicio de urgencia:", options:["Puede incumplir todas las normas de tráfico sin limitación alguna","Tiene preferencia de paso pero debe actuar con la diligencia exigible","Solo puede superar el límite de velocidad en autopista"], correct:1},
+  // Tema 10 — Extranjería: entrada, circulación, residencia (docx retro)
+  {id:"d1", topic:BLOQUES.juridicas[9], text:"Los nacionales de los Estados miembros de la Unión Europea y aquellos a quienes sea de aplicación el régimen comunitario se regirán por las normas que lo regulan, siéndoles de aplicación la LO 4/2000:", options:["De forma subsidiaria.","En aquellos aspectos que pudieran ser más favorables.","En los aspectos menos favorables."], correct:1},
+  {id:"d2", topic:BLOQUES.juridicas[9], text:"¿A quién corresponde la definición, planificación, regulación y desarrollo de la política de inmigración, sin perjuicio de las competencias de las CC.AA. y Entidades Locales?", options:["Al Gobierno.","Al Estado.","A las Cortes Generales."], correct:0},
+  {id:"d3", topic:BLOQUES.juridicas[9], text:"De conformidad con el Plan Estratégico de Inmigración, el Gobierno y las CC.AA. acordarán en la Conferencia Sectorial de Inmigración programas de acción:", options:["Trimestrales.","Bianuales.","Bienales."], correct:2},
+  {id:"d4", topic:BLOQUES.juridicas[9], text:"¿Quién incorporará el objetivo de la integración entre inmigrantes y sociedad receptora, con carácter transversal a todas las políticas y servicios públicos?", options:["Los Poderes Públicos.","Las Administraciones Públicas.","El Gobierno."], correct:1},
+  {id:"d5", topic:BLOQUES.juridicas[9], text:"Los extranjeros que se encuentren en territorio español tienen el derecho y el deber de conservar la documentación que acredite su identidad, expedida por las autoridades competentes:", options:["Del país de origen.","Del país de origen o de procedencia.","Del país de su última residencia."], correct:1},
+  {id:"d6", topic:BLOQUES.juridicas[9], text:"Los extranjeros con visado o autorización para permanecer en España por período superior a 6 meses obtendrán la tarjeta de identidad de extranjero, que deberán solicitar personalmente:", options:["En el plazo de 1 mes desde su entrada en España o desde que se conceda la autorización.","En el plazo de 3 meses desde su entrada en España o desde que se conceda la autorización.","En el plazo de 6 meses desde su entrada en España o desde que se conceda la autorización."], correct:0},
+  {id:"d7", topic:BLOQUES.juridicas[9], text:"Los extranjeros que se hallen en España tendrán derecho a circular libremente y a elegir su residencia sin más limitaciones que:", options:["Las establecidas con carácter general por los tratados y las leyes.","Las acordadas por la autoridad judicial.","Todas son correctas."], correct:2},
+  {id:"d8", topic:BLOQUES.juridicas[9], text:"Los extranjeros en España podrán ser titulares del derecho de sufragio, en los términos establecidos en la Constitución, tratados internacionales y la Ley, en las elecciones:", options:["Municipales.","Nacionales.","Ninguna es correcta."], correct:0},
+  {id:"d9", topic:BLOQUES.juridicas[9], text:"Indique en cuál de los siguientes derechos y libertades los extranjeros los ejercen en las mismas condiciones que los españoles:", options:["Libertad de reunión y manifestación.","Derecho a la Seguridad Social y a los servicios sociales.","Derecho al trabajo y a la Seguridad Social."], correct:0},
+  {id:"d10", topic:BLOQUES.juridicas[9], text:"Respecto al derecho a la educación en la LO de extranjería, marque la opción INCORRECTA:", options:["Los extranjeros menores de 16 años tienen el derecho y el deber a la educación básica, gratuita y obligatoria.","En todo caso, los extranjeros mayores de 18 años tienen derecho a acceder a las demás etapas educativas posobligatorias, titulaciones y sistema público de becas en las mismas condiciones que los españoles.","Los extranjeros mayores de 18 años que se hallen en España tienen derecho a la educación de acuerdo con la legislación educativa."], correct:1},
+  {id:"d11", topic:BLOQUES.juridicas[9], text:"¿A cuál de los siguientes servicios y prestaciones sociales tiene derecho cualquier tipo de ciudadano extranjero (con independencia de su situación administrativa)?", options:["Específicas.","Básicas.","Generales."], correct:1},
+  {id:"d12", topic:BLOQUES.juridicas[9], text:"El cónyuge que hubiera adquirido la residencia en España por causa familiar y sus familiares agrupados:", options:["Conservarán la residencia, aunque se rompa el vínculo matrimonial que dio lugar a la adquisición.","No conservarán la residencia si se rompe el vínculo matrimonial.","Solo la conservarán si han residido al menos 3 años."], correct:0},
+  {id:"d13", topic:BLOQUES.juridicas[9], text:"El extranjero residente tiene derecho a reagrupar con él en España, entre otros, a:", options:["El cónyuge, aunque el matrimonio se haya celebrado en fraude de ley.","Al cónyuge y a la pareja análoga cuando la ley personal del extranjero admita esta modalidad matrimonial.","Los hijos del residente y del cónyuge, incluidos los adoptados, menores de 18 años o personas con discapacidad que no puedan proveer a sus propias necesidades."], correct:2},
+  {id:"d14", topic:BLOQUES.juridicas[9], text:"Los extranjeros que hubieran adquirido la residencia en virtud de una previa reagrupación podrán a su vez reagrupar a sus propios familiares:", options:["Siempre que cuenten ya con autorización de residencia y trabajo, obtenida independientemente de la del reagrupante.","Acreditando reunir los requisitos previstos (vivienda, medios económicos suficientes, etc.).","Ambas son correctas."], correct:2},
+  {id:"d15", topic:BLOQUES.juridicas[9], text:"«La persona que mantenga con el extranjero residente una relación de afectividad análoga a la conyugal se equiparará al cónyuge a todos los efectos». Esta afirmación es:", options:["Sí, siempre que dicha relación esté debidamente acreditada y reúna los requisitos necesarios para producir efectos en España.","Sí, en todo caso o en cualquier circunstancia sin tener en cuenta requisitos.","No."], correct:0},
+  {id:"d16", topic:BLOQUES.juridicas[9], text:"Cuando se trate de ascendientes reagrupados, éstos sólo podrán ejercer, a su vez, el derecho de reagrupación familiar:", options:["En cualquier caso, y solo tras obtener la condición de residentes de larga duración.","Tras haber obtenido la condición de residentes de larga duración y acreditada solvencia económica.","Excepcionalmente, podrán reagrupar a sus hijos menores de edad que estén a su cargo o con cualquier tipo de discapacidad."], correct:1},
+  {id:"d17", topic:BLOQUES.juridicas[9], text:"¿Quién promoverá la participación de los reagrupados en programas de integración socio-cultural y de carácter lingüístico?", options:["Los Poderes Públicos.","Las Administraciones Públicas.","El Gobierno."], correct:1},
+  {id:"d18", topic:BLOQUES.juridicas[9], text:"El cónyuge reagrupado podrá obtener una autorización de residencia independiente:", options:["Únicamente cuando disponga de medios económicos suficientes.","En caso de muerte del reagrupante.","Solo si es víctima de violencia de género y dispone de medios económicos suficientes."], correct:1},
+  {id:"d19", topic:BLOQUES.juridicas[9], text:"Los extranjeros tienen derecho a la tutela judicial:", options:["Directa.","Efectiva.","Subsidiaria."], correct:1},
+  {id:"d20", topic:BLOQUES.juridicas[9], text:"El régimen de ejecutividad de los actos administrativos en materia de extranjería será el previsto con carácter general en la legislación vigente, salvo lo dispuesto para la tramitación de expedientes de expulsión con carácter:", options:["Ordinario.","Preferente.","Simplificado."], correct:1},
+  {id:"d21", topic:BLOQUES.juridicas[9], text:"Los actos discriminatorios contra un extranjero:", options:["Estos actos podrán ser directos o indirectos.","Estos actos podrán ser directos o positivos.","Estos actos podrán ser positivos o negativos."], correct:0},
+  {id:"d22", topic:BLOQUES.juridicas[9], text:"El extranjero que pretenda entrar en España deberá hacerlo por los puestos habilitados al efecto y, además:", options:["En cualquier caso, será preciso un visado.","Deberá no estar sujeto a prohibiciones expresas.","Hallarse provisto del pasaporte y del documento de viaje que acredite su nacionalidad, que se considere válido para tal fin."], correct:1},
+  {id:"d23", topic:BLOQUES.juridicas[9], text:"Se podrá autorizar la entrada en España de los extranjeros que no reúnan los requisitos cuando existan razones excepcionales de:", options:["Índole catastrófica.","Interés público.","Cumplimiento de compromisos adquiridos por Europa."], correct:1},
+  {id:"d24", topic:BLOQUES.juridicas[9], text:"Visado que habilita para trabajar por cuenta ajena hasta 9 meses en un período de 12 meses consecutivos:", options:["Visado de residencia y trabajo.","Visado de estancia.","Visado de residencia y trabajo de temporada."], correct:2},
+  {id:"d25", topic:BLOQUES.juridicas[9], text:"El visado se solicitará y expedirá en:", options:["Las Misiones Diplomáticas de España.","Las Oficinas Consulares de España.","Ambas son correctas."], correct:2},
+  {id:"d26", topic:BLOQUES.juridicas[9], text:"Excepcionalmente, el Ministro del Interior podrá prohibir la salida del territorio español por razones de:", options:["Seguridad nacional y salud pública.","Seguridad nacional y orden público.","Seguridad nacional y seguridad pública."], correct:0},
+  {id:"d27", topic:BLOQUES.juridicas[9], text:"La residencia temporal es la situación que autoriza a permanecer en España:", options:["Por un período superior a 90 días hasta cinco años.","Por un período de 90 días hasta cinco años.","Por un período superior a 90 días e inferior a cinco años."], correct:2},
+  {id:"d28", topic:BLOQUES.juridicas[9], text:"Para autorizar la residencia temporal de un extranjero será preciso que carezca de antecedentes penales por delitos existentes en el ordenamiento español:", options:["Únicamente en España.","Tanto en España, como en los países anteriores de residencia.","Tanto en España, como en su país de origen."], correct:1},
+  {id:"d29", topic:BLOQUES.juridicas[9], text:"Una mujer extranjera en situación irregular que denuncia violencia de género o violencia sexual, puede solicitar una autorización de residencia y trabajo por circunstancias excepcionales:", options:["Únicamente después de que finalice el procedimiento penal.","Desde que se dicte una orden de protección a su favor o exista un informe del Ministerio Fiscal que indique indicios de violencia.","Solo si sus hijos también están en situación irregular en España."], correct:1},
+  {id:"d30", topic:BLOQUES.juridicas[9], text:"Siguiendo la literalidad de la LO 4/2000, la residencia de larga duración es la situación que autoriza a residir y trabajar en España:", options:["Permanentemente.","Indefinidamente.","Perpetuamente."], correct:1},
+  {id:"d31", topic:BLOQUES.juridicas[9], text:"La extinción de la residencia de larga duración se producirá, entre otros supuestos:", options:["Cuando se dicte una orden de expulsión en los casos previstos en la Ley.","Cuando se produzca la ausencia del territorio de España durante 12 meses consecutivos.","Cuando se produzca la ausencia del territorio de la Unión Europea durante 24 meses consecutivos."], correct:0},
+  {id:"d32", topic:BLOQUES.juridicas[9], text:"El Acuerdo de la Conferencia Sectorial de Infancia y Adolescencia sobre la contingencia migratoria extraordinaria (menores extranjeros no acompañados) se adoptará por:", options:["Totalidad.","Unanimidad.","Mayoría absoluta."], correct:1},
+  {id:"d33", topic:BLOQUES.juridicas[9], text:"Se declarará la situación de contingencia migratoria extraordinaria en aquellas CC.AA. cuyo sistema de protección de menores extranjeros no acompañados:", options:["Exceda en ocupación tres veces su capacidad extraordinaria.","Exceda en ocupación cinco veces su capacidad ordinaria.","Ninguna es correcta."], correct:2},
+  {id:"d34", topic:BLOQUES.juridicas[9], text:"Serán sujetos pasivos de las tasas en los supuestos de relaciones laborales en el sector del servicio doméstico de carácter parcial o discontinuo:", options:["El empleador o empresario.","El propio trabajador.","La Comunidad Autónoma correspondiente."], correct:1},
+  {id:"d35", topic:BLOQUES.juridicas[9], text:"Órgano a través del cual se asegurará la adecuada coordinación de las actuaciones que desarrollen las Administraciones Públicas en materia de inmigración:", options:["La Conferencia Sectorial de Inmigración.","El Observatorio Español del Racismo y la Xenofobia.","La Comisión Laboral Tripartita de Inmigración."], correct:0},
+  {id:"d36", topic:BLOQUES.juridicas[9], text:"¿Cuál de los siguientes organismos tiene forma tripartita?", options:["El Foro para la Integración Social de los Inmigrantes.","La Comisión Laboral Tripartita de Inmigración.","Todas son correctas."], correct:2},
+  {id:"d37", topic:BLOQUES.juridicas[9], text:"El Observatorio Español del Racismo y la Xenofobia tendrá funciones de:", options:["Consulta y asesoramiento.","Consulta, información y asesoramiento.","Estudio y análisis."], correct:2},
+  // Tema 11 — Extranjería: infracciones y régimen sancionador (docx retro)
+  {id:"d38", topic:BLOQUES.juridicas[10], text:"Se trata de una infracción LEVE:", options:["La contratación de trabajadores cuya autorización no les habilita para trabajar en esa ocupación o ámbito geográfico, incurriéndose en una infracción por cada uno de los trabajadores ocupados.","Las salidas del territorio español por puestos no habilitados, sin exhibir la documentación prevista o contraviniendo las prohibiciones legalmente impuestas.","Encontrarse trabajando en España sin haber obtenido autorización de trabajo cuando no cuente con autorización de residencia válida."], correct:0},
+  {id:"d39", topic:BLOQUES.juridicas[10], text:"Se trata de una infracción MUY GRAVE:", options:["Constituirse en representante legal de un menor cuando dichas conductas se realicen con ánimo de lucro o para obtener indebidamente un derecho de residencia, siempre que no constituyan delito.","La realización de conductas de discriminación por motivos raciales, étnicos, nacionales o religiosos.","Todas son correctas."], correct:1},
+  {id:"d40", topic:BLOQUES.juridicas[10], text:"Se trata de una infracción GRAVE:", options:["La comisión de una tercera infracción grave siempre que en un plazo de un año anterior hubiera sido sancionado por dos faltas leves de la misma naturaleza.","La comisión de una tercera infracción leve, siempre que en el plazo de un año anterior hubiera sido sancionado por dos faltas leves de la misma naturaleza.","La comisión de una tercera infracción leve, siempre que en el plazo de un año anterior hubiera cometido, al menos, dos faltas leves de la misma naturaleza."], correct:1},
+  {id:"d41", topic:BLOQUES.juridicas[10], text:"Las infracciones tipificadas en la LO 4/2000 serán sancionadas en los siguientes términos:", options:["Las infracciones leves con multa de hasta 500 euros.","Las infracciones graves con multa de 500 hasta 10.000 euros.","En todo caso, las infracciones muy graves con multa desde 10.001 hasta 100.000 euros."], correct:0},
+  {id:"d42", topic:BLOQUES.juridicas[10], text:"En el supuesto de «encontrarse trabajando en España sin haber solicitado autorización administrativa para trabajar por cuenta propia, cuando se cuente con autorización de residencia temporal», el procedimiento sancionador se iniciará:", options:["Por acta de la Inspección de Trabajo y Seguridad Social.","Por expediente administrativo realizado por el Instructor del Cuerpo Nacional de Policía.","Por expediente administrativo realizado por el Instructor del CNP o de la Guardia Civil."], correct:0},
+  {id:"d43", topic:BLOQUES.juridicas[10], text:"Para la GRADUACIÓN de las sanciones, el órgano competente valorará:", options:["El grado de culpabilidad y, en su caso, el daño producido o el riesgo derivado de la infracción y su trascendencia.","La capacidad económica del infractor.","Todas son correctas."], correct:0},
+  {id:"d44", topic:BLOQUES.juridicas[10], text:"El sancionado por contratar trabajadores cuya autorización no les habilita para trabajar en esa ocupación o ámbito geográfico, si fuera subcontratista de otra empresa, el contratista principal y todos los subcontratistas intermedios responderán:", options:["Subsidiariamente.","Solidariamente.","Supletoriamente."], correct:1},
+  {id:"d45", topic:BLOQUES.juridicas[10], text:"Las infracciones muy graves prescribirán a los:", options:["Tres años.","Cinco años.","Dos años."], correct:0},
+  {id:"d46", topic:BLOQUES.juridicas[10], text:"Melissa, colombiana, se encuentra trabajando en España sin haber solicitado autorización administrativa para trabajar por cuenta propia, pero cuenta con permiso de residencia temporal. ¿Qué tipo de infracción comete?", options:["Infracción leve.","Infracción grave.","Infracción muy grave."], correct:0},
+  {id:"d47", topic:BLOQUES.juridicas[10], text:"La sanción de expulsión no podrá ser impuesta, salvo reincidencia, al siguiente extranjero:", options:["Los nacidos en España que hayan residido legalmente en los últimos tres años.","Los que hayan sido españoles y hubieran perdido la nacionalidad española.","Los residentes de larga duración."], correct:2},
+  {id:"d48", topic:BLOQUES.juridicas[10], text:"Si España decide expulsar a un residente de larga duración beneficiario de protección internacional reconocida por otro Estado miembro de la UE, la información solicitada a dicho país deberá ser respondida:", options:["En el plazo de quince días.","En el plazo de un mes.","En el plazo de cuarenta y cinco días."], correct:1},
+  {id:"d49", topic:BLOQUES.juridicas[10], text:"¿En qué casos podrán imponerse conjuntamente las sanciones de expulsión y multa?", options:["Cuando el extranjero haya cometido un delito contra la Seguridad Nacional o contra el Orden Público.","Cuando el extranjero haya cometido un delito contra la Seguridad Nacional, el Orden Público, la Seguridad Pública o la Salud Pública.","En ningún caso."], correct:2},
+  {id:"d50", topic:BLOQUES.juridicas[10], text:"¿Cuál de las siguientes es una infracción MUY GRAVE según la LO 4/2000?", options:["La contratación de trabajadores cuya autorización no les habilita para trabajar en esa ocupación o ámbito geográfico.","No dar de alta en el régimen general de la Seguridad Social al trabajador extranjero cuya autorización de residencia y trabajo por cuenta ajena hubiera solicitado.","La contratación de trabajadores extranjeros sin haber obtenido con carácter previo la correspondiente autorización de residencia y trabajo."], correct:2},
+  {id:"d51", topic:BLOQUES.juridicas[10], text:"No será preciso expediente de expulsión para la devolución de los extranjeros en los siguientes supuestos:", options:["Los que habiendo sido expulsados contravengan la prohibición de entrada en España.","Los que pretendan entrar legalmente en el país.","Ambas son correctas."], correct:0},
+  {id:"d52", topic:BLOQUES.juridicas[10], text:"La devolución en materia de extranjería (LO 4/2000) será acordada por:", options:["La autoridad administrativa.","La autoridad gubernativa competente.","La autoridad judicial."], correct:1},
+  {id:"d53", topic:BLOQUES.juridicas[10], text:"Cuando existan motivos razonables para creer que una persona extranjera en situación irregular ha sido víctima de trata de seres humanos, el período de restablecimiento y reflexión:", options:["Tendrá una duración de, al menos, noventa días.","Tendrá una duración máxima de noventa días.","Tendrá una duración de noventa días."], correct:0},
+  {id:"d54", topic:BLOQUES.juridicas[10], text:"El ejercicio de la potestad sancionadora en la LO 4/2000 se tramitará por los procedimientos:", options:["Ordinario, preferente y simplificado.","Preferente, excluyente y simplificado.","Ninguna es correcta."], correct:0},
+  {id:"d55", topic:BLOQUES.juridicas[10], text:"¿Cuál será la duración del internamiento de un extranjero en los CIE?", options:["En todo caso, duración máxima de 60 días.","Al menos 90 días.","Tiempo imprescindible para los fines del expediente."], correct:2},
+  {id:"d56", topic:BLOQUES.juridicas[10], text:"Se podrán utilizar medios de contención física personal o separación preventiva del agresor en habitación individual. Su utilización:", options:["En cualquier caso, será previamente autorizada por el director del centro.","Será posteriormente comunicada al director del centro.","Se comunicará lo antes posible a la autoridad judicial que autorizó su internamiento."], correct:2},
+  {id:"d57", topic:BLOQUES.juridicas[10], text:"¿En cuál de los siguientes supuestos cabrá la tramitación por el procedimiento preferente?", options:["53.1.f)","54.1.c)","53.1.b)"], correct:0},
+  {id:"d58", topic:BLOQUES.juridicas[10], text:"En el procedimiento ordinario de expulsión, el plazo de cumplimiento voluntario para abandonar el territorio nacional:", options:["No podrá ser inferior a un mes.","Entre siete y treinta días, contados desde el momento de la notificación de la resolución.","Entre siete y treinta días, contados desde el momento de la resolución."], correct:1},
+  // Tema 12 — Protección internacional, apátridas y desplazados (docx retro)
+  {id:"d59", topic:BLOQUES.juridicas[11], text:"La condición de refugiado se reconoce a toda persona que…", options:["Abandona su país por inestabilidad económica grave que le impide mantener condiciones de vida dignas, sin persecución individualizada.","Se encuentra fuera de su país y, debido a fundados temores de persecución por motivos como raza, religión, nacionalidad, opiniones políticas o pertenencia a determinado grupo social, no puede o no quiere acogerse a la protección del mismo.","Sale de su país por catástrofes naturales o emergencias ambientales que generan riesgo para su supervivencia."], correct:1},
+  {id:"d60", topic:BLOQUES.juridicas[11], text:"Quedarán excluidas de la condición de refugiados, según la Ley 12/2009:", options:["Las personas que constituyan, por razones fundadas, un peligro para la seguridad de España.","Las personas que, habiendo sido objeto de una condena firme por delito grave, constituyan una amenaza para la comunidad.","Han cometido un delito contra la paz, un delito de guerra o un delito contra la humanidad, definidos en los instrumentos internacionales."], correct:2},
+  {id:"d61", topic:BLOQUES.juridicas[11], text:"El procedimiento de protección internacional se inicia con la presentación de la solicitud, que deberá efectuarse:", options:["Mediante comparecencia personal de los interesados.","Mediante persona que lo represente.","Ambas son correctas."], correct:2},
+  {id:"d62", topic:BLOQUES.juridicas[11], text:"El Ministro del Interior podrá, mediante resolución motivada, no admitir a trámite las solicitudes por falta de competencia o requisitos, a propuesta de:", options:["La Oficina de Asilo y Refugio.","La Comisión Interministerial de Asilo y Refugio.","La Comisión Interministerial de Extranjería."], correct:0},
+  {id:"d63", topic:BLOQUES.juridicas[11], text:"Contra la resolución de inadmisión a trámite o de denegación de la solicitud se podrá presentar una petición de reexamen que suspenderá los efectos de aquélla:", options:["En el plazo de dos días contados desde su notificación.","En el plazo de dos días contados desde la resolución.","En el plazo de cuatro días contados desde la notificación."], correct:0},
+  {id:"d64", topic:BLOQUES.juridicas[11], text:"Órgano colegiado adscrito al Ministerio del Interior, compuesto por un representante de cada uno de los departamentos con competencia en política exterior e interior, justicia, inmigración, acogida de solicitantes de asilo e igualdad:", options:["La Oficina de Asilo y Refugio.","La Comisión Interministerial de Asilo y Refugio.","La Comisión Interministerial de Extranjería."], correct:1},
+  {id:"d65", topic:BLOQUES.juridicas[11], text:"El estatuto de apátrida cesará cuando el apátrida haya obtenido la nacionalidad española:", options:["De forma automática.","A instancia de parte.","Ambas son correctas."], correct:0},
+  {id:"d66", topic:BLOQUES.juridicas[11], text:"¿Qué tiempo tiene el Ministro del Interior para resolver el Estatuto del Apátrida?", options:["Un plazo no superior a tres meses.","Un plazo no superior a seis meses.","Un plazo mínimo de seis meses."], correct:0},
+  {id:"d67", topic:BLOQUES.juridicas[11], text:"Las condiciones de acogida que incluyen alojamiento, alimentación y vestuario, proporcionadas en especie o en forma de asignaciones financieras o de vales, y una asignación para gastos diarios. Es una definición de:", options:["Condiciones de acogida.","Condiciones materiales de acogida.","Carencia de medios económicos."], correct:1},
+  {id:"d68", topic:BLOQUES.juridicas[11], text:"La duración total del itinerario de acogida, salvo casos de vulnerabilidad excepcionalmente autorizados:", options:["No debe superar los dieciocho meses.","No debe superar los veinticuatro meses.","No debe superar los treinta y seis meses."], correct:0},
+  {id:"d69", topic:BLOQUES.juridicas[11], text:"Se consideran desplazados a los nacionales de un tercer país no miembro de la UE o apátridas que hayan debido abandonar su país o región de origen, o hayan sido evacuados, en particular:", options:["Las personas que hayan huido de zonas de conflicto armado o de violencia permanente.","Las personas que hayan estado o estén en peligro grave de verse expuestas a una violación sistemática o generalizada de los derechos humanos.","Ambas son correctas."], correct:2},
+  // Tema 5 — Organización y funcionamiento de la AGE / El Gobierno (elrincondelpolicia.es, preguntas de examen oficial)
+  {id:"t5-1", topic:BLOQUES.juridicas[4], text:"Según la Ley 50/1997, del Gobierno, ¿cuál de las siguientes opciones NO corresponde a las funciones del Consejo de Ministros?", options:["Acordar la negociación y firma de Tratados internacionales, así como su aplicación provisional.","Declarar los estados de excepción y sitio, así como proponer al Congreso de los Diputados la declaración del estado de alarma.","Disponer la emisión de Deuda Pública o contraer crédito, cuando haya sido autorizado por una Ley."], correct:1, feedback:"La opción correcta es la b): conforme al art. 116 CE y al art. 5 de la Ley 50/1997, el Gobierno declara el estado de alarma mediante decreto, declara el estado de excepción previa autorización del Congreso, y es el Congreso quien declara el estado de sitio a propuesta del Gobierno. La pregunta invierte esos papeles. Las opciones a) y c) sí son funciones propias del Consejo de Ministros recogidas en el art. 5.1 de la Ley 50/1997."},
+  {id:"t5-2", topic:BLOQUES.juridicas[4], text:"El supremo órgano consultivo del Gobierno es:", options:["El Consejo de Gobierno.","El Consejo de Ministros.","El Consejo de Estado."], correct:2, feedback:"El art. 107 CE y la Ley Orgánica 3/1980 del Consejo de Estado lo configuran expresamente como el supremo órgano consultivo del Gobierno. No debe confundirse con el Consejo de Ministros, que es el órgano de gobierno colegiado, no un órgano consultivo."},
+  {id:"t5-3", topic:BLOQUES.juridicas[4], text:"¿Cuál de las siguientes opciones NO puede ser ejercida por el Presidente del Gobierno en funciones?", options:["Dirigir la política de defensa.","Interponer el recurso de inconstitucionalidad.","Plantear la cuestión de confianza."], correct:1, feedback:"El art. 21.3 de la Ley 50/1997 prohíbe expresamente al Presidente del Gobierno en funciones interponer el recurso de inconstitucionalidad. Recuerda que el Gobierno en funciones sí conserva el despacho ordinario de los asuntos públicos, incluida la dirección de la política de defensa."},
+  {id:"t5-4", topic:BLOQUES.juridicas[4], text:"Según lo dispuesto en el artículo 29 de la Ley 50/1997, de 27 de noviembre, del Gobierno, ¿cuál de las siguientes opciones NO es correcta?", options:["El Gobierno está sujeto a la Constitución y al resto del ordenamiento jurídico en toda su actuación.","Todos los actos y omisiones del Gobierno están sometidos al control político de las Cortes Generales.","Los actos que constituyan una vía de hecho del Gobierno y de los órganos y autoridades regulados en la presente Ley son impugnables ante el Tribunal Constitucional."], correct:2, feedback:"El art. 29 de la Ley 50/1997 establece que la vía de hecho del Gobierno es impugnable ante la jurisdicción contencioso-administrativa, no ante el Tribunal Constitucional. Ese es el matiz que convierte la opción c) en incorrecta."},
+  {id:"t5-5", topic:BLOQUES.juridicas[4], text:"Según el artículo 55 de la Ley 40/2015 de Régimen Jurídico del Sector Público, se consideran órganos superiores en la organización central de la Administración General del Estado:", options:["Los Ministros, los Secretarios de Estado y los Subsecretarios.","Los Ministros, los Secretarios de Estado y los Directores Generales.","Los Ministros y los Secretarios de Estado."], correct:2, feedback:"El art. 55 de la Ley 40/2015 distingue entre órganos superiores (Ministros y Secretarios de Estado) y órganos directivos (Subsecretarios, Secretarios Generales, Secretarios Generales Técnicos, Directores Generales y Subdirectores Generales). Es un matiz muy preguntado en examen."},
+  {id:"t5-6", topic:BLOQUES.juridicas[4], text:"En la organización territorial de la Administración General del Estado, ¿qué nivel tendrán los Subdelegados del Gobierno en las provincias?", options:["De Subdirectores generales.","De Subsecretarios.","De Directores generales."], correct:0, feedback:"Conforme al art. 72 de la Ley 40/2015, los Subdelegados del Gobierno en las provincias tendrán nivel orgánico de Subdirector general. No confundir con el rango de Subsecretario, que corresponde a los propios Delegados del Gobierno en las CC. AA."},
+  {id:"t5-7", topic:BLOQUES.juridicas[4], text:"El Presidente del Gobierno en funciones NO tiene la siguiente facultad:", options:["Aprobar el Proyecto de Ley de Presupuestos Generales del Estado.","Presentar proyectos de ley al Senado.","Proponer al Rey la disolución del Senado."], correct:2, feedback:"El art. 21.4 de la Ley 50/1997 prohíbe al Presidente del Gobierno en funciones proponer al Rey la disolución de cualquiera de las Cámaras (ni Congreso ni Senado). Esta prohibición, junto con la de plantear cuestión de confianza y aprobar los Presupuestos, es de las más preguntadas del tema."},
+  {id:"t5-8", topic:BLOQUES.juridicas[4], text:"Las deliberaciones del Consejo de Ministros serán:", options:["Clasificadas.","Reservadas.","Secretas."], correct:2, feedback:"El art. 5.3 de la Ley 50/1997 establece literalmente que las deliberaciones del Consejo de Ministros son secretas. Es una pregunta muy literal: cuidado con confundir «secretas» con «reservadas», que es un término distinto en la Ley de Secretos Oficiales."},
+  {id:"t5-9", topic:BLOQUES.juridicas[4], text:"El Gobierno en funciones no podrá ejercer las siguientes facultades: Presentar proyectos de Ley al Congreso de los Diputados o, en su caso, al Senado y:", options:["Aprobar el Proyecto de Ley de Presupuestos Generales del Estado.","Proponer al Rey el nombramiento de Ministros.","Sugerir cuestión de confianza."], correct:0, feedback:"El art. 21.2 de la Ley 50/1997 prohíbe expresamente al Gobierno en funciones presentar proyectos de ley y aprobar el Proyecto de Ley de Presupuestos Generales del Estado. Estas dos prohibiciones suelen aparecer juntas en el enunciado."},
+  {id:"t5-10", topic:BLOQUES.juridicas[4], text:"Entre las competencias del Delegado del Gobierno en las Comunidades Autónomas, se encuentra:", options:["Proteger el libre ejercicio de los derechos y libertades y garantizar la seguridad ciudadana, a través de los Subdelegados del Gobierno, bajo la dependencia funcional del Gobierno de la Nación.","Proteger el libre ejercicio de los derechos y libertades y garantizar la seguridad ciudadana, a través de los Subdelegados del Gobierno y de las Fuerzas y Cuerpos de Seguridad del Estado, bajo la dependencia funcional del Gobierno de la Nación.","Proteger el libre ejercicio de los derechos y libertades y garantizar la seguridad ciudadana, a través de los Subdelegados del Gobierno y de las Fuerzas y Cuerpos de Seguridad del Estado, cuya jefatura corresponderá al Delegado del Gobierno."], correct:2, feedback:"El art. 154 CE y el art. 72 de la Ley 40/2015 atribuyen al Delegado del Gobierno en la Comunidad Autónoma la jefatura de las Fuerzas y Cuerpos de Seguridad del Estado en su territorio, no una mera dependencia funcional. Ese matiz de «jefatura» es la clave para distinguir la respuesta correcta."},
+  {id:"t5-11", topic:BLOQUES.juridicas[4], text:"El Secretariado del Gobierno, como órgano de apoyo del Consejo de Ministros, de las Comisiones delegadas del Gobierno y de las Comisión General de Secretarios de Estado y Subsecretarios, ejercerá una de las siguientes funciones:", options:["Estudiar aquellos asuntos que, afectando a varios Ministerios, revistan especial trascendencia.","Velar por la correcta y fiel publicación de las disposiciones y normas emanadas del Gobierno que deban insertarse en el «Boletín Oficial del Estado».","Examinar las cuestiones de carácter general que tengan relación con varios Ministerios."], correct:1, feedback:"El art. 8 de la Ley 50/1997 atribuye al Secretariado del Gobierno, entre otras funciones, velar por la correcta y fiel publicación en el BOE de las disposiciones y normas emanadas del Gobierno. Las opciones a) y c) describen más bien funciones de la Comisión General de Secretarios de Estado y Subsecretarios."},
+  {id:"t5-12", topic:BLOQUES.juridicas[4], text:"Según la Ley 50/1997, de 27 de noviembre, del Gobierno, ¿cuál de las siguientes facultades no podrá ejercer el Presidente del Gobierno en funciones?", options:["Plantear la cuestión de confianza.","Interponer el recurso de inconstitucionalidad.","Impartir instrucciones a los demás miembros del Gobierno."], correct:0, feedback:"El art. 21.5 de la Ley 50/1997 prohíbe al Presidente del Gobierno en funciones plantear la cuestión de confianza. Repasa el art. 21 completo: recoge todas las limitaciones del Gobierno y su Presidente en funciones, un contenido que se repite mucho en examen."},
+  {id:"t5-13", topic:BLOQUES.juridicas[4], text:"Según la Ley 40/2015, de 1 de octubre, de Régimen Jurídico del Sector Público, los secretarios generales técnicos tendrán la categoría de:", options:["Director general.","Subsecretario.","Subdirector."], correct:0, feedback:"El art. 63 de la Ley 40/2015 otorga a los Secretarios Generales Técnicos la categoría de Director General, aunque dependen directamente del Subsecretario y centralizan servicios comunes."},
+  {id:"t5-14", topic:BLOQUES.juridicas[4], text:"Con respecto a los Ministros:", options:["Los Ministros sin cartera no existen en base al ordenamiento jurídico español.","Los Ministros sin cartera podrán existir y su ámbito de competencias deberá ser delimitado por real decreto.","En nuestro marco legislativo se recoge a los Ministros sin cartera, pero se exige que sus competencias sean delimitadas por ley orgánica."], correct:1, feedback:"El art. 4.2 de la Ley 50/1997 permite la existencia de Ministros sin cartera, a los que se les podrá atribuir el ejercicio de determinadas funciones gubernamentales mediante real decreto, sin necesidad de ley orgánica."},
+  {id:"t5-15", topic:BLOQUES.juridicas[4], text:"¿Cuál de los siguientes es un órgano superior o directivo de la Administración Central del Estado?", options:["Secretario General Técnico.","Subsecretario de Estado.","Subsecretario de CC. AA."], correct:0, feedback:"El Secretario General Técnico es un órgano directivo reconocido en el art. 55 y 63 de la Ley 40/2015. Las otras dos opciones son denominaciones que no existen como tales en la organización de la AGE: no hay «Subsecretario de Estado» (existe Secretario de Estado y, por separado, Subsecretario) ni «Subsecretario de CC. AA.»."},
+  {id:"t5-16", topic:BLOQUES.juridicas[4], text:"¿Qué rango ostentan los Delegados del Gobierno dentro de la Administración Pública?", options:["Directores Generales.","Subdirectores.","Subsecretarios."], correct:2, feedback:"El art. 154 CE y el art. 72 de la Ley 40/2015 otorgan a los Delegados del Gobierno en las Comunidades Autónomas rango de Subsecretario. Es la misma referencia normativa que conviene repasar para la pregunta sobre los Subdelegados (rango de Subdirector general)."},
+  {id:"t5-17", topic:BLOQUES.juridicas[4], text:"A raíz de la entrada en vigor de la Ley 40/2015, de 1 de octubre, del Régimen Jurídico del Sector Público, ¿quién será el encargado de nombrar a los Subdelegados del Gobierno en aquellas Comunidades Autónomas donde existan varias provincias?", options:["El Delegado de Gobierno de la CC. AA.","El Consejo de Ministros.","El Presidente de la CC. AA."], correct:0, feedback:"El art. 72.3 de la Ley 40/2015 atribuye al Delegado del Gobierno en la Comunidad Autónoma el nombramiento de los Subdelegados del Gobierno en las provincias en las que existan, conforme a los principios de mérito y capacidad."},
+  {id:"t5-18", topic:BLOQUES.juridicas[4], text:"Los Delegados del Gobierno en las Comunidades Autónomas tendrán rango de:", options:["Director General.","Subdirector General.","Subsecretario."], correct:2, feedback:"Igual que en la pregunta anterior sobre su rango: los Delegados del Gobierno tienen rango de Subsecretario, conforme al art. 154 CE y al art. 72 de la Ley 40/2015."},
+  {id:"t5-19", topic:BLOQUES.juridicas[4], text:"La Administración General del Estado desarrolla funciones:", options:["Administrativas de carácter ejecutivo.","Ejecutivas de carácter administrativo.","Instrumentales de carácter administrativo."], correct:1, feedback:"El art. 1 de la Ley 40/2015 define la AGE como la Administración que, bajo la dirección del Gobierno, desarrolla funciones ejecutivas de carácter administrativo. Cuidado con el orden de las palabras: no es «administrativas de carácter ejecutivo»."},
+  {id:"t5-20", topic:BLOQUES.juridicas[4], text:"Según establece el artículo 22 de la antigua LOFAGE (art. 72 de la Ley 40/2015), en los casos de ausencia, vacante o enfermedad del Delegado de Gobierno en una Comunidad Autónoma uniprovincial, en las que no exista subdelegado de Gobierno, ¿este será suplido por?", options:["El titular del órgano responsable de los servicios comunes de la Delegación del Gobierno.","Secretario general.","El Subdelegado del Gobierno en la provincia donde aquel tenga su sede."], correct:1, feedback:"En las Comunidades Autónomas uniprovinciales sin Subdelegado, la suplencia del Delegado del Gobierno en caso de ausencia, vacante o enfermedad corresponde al Secretario general de la Delegación del Gobierno (art. 72 Ley 40/2015)."},
+  {id:"t5-21", topic:BLOQUES.juridicas[4], text:"En el ámbito de la Administración General del Estado, una Subdirección General:", options:["Se suprime a propuesta del Ministro respectivo.","Se modifica por Real Decreto del Consejo de Ministros.","Se crea previa aprobación del Ministro de Administraciones Públicas."], correct:1, feedback:"Las Subdirecciones Generales y órganos similares se crean, modifican y suprimen por Real Decreto del Consejo de Ministros, a iniciativa del Ministro competente y a propuesta del Ministro de Hacienda y Función Pública (arts. 66 y 74 Ley 40/2015). Repasa la diferencia con la creación de órganos superiores/directivos de mayor rango, que exige Real Decreto del Presidente del Gobierno."},
+  // Tema 6 — Los funcionarios públicos: concepto y clases. Adquisición y pérdida de la condición de funcionario (elrincondelpolicia.es, preguntas de examen oficial)
+  {id:"t6-1", topic:BLOQUES.juridicas[5], text:"Según el Real Decreto Legislativo 5/2015 del Estatuto Básico del Empleado Público, ¿en cuál de estas opciones NO será considerado como empleado público?", options:["Personal laboral, ya sea fijo, por tiempo indefinido o temporal.","Funcionario interino.","Personal accidental."], correct:2, feedback:"El art. 8.2 del TREBEP clasifica a los empleados públicos en funcionarios de carrera, funcionarios interinos, personal laboral y personal eventual. «Personal accidental» no es ninguna de estas categorías reconocidas por el Estatuto."},
+  {id:"t6-2", topic:BLOQUES.juridicas[5], text:"Los efectos económicos plenos, para el funcionario de carrera, comienzan a producirse desde:", options:["Recibir el nombramiento de la autoridad competente.","Prestar el juramento o promesa legalmente establecida.","Tomar posesión del cargo."], correct:2, feedback:"El art. 62 del TREBEP vincula el nacimiento de la relación de servicio, con sus efectos administrativos y económicos plenos, al acto de toma de posesión dentro del plazo que se establezca, último de los requisitos sucesivos para adquirir la condición de funcionario de carrera."},
+  {id:"t6-3", topic:BLOQUES.juridicas[5], text:"Según las clases de empleados públicos que efectúa el artículo 8 del Real Decreto Legislativo 5/2015, de 30 de octubre, por el que se aprueba el texto refundido de la Ley del Estatuto Básico del Empleado Público, se clasifican en:", options:["Funcionario laboral fijo, funcionario eventual y funcionario fijo-discontinuo.","Funcionarios de carrera, funcionarios interinos, personal laboral y personal eventual.","Funcionarios de carrera, personal laboral, personal de Cuerpos Generales y personal del Cuerpo Superior de la Administración."], correct:1, feedback:"El art. 8.2 del TREBEP establece exactamente estas cuatro categorías: funcionarios de carrera, funcionarios interinos, personal laboral y personal eventual. Es la clasificación básica del tema y conviene memorizarla literalmente."},
+  {id:"t6-4", topic:BLOQUES.juridicas[5], text:"Para adquirirse la condición de funcionario de carrera se debe cumplir unos requisitos de forma sucesiva. Conforme dispone el Real Decreto Legislativo 5/2015, de 30 de octubre, ¿cuál de las alternativas propuestas es el último de los requisitos que debe cumplir para ser nombrado como tal?", options:["Nombramiento por el órgano o autoridad competente, que será publicado en el Diario Oficial correspondiente.","Acto de acatamiento de la Constitución, y, en su caso, del Estatuto de Autonomía correspondiente y del resto del ordenamiento jurídico.","Toma de posesión dentro del plazo que se establezca."], correct:2, feedback:"El art. 62 del TREBEP fija el orden: superar el proceso selectivo, nombramiento publicado en el diario oficial, acatamiento de la Constitución y, por último, toma de posesión dentro del plazo establecido, momento en el que se adquiere la condición plena de funcionario de carrera."},
+  {id:"t6-5", topic:BLOQUES.juridicas[5], text:"¿Qué delito comete el funcionario público que, a sabiendas de su injusticia, dictare una resolución arbitraria en un asunto administrativo?", options:["Prevaricación.","Cohecho.","Tráfico de influencias."], correct:0, feedback:"El art. 404 del Código Penal tipifica precisamente este supuesto como delito de prevaricación administrativa: la autoridad o funcionario público que, a sabiendas de su injusticia, dicta una resolución arbitraria en un asunto administrativo."},
+  {id:"t6-6", topic:BLOQUES.juridicas[5], text:"El procedimiento mediante el cual se mide y valora la conducta profesional y el rendimiento o el logro de resultados de los funcionarios públicos es:", options:["La evaluación del desempeño.","La estadística laboral.","La carrera profesional."], correct:0, feedback:"El art. 20 del TREBEP regula la evaluación del desempeño como el procedimiento mediante el cual se mide y valora la conducta profesional y el rendimiento o el logro de resultados. Sus resultados se tienen en cuenta para la carrera profesional, la formación, la provisión de puestos y la percepción de retribuciones complementarias."},
+  {id:"t6-7", topic:BLOQUES.juridicas[5], text:"¿Cómo se denomina el empleado público que solo realiza funciones expresamente calificadas como de confianza o asesoramiento especial, siendo retribuido con cargo a los créditos presupuestarios consignados para este fin?", options:["Funcionario interino.","Personal laboral.","Personal eventual."], correct:2, feedback:"El art. 12.1 del TREBEP define exactamente así al personal eventual: nombramiento no permanente, funciones de confianza o asesoramiento especial, retribuido con cargo a los créditos presupuestarios consignados para este fin."},
+  {id:"t6-8", topic:BLOQUES.juridicas[5], text:"¿Cuál es la edad máxima de permanencia en el servicio activo de un funcionario público?", options:["La correspondiente a la jubilación forzosa, sesenta y cinco años.","Se podrá permanecer en servicio activo como máximo hasta los setenta y dos años en los términos que se establezcan en las leyes de la función pública.","Según la legislación vigente, un funcionario público podrá jubilarse máximo a los setenta años siempre que lo solicite y le sea concedido."], correct:2, feedback:"El art. 67.3 del TREBEP fija la jubilación forzosa a los 65 años, si bien permite prolongar la permanencia en servicio activo, como máximo, hasta los setenta años, cuando el funcionario lo solicite y le sea concedido por la Administración, atendiendo a las necesidades del servicio."},
+  {id:"t6-9", topic:BLOQUES.juridicas[5], text:"El plazo para resolver una petición de rehabilitación de la condición de funcionario es:", options:["3 meses.","4 meses.","6 meses."], correct:2, feedback:"El art. 68 del TREBEP y su normativa de desarrollo fijan en 6 meses el plazo máximo para resolver una petición de rehabilitación de la condición de funcionario."},
+  {id:"t6-10", topic:BLOQUES.juridicas[5], text:"¿Cuál de las siguientes opciones no se contempla como situación administrativa de los Funcionarios de carrera en el Real Decreto Legislativo 5/2015, de 30 de octubre?", options:["Suspensión de funciones.","Servicios especiales.","Comisión de servicios."], correct:2, feedback:"El art. 85 del TREBEP recoge como situaciones administrativas: servicio activo, servicios especiales, servicio en otras Administraciones Públicas, excedencia y suspensión de funciones. La comisión de servicios no es una situación administrativa, sino una forma de provisión de puestos de trabajo."},
+  {id:"t6-11", topic:BLOQUES.juridicas[5], text:"El personal con carácter no permanente que sólo realiza funciones de confianza o asesoramiento especial es:", options:["El personal laboral.","El personal eventual.","El personal interino."], correct:1, feedback:"El art. 12.1 del TREBEP define así al personal eventual, cuyo nombramiento y cese son libres, y que cesa en todo caso cuando se produzca el cese de la autoridad a la que preste la función de confianza o asesoramiento."},
+  {id:"t6-12", topic:BLOQUES.juridicas[5], text:"Si como funcionario de carrera con nivel 17 paso a ocupar un puesto de nivel 20, ¿cuánto tiempo tardaré en consolidarlo?", options:["2 años.","3 años.","4 años."], correct:2, feedback:"La normativa de aplicación al personal funcionario (grado personal) exige, con carácter general, dos años continuados en el nivel superior para consolidarlo, u otras combinaciones alternativas; sin embargo, la plantilla oficial de este examen marcó la c) como respuesta correcta, por lo que conviene repasar bien esta pregunta con tu profesor, ya que la clave oficial se aparta de la regla general habitual."},
+  {id:"t6-13", topic:BLOQUES.juridicas[5], text:"Es correcto afirmar que:", options:["A los funcionarios interinos, no les será aplicable, en tanto y cuanto no sean funcionarios de carrera, el régimen general de los funcionarios de carrera.","La selección de funcionarios interinos habrá de realizarse mediante procedimientos ágiles que respetarán los principios de igualdad, profesionalidad, capacitación y publicidad.","Las plazas vacantes desempeñadas por funcionarios interinos deberán incluirse en la oferta de empleo correspondiente al ejercicio en que se produce su nombramiento y, si no fuera posible, en la siguiente, salvo que se decida su amortización."], correct:2, feedback:"El art. 10.4 del TREBEP establece literalmente que las plazas vacantes desempeñadas por funcionarios interinos deben incluirse en la oferta de empleo del ejercicio en que se produce su nombramiento y, si no fuera posible, en la siguiente, salvo que se decida su amortización. La opción b) también recoge un principio real del art. 10.2, pero en esta pregunta la respuesta marcada como correcta es la c)."},
+  {id:"t6-14", topic:BLOQUES.juridicas[5], text:"¿Cuál de las siguientes respuestas relativa a la excedencia voluntaria por interés particular de un funcionario público, es correcta?", options:["Podrá declararse cuando al funcionario se le instruya un expediente disciplinario.","La concesión quedará subordinada a las necesidades del servicio, debidamente motivadas.","El funcionario devengará retribuciones y será compatible el tiempo que permanezca en esta situación a efectos de trienios y derechos en el régimen de Seguridad Social que les sea de aplicación."], correct:1, feedback:"El art. 89.2 del TREBEP condiciona la concesión de la excedencia voluntaria por interés particular a las necesidades del servicio, debidamente motivadas. Durante esta situación el funcionario NO devenga retribuciones ni le es computable el tiempo a efectos de trienios ni de derechos pasivos, y no puede declararse mientras se le instruye expediente disciplinario."},
+  {id:"t6-15", topic:BLOQUES.juridicas[5], text:"Según el Texto refundido de la Ley del Estatuto Básico del Empleado Público, las disposiciones de dicho Estatuto sólo se aplicarán directamente cuando así lo disponga su legislación específica al siguiente personal:", options:["Personal del Centro Nacional de Inteligencia, Personal militar de las Fuerzas Armadas, Personal de las Fuerzas y Cuerpos de Seguridad y Personal no retribuido por arancel.","Personal del Centro Nacional de Inteligencia, Personal militar de las Fuerzas Armadas y Personal de las Fuerzas y Cuerpos de Seguridad.","Personal del Centro Nacional de Inteligencia, Personal militar de las Fuerzas Armadas, Personal de las Fuerzas y Cuerpos de Seguridad y Personal funcionario las Delegaciones y Subdelegaciones del Gobierno de las Comunidades Autónomas."], correct:1, feedback:"El art. 4 del TREBEP excluye de su aplicación directa (salvo remisión expresa de su legislación específica) a determinados colectivos, entre ellos el personal del CNI, el personal militar de las Fuerzas Armadas y el personal de las Fuerzas y Cuerpos de Seguridad. El personal de las Delegaciones y Subdelegaciones del Gobierno no forma parte de esta lista de excepciones."},
+  {id:"t6-16", topic:BLOQUES.juridicas[5], text:"Con relación a las clases de personal al servicio de las Administraciones Públicas, según la Ley 5/2015 de 30 de octubre, del Estatuto Básico del Empleado Público:", options:["Los nombramientos y ceses de los funcionarios interinos serán libres.","La condición de personal eventual no podrá constituir mérito para el acceso a la Función Pública o para la promoción interna.","Al personal eventual le será aplicable, en lo que sea adecuado a la naturaleza de su condición, el régimen de la legislación laboral."], correct:1, feedback:"El art. 12.3 del TREBEP establece expresamente que la condición de personal eventual no podrá constituir mérito para el acceso a la Función Pública ni para la promoción interna. El nombramiento y cese libres son propios del personal eventual, no de los interinos, y a este último tampoco se le aplica el régimen laboral, sino en lo que sea adecuado el régimen general de los funcionarios de carrera."},
+  {id:"t6-17", topic:BLOQUES.juridicas[5], text:"Según el artículo 18 del Real Decreto Legislativo 5/2015, por el que se aprueba el texto refundido de la Ley del Estatuto Básico del Empleado Público, al respecto de la promoción interna de los funcionarios de carrera, es correcto afirmar que:", options:["Los funcionarios deberán poseer los requisitos exigidos para el ingreso, tener una antigüedad de, al menos, dos años de servicio activo en el inferior Subgrupo, o Grupo de clasificación profesional, en el supuesto de que éste no tenga Subgrupo y superar las correspondientes pruebas selectivas.","Se articulará un sistema de grados, categorías o escalones de ascenso fijándose la remuneración a cada uno de ellos.","Se deberá valorar la trayectoria y actuación profesional, la calidad de los trabajos realizados."], correct:0, feedback:"El art. 18.2 del TREBEP exige, para la promoción interna a cuerpos o escalas del mismo o superior Subgrupo, cumplir los requisitos exigidos para el ingreso, tener una antigüedad de al menos dos años de servicio activo en el inferior y superar las correspondientes pruebas selectivas."},
+  {id:"t6-18", topic:BLOQUES.juridicas[5], text:"En lo referente a la renuncia a la condición de funcionario:", options:["La renuncia voluntaria a la condición de funcionario habrá de ser manifestada por escrito y será aceptada expresamente por la Administración en cualquier caso.","No podrá ser aceptada la renuncia cuando el funcionario esté sujeto a expediente disciplinario o haya sido dictado en su contra auto de procesamiento o de apertura de juicio oral por la comisión de algún delito.","La renuncia a la condición de funcionario inhabilita para ingresar de nuevo en la Administración Pública a través del procedimiento de selección establecido."], correct:1, feedback:"El art. 63.2 del TREBEP prohíbe aceptar la renuncia cuando el funcionario esté sujeto a expediente disciplinario o a un procedimiento judicial (auto de procesamiento o apertura de juicio oral) por la comisión de algún delito. La renuncia, además, no inhabilita para el reingreso en la función pública a través de un nuevo proceso selectivo."},
+  {id:"t6-19", topic:BLOQUES.juridicas[5], text:"Antonio fue nombrado funcionario interino al darse la circunstancia de existir una plaza vacante que no era posible cubrir por funcionarios de carrera. Esa plaza vacante desempeñada deberá incluirse en la oferta de empleo:", options:["Al ejercicio en que se produce su nombramiento en todo caso por su excepcionalidad.","No deberá incluirse nunca, debe amortizarse.","Cabe la posibilidad de la inclusión de la misma en el ejercicio siguiente."], correct:2, feedback:"El art. 10.4 del TREBEP dispone que la plaza se incluirá en la oferta de empleo del ejercicio en que se produce el nombramiento y, si no fuera posible, cabe la posibilidad de incluirla en el ejercicio siguiente, salvo que se decida su amortización."},
+  {id:"t6-20", topic:BLOQUES.juridicas[5], text:"No es correcto afirmar que:", options:["Es personal eventual el que, en virtud de nombramiento y carácter no permanente, solo realiza funciones expresamente calificadas como de confianza o asesoramiento especial.","El nombramiento y cese del personal eventual serán libres. El cese tendrá lugar en todo caso cuando se produzca el de la autoridad a la que se preste la función de confianza o asesoramiento.","La condición de personal eventual podrá constituir mérito para el acceso a la función pública o para la promoción interna."], correct:2, feedback:"Es la afirmación incorrecta porque, según el art. 12.3 del TREBEP, la condición de personal eventual NO podrá constituir mérito para el acceso a la Función Pública ni para la promoción interna; es justo lo contrario de lo que dice la opción c)."},
+  {id:"t6-21", topic:BLOQUES.juridicas[5], text:"El Real Decreto Legislativo 5/2015, de 30 de octubre, por el que se aprueba el texto refundido de la Ley del Estatuto Básico del Empleado Público, define al personal laboral como:", options:["Personal que en virtud de contrato de trabajo formalizado por escrito, en cualquiera de las modalidades de contratación de personal previstas en la legislación laboral, presta servicios retribuidos por las Administraciones públicas.","Personal que en virtud de nombramiento y con carácter no permanente, solo realiza funciones expresamente calificadas como de confianza.","Personal que por razones expresamente justificadas de necesidad y urgencia, son nombrados como tales."], correct:0, feedback:"El art. 11.1 del TREBEP define así al personal laboral, distinguiéndolo del personal eventual (opción b, definida en el art. 12.1) y de los funcionarios interinos (opción c, definidos en el art. 10.1)."},
+  {id:"t6-22", topic:BLOQUES.juridicas[5], text:"Según el Real Decreto Legislativo 5/2015, de 30 de octubre, es causa de pérdida de la condición de funcionario de carrera:", options:["La pena principal o accesoria de inhabilitación absoluta o especial para cargo público que tuviere carácter firme.","La pena total o parcial de inhabilitación absoluta o especial para cargo público que tuviere carácter firme.","La pena parcial o subsidiaria de inhabilitación absoluta o especial para cargo público que tuviere carácter firme."], correct:0, feedback:"El art. 63.b) del TREBEP recoge literalmente esta causa de pérdida de la condición de funcionario: la pena principal o accesoria de inhabilitación absoluta o especial para cargo público que tuviere carácter firme. Cuidado con las variantes «total/parcial» o «parcial/subsidiaria», que son distractores habituales."},
+  {id:"t6-23", topic:BLOQUES.juridicas[5], text:"Los funcionarios interinos son nombrados como tales para el desempeño de funciones propias de funcionarios de carrera, cuando se den algunas circunstancias. ¿Cuál de las siguientes es incorrecta?", options:["La existencia de plazas vacantes cuando no sea posible su cobertura por funcionarios de carrera.","La ejecución de programas de carácter temporal, que no podrán tener una duración superior a un año.","El exceso o acumulación de tareas por plazo máximo de nueve meses, dentro de un periodo de dieciocho meses."], correct:1, feedback:"El art. 10.1.b) del TREBEP establece que la ejecución de programas de carácter temporal no podrá tener una duración superior a tres años, ampliable doce meses más por las leyes de Función Pública que se dicten en desarrollo del Estatuto; por tanto, el límite de «un año» de la opción b) es incorrecto."},
+  {id:"t6-24", topic:BLOQUES.juridicas[5], text:"El nacional perteneciente a un Estado del Espacio Económico Europeo:", options:["Puede ser contratado como personal laboral al servicio de la Administración, sin restricciones.","Podrá acceder, como personal funcionario, en igualdad de condiciones que los españoles y los ciudadanos de la Unión Europea a los empleos públicos.","Precisa de residencia legal en España para optar a un empleo público."], correct:0, feedback:"El art. 57 del TREBEP permite el acceso al empleo público de los nacionales de Estados miembros de la Unión Europea y del Espacio Económico Europeo; en el caso del acceso como personal laboral no se exigen las restricciones que sí existen para determinados puestos funcionariales que impliquen participación directa o indirecta en el ejercicio de potestades públicas."},
+  {id:"t6-25", topic:BLOQUES.juridicas[5], text:"Los empleados públicos se clasifican en:", options:["Funcionarios de carrera, funcionarios interinos, personal laboral y personal eventual.","Funcionarios de carrera, personal interino, personal laboral y personal eventual.","Funcionarios de carrera, funcionarios laborales, funcionarios eventuales y personal eventual."], correct:0, feedback:"El art. 8.2 del TREBEP fija literalmente estas cuatro categorías: funcionarios de carrera, funcionarios interinos, personal laboral y personal eventual. Presta atención a la redacción exacta: es «funcionarios interinos», no «personal interino»."},
+  {id:"t6-26", topic:BLOQUES.juridicas[5], text:"La no resolución por parte de la Administración de un procedimiento de rehabilitación en la condición de funcionario público, instado a petición de quien hubiera perdido dicha condición en virtud de condena a la pena principal o accesoria de inhabilitación, produce:", options:["Silencio positivo.","Silencio negativo.","En ningún caso en estos procedimientos se produce silencio administrativo."], correct:1, feedback:"En los procedimientos de rehabilitación de la condición de funcionario regulados en el art. 68 del TREBEP, transcurrido el plazo máximo de 6 meses sin resolución expresa, el silencio administrativo tiene carácter negativo o desestimatorio."},
+  {id:"t6-27", topic:BLOQUES.juridicas[5], text:"Los órganos de gobierno de las Administraciones Públicas podrán conceder, con carácter excepcional, la rehabilitación de la condición de funcionario, si:", options:["La pérdida no fue por sanción disciplinaria de separación del servicio.","A petición del interesado cuando la pérdida haya sido por condena de pena principal o accesoria de inhabilitación, atendiendo a las circunstancias y entidad del delito cometido.","La pérdida sea por Jubilación voluntaria."], correct:1, feedback:"El art. 68.2 del TREBEP permite conceder la rehabilitación, con carácter excepcional, a petición del interesado, cuando la pérdida de la condición de funcionario se hubiera producido por condena a pena principal o accesoria de inhabilitación, ponderando de manera restrictiva las circunstancias y entidad del delito cometido."},
 ];
 
 /* ===== STORAGE (localStorage para GitHub Pages) ===== */
+/* skey(): añade un sufijo por usuario a las claves de progreso individual, para que
+   varios alumnos que compartan navegador no mezclen sus datos entre sí. */
+function currentUserKey(){
+  if(typeof currentRole!=='undefined' && currentRole==='alumno'){
+    const email=(sessionStorage.getItem('ca-student-email')||'anon').toLowerCase().trim();
+    return 'u_'+email.replace(/[^a-z0-9]/g,'_');
+  }
+  return 'profesora';
+}
+function skey(base){ return base+':'+currentUserKey(); }
+
 function getCustom(){ try{ return JSON.parse(localStorage.getItem('ca-custom-q')||'[]'); }catch(e){ return []; } }
 function saveCustom(a){ localStorage.setItem('ca-custom-q', JSON.stringify(a)); }
-function getStats(){ try{ return JSON.parse(localStorage.getItem('ca-stats')||'{}'); }catch(e){ return {}; } }
-function saveStats(o){ localStorage.setItem('ca-stats', JSON.stringify(o)); }
-function getFailed(){ try{ return JSON.parse(localStorage.getItem('ca-failed')||'[]'); }catch(e){ return []; } }
-function saveFailed(a){ localStorage.setItem('ca-failed', JSON.stringify(a)); }
+function getStats(){ try{ return JSON.parse(localStorage.getItem(skey('ca-stats'))||'{}'); }catch(e){ return {}; } }
+function saveStats(o){ localStorage.setItem(skey('ca-stats'), JSON.stringify(o)); }
+function getFailed(){ try{ return JSON.parse(localStorage.getItem(skey('ca-failed'))||'[]'); }catch(e){ return []; } }
+function saveFailed(a){ localStorage.setItem(skey('ca-failed'), JSON.stringify(a)); }
 
-function getBookmarks(){ try{ return JSON.parse(localStorage.getItem('ca-bookmarks')||'[]'); }catch(e){ return []; } }
-function saveBookmarks(a){ localStorage.setItem('ca-bookmarks', JSON.stringify(a)); }
-function getComments(){ try{ return JSON.parse(localStorage.getItem('ca-comments')||'{}'); }catch(e){ return {}; } }
-function saveComments(o){ localStorage.setItem('ca-comments', JSON.stringify(o)); }
-function getDismissed(){ try{ return JSON.parse(localStorage.getItem('ca-dismissed')||'[]'); }catch(e){ return []; } }
-function saveDismissed(a){ localStorage.setItem('ca-dismissed', JSON.stringify(a)); }
+function getBookmarks(){ try{ return JSON.parse(localStorage.getItem(skey('ca-bookmarks'))||'[]'); }catch(e){ return []; } }
+function saveBookmarks(a){ localStorage.setItem(skey('ca-bookmarks'), JSON.stringify(a)); }
+function getComments(){ try{ return JSON.parse(localStorage.getItem(skey('ca-comments'))||'{}'); }catch(e){ return {}; } }
+function saveComments(o){ localStorage.setItem(skey('ca-comments'), JSON.stringify(o)); }
+function getDismissed(){ try{ return JSON.parse(localStorage.getItem(skey('ca-dismissed'))||'[]'); }catch(e){ return []; } }
+function saveDismissed(a){ localStorage.setItem(skey('ca-dismissed'), JSON.stringify(a)); }
 function getActiveFailed(){ const d=getDismissed(); return getFailed().filter(q=>!d.includes(q.id)); }
+
+/* ===== CUENTAS DE ALUMNOS (roster gestionado por la profesora) ===== */
+function getStudents(){ try{ return JSON.parse(localStorage.getItem('ca-students')||'[]'); }catch(e){ return []; } }
+function saveStudents(a){ localStorage.setItem('ca-students', JSON.stringify(a)); }
+function sanitizeEmailKey(email){ return (email||'').toLowerCase().trim().replace(/[^a-z0-9]/g,'_'); }
+function genPassword(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+  let s=''; for(let i=0;i<8;i++) s+=chars[Math.floor(Math.random()*chars.length)];
+  return s;
+}
+
+function getImpugnaciones(){ try{ return JSON.parse(localStorage.getItem('ca-impugnaciones')||'[]'); }catch(e){ return []; } }
+function saveImpugnaciones(a){ localStorage.setItem('ca-impugnaciones', JSON.stringify(a)); }
 
 /* ===== ESTADO ===== */
 const ADMIN_PASSWORD = "codigoazul2026";
+const PROFESORA_EMAIL = "info.codigoazul@gmail.com";
 let customQ=[], stats={};
 let quiz=[], qIdx=0, qScore=0, qAnswered=false, sessionFailed=[];
 let repasoQuiz=[], repasoIdx=0, repasoScore=0, repasoAnswered=false;
 let adminLoggedIn = false;
+let currentRole = null; // 'alumno' | 'profesora'
 
 function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
 function allQ(){ return SEED.concat(customQ); }
+
+/* ===== ENTRADA / LOGIN ===== */
+document.getElementById('profEmailShow').textContent = PROFESORA_EMAIL;
+
+function showEntryChoice(which){
+  document.getElementById('entryChoices').style.display='none';
+  document.getElementById('formAlumno').classList.toggle('open', which==='alumno');
+  document.getElementById('formProfesora').classList.toggle('open', which==='profesora');
+}
+function backToChoices(){
+  document.getElementById('entryChoices').style.display='flex';
+  document.getElementById('formAlumno').classList.remove('open');
+  document.getElementById('formProfesora').classList.remove('open');
+}
+document.getElementById('cardAlumno').addEventListener('click',()=>showEntryChoice('alumno'));
+document.getElementById('cardProfesora').addEventListener('click',()=>showEntryChoice('profesora'));
+document.querySelectorAll('.entry-back').forEach(b=>b.addEventListener('click', backToChoices));
+
+function enterApp(role, alumnoNombre, alumnoEmail){
+  currentRole = role;
+  sessionStorage.setItem('ca-role', role);
+  if(role==='alumno'){
+    if(alumnoNombre) sessionStorage.setItem('ca-alumno-nombre', alumnoNombre); else sessionStorage.removeItem('ca-alumno-nombre');
+    if(alumnoEmail) sessionStorage.setItem('ca-student-email', alumnoEmail);
+  }
+  adminLoggedIn = (role==='profesora');
+  document.getElementById('entryGate').style.display='none';
+  document.getElementById('appShell').style.display='block';
+  const badge=document.getElementById('roleBadge');
+  const changeLink=document.getElementById('changePassLink');
+  if(role==='profesora'){
+    badge.textContent='👨‍🏫 Profesor'; badge.className='role-badge profesora';
+    changeLink.style.display='none';
+  } else {
+    const nombre=sessionStorage.getItem('ca-alumno-nombre');
+    badge.textContent='🎓 '+(nombre?nombre:(sessionStorage.getItem('ca-student-email')||'Alumno/a'));
+    badge.className='role-badge alumno';
+    changeLink.style.display='inline-block';
+  }
+  document.querySelectorAll('.teacher-tab').forEach(t=>{ t.style.display = role==='profesora' ? 'block' : 'none'; });
+  // recargar banco de preguntas propias y estadísticas correspondientes a este usuario
+  customQ=getCustom(); stats=getStats();
+  buildAllGrids(false);
+}
+
+document.getElementById('entrarAlumnoBtn').addEventListener('click',()=>{
+  const email=document.getElementById('alumnoEmail').value.trim().toLowerCase();
+  const pass=document.getElementById('alumnoPass').value;
+  const student=getStudents().find(s=>s.email.toLowerCase()===email && s.password===pass);
+  const err=document.getElementById('alumnoErr');
+  if(!student){
+    err.style.display='block';
+    return;
+  }
+  err.style.display='none';
+  enterApp('alumno', student.name, student.email);
+});
+document.getElementById('alumnoPass').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('entrarAlumnoBtn').click(); });
+document.getElementById('alumnoEmail').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('alumnoPass').focus(); });
+
+document.getElementById('entrarProfBtn').addEventListener('click',()=>{
+  const pass=document.getElementById('profPass').value;
+  if(pass===ADMIN_PASSWORD){
+    document.getElementById('profPassErr').style.display='none';
+    enterApp('profesora');
+  } else {
+    document.getElementById('profPassErr').style.display='block';
+  }
+});
+document.getElementById('profPass').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('entrarProfBtn').click(); });
+
+document.getElementById('logoutBtn').addEventListener('click',()=>{
+  sessionStorage.removeItem('ca-role');
+  sessionStorage.removeItem('ca-alumno-nombre');
+  sessionStorage.removeItem('ca-student-email');
+  currentRole=null; adminLoggedIn=false;
+  document.getElementById('appShell').style.display='none';
+  document.getElementById('entryGate').style.display='flex';
+  backToChoices();
+  document.getElementById('profPass').value='';
+  document.getElementById('alumnoEmail').value='';
+  document.getElementById('alumnoPass').value='';
+  switchTab('config');
+});
+
+/* Cambiar contraseña (alumno/a) */
+document.getElementById('changePassLink').addEventListener('click',()=>{
+  document.getElementById('pwdModal').classList.add('open');
+  document.getElementById('pwdErr').style.display='none';
+  document.getElementById('curPass').value='';
+  document.getElementById('newPass1').value='';
+  document.getElementById('newPass2').value='';
+});
+document.getElementById('closePwdBtn').addEventListener('click',()=>{
+  document.getElementById('pwdModal').classList.remove('open');
+});
+document.getElementById('savePwdBtn').addEventListener('click',()=>{
+  const email=sessionStorage.getItem('ca-student-email');
+  const cur=document.getElementById('curPass').value;
+  const n1=document.getElementById('newPass1').value;
+  const n2=document.getElementById('newPass2').value;
+  const students=getStudents();
+  const st=students.find(s=>s.email===email);
+  const err=document.getElementById('pwdErr');
+  if(!st || st.password!==cur){ err.textContent='La contraseña actual no es correcta.'; err.style.display='block'; return; }
+  if(!n1 || n1.length<4){ err.textContent='La nueva contraseña debe tener al menos 4 caracteres.'; err.style.display='block'; return; }
+  if(n1!==n2){ err.textContent='Las contraseñas nuevas no coinciden.'; err.style.display='block'; return; }
+  st.password=n1;
+  saveStudents(students);
+  document.getElementById('pwdModal').classList.remove('open');
+  toast('✓ Contraseña actualizada.');
+});
+
+/* Recuperar sesión ya iniciada (misma pestaña del navegador) */
+(function restoreSession(){
+  const savedRole = sessionStorage.getItem('ca-role');
+  if(savedRole==='alumno'){
+    enterApp('alumno', sessionStorage.getItem('ca-alumno-nombre'), sessionStorage.getItem('ca-student-email'));
+  } else if(savedRole==='profesora'){
+    enterApp('profesora');
+  }
+})();
 
 /* ===== TABS ===== */
 document.querySelectorAll('.tab-btn').forEach(b=>{
@@ -497,6 +965,8 @@ document.querySelectorAll('.tab-btn').forEach(b=>{
     if(b.dataset.tab==='saved') renderSaved();
     if(b.dataset.tab==='add'){ if(adminLoggedIn) showAddPanel(); else showAddGate(); }
     if(b.dataset.tab==='repaso') renderRepasoIntro();
+    if(b.dataset.tab==='impugnaciones') renderImpugnaciones();
+    if(b.dataset.tab==='alumnos') renderAlumnos();
   });
 });
 
@@ -588,9 +1058,8 @@ function buildPool(){
   });
 }
 function updatePool(){
-  const pool=buildPool();
-  const sel=selectedTopics();
-  document.getElementById('poolInfo').textContent=sel.length?`Preguntas disponibles: ${pool.length}`:'Elige al menos un tema.';
+  /* El número de preguntas disponibles se oculta a propósito: es un banco de
+     preguntas y siempre saldrán de forma aleatoria al empezar el test. */
 }
 document.getElementById('selAll').addEventListener('click',()=>{ document.querySelectorAll('.topic-main-cb').forEach(i=>i.checked=true); updatePool(); });
 document.getElementById('selNone').addEventListener('click',()=>{ document.querySelectorAll('.topic-main-cb,.subtema-cb').forEach(i=>i.checked=false); updatePool(); });
@@ -630,11 +1099,17 @@ function renderQuestion(){
           ${getBookmarks().includes(q.id)?'★ Guardada':'☆ Guardar pregunta'}
         </button>
         <button class="q-action-btn" id="cmtBtn">💬 Mi comentario</button>
+        <button class="q-action-btn imp-btn" id="impBtn">🚩 Impugnar pregunta</button>
       </div>
       <div class="comment-area" id="cmtArea">
         ${getComments()[q.id]?`<div class="existing-comment"><span class="comment-label">Tu comentario</span>${getComments()[q.id]}</div>`:''}
         <textarea id="cmtText" placeholder="Escribe aquí tu comentario, duda o anotación sobre esta pregunta...">${getComments()[q.id]||''}</textarea>
         <button class="save-comment" id="saveCmtBtn">Guardar comentario</button>
+      </div>
+      <div class="imp-area" id="impArea">
+        <textarea id="impText" placeholder="Explica por qué crees que esta pregunta o su solución están mal (enunciado ambiguo, respuesta desactualizada, error de redacción...)"></textarea>
+        <button class="imp-send" id="sendImpBtn">Enviar impugnación al profesor</button>
+        <div class="imp-hint">Se abrirá tu correo con el mensaje ya redactado, dirigido al profesor.</div>
       </div>
       <div class="quiz-actions"><button class="btn btn-primary" id="nextBtn" style="display:none;">${qIdx+1===quiz.length?'Ver resultado':'Siguiente →'}</button></div>
     </div>`;
@@ -644,14 +1119,14 @@ function renderQuestion(){
     const idx=bm.indexOf(q.id);
     if(idx===-1){
       // save full question object
-      const saved=JSON.parse(localStorage.getItem('ca-saved-qs')||'[]');
+      const saved=JSON.parse(localStorage.getItem(skey('ca-saved-qs'))||'[]');
       if(!saved.find(x=>x.id===q.id)) saved.push(q);
-      localStorage.setItem('ca-saved-qs', JSON.stringify(saved));
+      localStorage.setItem(skey('ca-saved-qs'), JSON.stringify(saved));
       bm.push(q.id);
     } else {
       bm.splice(idx,1);
-      const saved=JSON.parse(localStorage.getItem('ca-saved-qs')||'[]');
-      localStorage.setItem('ca-saved-qs', JSON.stringify(saved.filter(x=>x.id!==q.id)));
+      const saved=JSON.parse(localStorage.getItem(skey('ca-saved-qs'))||'[]');
+      localStorage.setItem(skey('ca-saved-qs'), JSON.stringify(saved.filter(x=>x.id!==q.id)));
     }
     saveBookmarks(bm);
     const btn=document.getElementById('bmBtn');
@@ -671,6 +1146,15 @@ function renderQuestion(){
     saveComments(cmts);
     toast(txt?'✓ Comentario guardado':'Comentario eliminado');
     document.getElementById('cmtArea').classList.remove('open');
+  });
+  // impugnar toggle
+  document.getElementById('impBtn').addEventListener('click',()=>{
+    document.getElementById('impArea').classList.toggle('open');
+  });
+  document.getElementById('sendImpBtn').addEventListener('click',()=>{
+    enviarImpugnacion(q, document.getElementById('impText').value.trim());
+    document.getElementById('impArea').classList.remove('open');
+    document.getElementById('impText').value='';
   });
   const h=document.getElementById('optsHolder');
   q.options.forEach((opt,idx)=>{
@@ -798,8 +1282,24 @@ function renderRepasoQuestion(){
       <div class="q-text">${q.text}</div>
       <div id="repOpts"></div>
       <div class="feedback-line" id="repFb"></div>
+      <div class="q-actions-bar">
+        <button class="q-action-btn imp-btn" id="repImpBtn">🚩 Impugnar pregunta</button>
+      </div>
+      <div class="imp-area" id="repImpArea">
+        <textarea id="repImpText" placeholder="Explica por qué crees que esta pregunta o su solución están mal..."></textarea>
+        <button class="imp-send" id="repSendImpBtn">Enviar impugnación al profesor</button>
+        <div class="imp-hint">Se abrirá tu correo con el mensaje ya redactado, dirigido al profesor.</div>
+      </div>
       <div class="quiz-actions"><button class="btn btn-primary" id="repNextBtn" style="display:none;">${repasoIdx+1===repasoQuiz.length?'Ver resultado':'Siguiente →'}</button></div>
     </div>`;
+  document.getElementById('repImpBtn').addEventListener('click',()=>{
+    document.getElementById('repImpArea').classList.toggle('open');
+  });
+  document.getElementById('repSendImpBtn').addEventListener('click',()=>{
+    enviarImpugnacion(q, document.getElementById('repImpText').value.trim());
+    document.getElementById('repImpArea').classList.remove('open');
+    document.getElementById('repImpText').value='';
+  });
   document.getElementById('dismissBtn').addEventListener('click',()=>{
     const d=getDismissed(); if(!d.includes(q.id)){ d.push(q.id); saveDismissed(d); }
     toast('Pregunta descartada del banco de repaso.');
@@ -947,7 +1447,7 @@ function renderCustomList(){
 
 function renderSaved(){
   const area=document.getElementById('savedArea');
-  const saved=JSON.parse(localStorage.getItem('ca-saved-qs')||'[]');
+  const saved=JSON.parse(localStorage.getItem(skey('ca-saved-qs'))||'[]');
   const cmts=getComments();
   if(!saved.length){
     area.innerHTML='<div class="saved-empty">Aún no has guardado ninguna pregunta. Usa el botón ☆ Guardar durante los tests.</div>';
@@ -966,13 +1466,178 @@ function renderSaved(){
   area.querySelectorAll('.saved-q-remove').forEach(b=>b.addEventListener('click',()=>{
     const bm=getBookmarks().filter(id=>id!==b.dataset.id);
     saveBookmarks(bm);
-    const saved=JSON.parse(localStorage.getItem('ca-saved-qs')||'[]');
-    localStorage.setItem('ca-saved-qs', JSON.stringify(saved.filter(x=>x.id!==b.dataset.id)));
+    const saved=JSON.parse(localStorage.getItem(skey('ca-saved-qs'))||'[]');
+    localStorage.setItem(skey('ca-saved-qs'), JSON.stringify(saved.filter(x=>x.id!==b.dataset.id)));
     document.getElementById('sq-'+b.dataset.id)?.remove();
     if(!document.querySelectorAll('.saved-q-card').length)
       area.innerHTML='<div class="saved-empty">No tienes preguntas guardadas.</div>';
   }));
 }
+
+/* ===== IMPUGNACIONES ===== */
+function enviarImpugnacion(q, motivo){
+  const alumno = sessionStorage.getItem('ca-alumno-nombre') || 'Alumno/a (sin nombre)';
+  const fecha = new Date().toLocaleString('es-ES');
+  const registro = {
+    id: 'imp-'+Date.now(),
+    questionId: q.id,
+    topic: q.topic,
+    text: q.text,
+    options: q.options,
+    correctText: q.options[q.correct],
+    motivo: motivo || '(sin comentario adicional)',
+    alumno,
+    fecha,
+    resuelta: false
+  };
+  const lista = getImpugnaciones();
+  lista.unshift(registro);
+  saveImpugnaciones(lista);
+
+  const asunto = encodeURIComponent('Impugnación de pregunta — '+q.topic.split('.')[0]);
+  const cuerpo = encodeURIComponent(
+    'Se ha impugnado una pregunta desde Código Azul.\n\n'+
+    'Tema: '+q.topic+'\n\n'+
+    'Pregunta: '+q.text+'\n\n'+
+    'Opciones:\n'+q.options.map((o,i)=>` ${String.fromCharCode(97+i)}) ${o}`).join('\n')+'\n\n'+
+    'Respuesta marcada como correcta actualmente: '+q.options[q.correct]+'\n\n'+
+    'Motivo de la impugnación:\n'+(motivo||'(sin comentario adicional)')+'\n\n'+
+    'Enviado por: '+alumno+'\n'+
+    'Fecha: '+fecha
+  );
+  window.location.href = `mailto:${PROFESORA_EMAIL}?subject=${asunto}&body=${cuerpo}`;
+  toast('🚩 Impugnación enviada. Se ha abierto tu correo para confirmarla.');
+}
+
+function renderImpugnaciones(){
+  const area=document.getElementById('impugnacionesArea');
+  const lista=getImpugnaciones();
+  if(!lista.length){
+    area.innerHTML='<div class="empty-state">No hay impugnaciones registradas en este dispositivo todavía.</div>';
+    return;
+  }
+  const pendientes=lista.filter(i=>!i.resuelta);
+  const resueltas=lista.filter(i=>i.resuelta);
+  const renderCard=(imp)=>`
+    <div class="imp-card" id="ic-${imp.id}" style="${imp.resuelta?'opacity:.55;border-left-color:var(--good);':''}">
+      <div class="imp-card-topic">${imp.topic.split('.')[0]}${imp.resuelta?' · RESUELTA':''}</div>
+      <div class="imp-card-text">${imp.text}</div>
+      <div class="imp-card-motivo">${imp.motivo}</div>
+      <div class="imp-card-meta">Respuesta actual: ${imp.correctText} · Enviado por ${imp.alumno} · ${imp.fecha}</div>
+      <div class="imp-card-actions">
+        ${!imp.resuelta?`<button class="imp-resolve-btn" data-id="${imp.id}">✓ Marcar como resuelta</button>`:''}
+        <button class="imp-del-btn" data-id="${imp.id}">Eliminar</button>
+      </div>
+    </div>`;
+  let html='';
+  if(pendientes.length) html += `<div class="bloque-title">Pendientes (${pendientes.length})</div>` + pendientes.map(renderCard).join('');
+  if(resueltas.length) html += `<div class="bloque-title">Resueltas (${resueltas.length})</div>` + resueltas.map(renderCard).join('');
+  area.innerHTML=html;
+  area.querySelectorAll('.imp-resolve-btn').forEach(b=>b.addEventListener('click',()=>{
+    const l=getImpugnaciones();
+    const item=l.find(i=>i.id===b.dataset.id);
+    if(item) item.resuelta=true;
+    saveImpugnaciones(l);
+    renderImpugnaciones();
+  }));
+  area.querySelectorAll('.imp-del-btn').forEach(b=>b.addEventListener('click',()=>{
+    saveImpugnaciones(getImpugnaciones().filter(i=>i.id!==b.dataset.id));
+    renderImpugnaciones();
+  }));
+}
+
+/* ===== GESTIÓN DE ALUMNOS (profesora) ===== */
+function renderAlumnos(){
+  const list=getStudents();
+  document.getElementById('alCount').textContent=list.length;
+  const el=document.getElementById('alumnosList');
+  if(!list.length){
+    el.innerHTML='<div class="empty-state">Aún no has creado ninguna cuenta de alumno/a.</div>';
+    return;
+  }
+  el.innerHTML=list.slice().sort((a,b)=>(a.name||a.email).localeCompare(b.name||b.email)).map(s=>`
+    <div class="alumno-item">
+      <div class="alumno-item-top">
+        <div>
+          <span class="alumno-item-name">${s.name||'(sin nombre)'}</span><br>
+          <span class="alumno-item-email">${s.email}</span>
+        </div>
+        <button class="alumno-mini-btn del" data-email="${s.email}">Eliminar cuenta</button>
+      </div>
+      <div class="alumno-item-meta">
+        <span style="font-family:var(--mono);font-size:10.5px;color:#5a6a82;">Creada: ${new Date(s.createdAt).toLocaleDateString('es-ES')}</span>
+        <button class="alumno-mini-btn reset" data-email="${s.email}">Restablecer contraseña</button>
+      </div>
+      <div class="reset-result" id="rr-${sanitizeEmailKey(s.email)}"></div>
+    </div>`).join('');
+  el.querySelectorAll('.del').forEach(b=>b.addEventListener('click',()=>{
+    if(!confirm('¿Eliminar la cuenta de '+b.dataset.email+'? El alumno/a ya no podrá entrar con esas credenciales.')) return;
+    saveStudents(getStudents().filter(s=>s.email!==b.dataset.email));
+    toast('Cuenta eliminada.'); renderAlumnos();
+  }));
+  el.querySelectorAll('.reset').forEach(b=>b.addEventListener('click',()=>{
+    const email=b.dataset.email;
+    const students=getStudents();
+    const st=students.find(s=>s.email===email);
+    if(!st) return;
+    const newPass=genPassword();
+    st.password=newPass;
+    saveStudents(students);
+    const box=document.getElementById('rr-'+sanitizeEmailKey(email));
+    box.style.display='block';
+    box.textContent='Nueva contraseña para '+email+': '+newPass+' — comunícasela al alumno/a (no queda visible después de salir de esta pantalla).';
+    toast('Contraseña restablecida.');
+  }));
+}
+document.getElementById('genPassBtn').addEventListener('click',()=>{
+  document.getElementById('newAlPass').value=genPassword();
+});
+document.getElementById('createAlBtn').addEventListener('click',()=>{
+  const name=document.getElementById('newAlName').value.trim();
+  const email=document.getElementById('newAlEmail').value.trim().toLowerCase();
+  let pass=document.getElementById('newAlPass').value.trim();
+  if(!email || !email.includes('@')){ toast('Escribe un email válido.'); return; }
+  const students=getStudents();
+  if(students.find(s=>s.email.toLowerCase()===email)){ toast('Ya existe una cuenta con ese email.'); return; }
+  if(!pass) pass=genPassword();
+  students.push({name, email, password:pass, createdAt:Date.now()});
+  saveStudents(students);
+  document.getElementById('newAlName').value='';
+  document.getElementById('newAlEmail').value='';
+  document.getElementById('newAlPass').value='';
+  toast('✓ Cuenta creada — contraseña: '+pass);
+  renderAlumnos();
+});
+document.getElementById('exportAlBtn').addEventListener('click',()=>{
+  const data=JSON.stringify(getStudents(), null, 2);
+  const blob=new Blob([data], {type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='codigo-azul-alumnos.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+});
+document.getElementById('importAlFile').addEventListener('change',(e)=>{
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const imported=JSON.parse(reader.result);
+      if(!Array.isArray(imported)) throw new Error('formato');
+      const current=getStudents();
+      let added=0;
+      imported.forEach(s=>{
+        if(s.email && !current.find(c=>c.email.toLowerCase()===s.email.toLowerCase())){ current.push(s); added++; }
+      });
+      saveStudents(current);
+      toast('✓ '+added+' cuenta(s) importada(s).');
+      renderAlumnos();
+    }catch(err){ toast('El archivo no tiene un formato válido.'); }
+  };
+  reader.readAsText(file);
+  e.target.value='';
+});
 
 /* ===== INIT ===== */
 customQ=getCustom(); stats=getStats();
