@@ -485,6 +485,7 @@
     <div class="brand">CÓDIGO <span>AZUL</span></div>
     <div class="top-right">
       <span class="role-badge" id="roleBadge"></span>
+      <button class="logout-link" id="syncNowBtn" title="Traer los datos más recientes de la nube">🔄 Sincronizar</button>
       <button class="logout-link" id="changePassLink" style="display:none;">Cambiar contraseña</button>
       <a href="index.html" class="back-link">← Volver a la web</a>
       <button class="logout-link" id="logoutBtn">Cerrar sesión</button>
@@ -673,7 +674,59 @@
 
 </div><!-- /appShell -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* ============================================================
+   SINCRONIZACION EN LA NUBE (Supabase) - OPCIONAL
+   ============================================================
+   Si dejas los valores de abajo tal cual, la app funciona exactamente
+   igual que antes: todo se queda en este navegador (localStorage).
+
+   Para activar la sincronizacion real entre dispositivos:
+   1. Crea un proyecto gratuito en https://supabase.com
+   2. Ve a Project Settings -> API y copia la "Project URL" y la
+      clave "anon public".
+   3. Sustituye los dos valores de aqui abajo por los tuyos.
+   4. En el SQL Editor de Supabase, ejecuta el script de la tabla
+      kv_store que se indica en la guia de despliegue.
+   No hace falta tocar nada mas del codigo.
+*/
+const SUPABASE_URL = "https://mbfnmjvgjhllourorntt.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1iZm5tanZnamhsbG91cm9ybnR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMDA2MTQsImV4cCI6MjA5ODU3NjYxNH0.EUtz9kiqigyrXe17zVw2B0GeCmdYG48dKoj5jd9vycE";
+const supabaseClient = (typeof window!=='undefined' && window.supabase && SUPABASE_URL.indexOf('PEGA_AQUI')===-1)
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+function cloudEnabled(){ return !!supabaseClient; }
+
+async function cloudPull(keys){
+  if(!cloudEnabled() || !keys.length) return {};
+  try{
+    const { data, error } = await supabaseClient.from('kv_store').select('key,value').in('key', keys);
+    if(error){ console.warn('[nube] error al leer', error); return {}; }
+    const out={};
+    (data||[]).forEach(row=>{ out[row.key]=row.value; });
+    return out;
+  }catch(e){ console.warn('[nube] excepcion al leer', e); return {}; }
+}
+function cloudPush(key, value){
+  if(!cloudEnabled()) return;
+  supabaseClient.from('kv_store')
+    .upsert({ key, value, updated_at:new Date().toISOString() }, { onConflict:'key' })
+    .then(({error})=>{ if(error) console.warn('[nube] error al guardar', key, error); });
+}
+const CLOUD_GLOBAL_KEYS = ['ca-students','ca-custom-q','ca-impugnaciones'];
+const CLOUD_USER_BASES = ['ca-stats','ca-failed','ca-bookmarks','ca-comments','ca-dismissed','ca-saved-qs'];
+async function cloudSyncGlobal(){
+  const data = await cloudPull(CLOUD_GLOBAL_KEYS);
+  Object.keys(data).forEach(k=> localStorage.setItem(k, JSON.stringify(data[k])));
+}
+async function cloudSyncDown(){
+  const keys=[...CLOUD_GLOBAL_KEYS, ...CLOUD_USER_BASES.map(b=>skey(b))];
+  const data = await cloudPull(keys);
+  Object.keys(data).forEach(k=> localStorage.setItem(k, JSON.stringify(data[k])));
+}
+/* ============================================================ */
+
 /* ===== BLOQUES TEMARIO OFICIAL ===== */
 const BLOQUES = {
   juridicas: [
@@ -1111,23 +1164,23 @@ function currentUserKey(){
 function skey(base){ return base+':'+currentUserKey(); }
 
 function getCustom(){ try{ return JSON.parse(localStorage.getItem('ca-custom-q')||'[]'); }catch(e){ return []; } }
-function saveCustom(a){ localStorage.setItem('ca-custom-q', JSON.stringify(a)); }
+function saveCustom(a){ localStorage.setItem('ca-custom-q', JSON.stringify(a)); cloudPush('ca-custom-q', a); }
 function getStats(){ try{ return JSON.parse(localStorage.getItem(skey('ca-stats'))||'{}'); }catch(e){ return {}; } }
-function saveStats(o){ localStorage.setItem(skey('ca-stats'), JSON.stringify(o)); }
+function saveStats(o){ localStorage.setItem(skey('ca-stats'), JSON.stringify(o)); cloudPush(skey('ca-stats'), o); }
 function getFailed(){ try{ return JSON.parse(localStorage.getItem(skey('ca-failed'))||'[]'); }catch(e){ return []; } }
-function saveFailed(a){ localStorage.setItem(skey('ca-failed'), JSON.stringify(a)); }
+function saveFailed(a){ localStorage.setItem(skey('ca-failed'), JSON.stringify(a)); cloudPush(skey('ca-failed'), a); }
 
 function getBookmarks(){ try{ return JSON.parse(localStorage.getItem(skey('ca-bookmarks'))||'[]'); }catch(e){ return []; } }
-function saveBookmarks(a){ localStorage.setItem(skey('ca-bookmarks'), JSON.stringify(a)); }
+function saveBookmarks(a){ localStorage.setItem(skey('ca-bookmarks'), JSON.stringify(a)); cloudPush(skey('ca-bookmarks'), a); }
 function getComments(){ try{ return JSON.parse(localStorage.getItem(skey('ca-comments'))||'{}'); }catch(e){ return {}; } }
-function saveComments(o){ localStorage.setItem(skey('ca-comments'), JSON.stringify(o)); }
+function saveComments(o){ localStorage.setItem(skey('ca-comments'), JSON.stringify(o)); cloudPush(skey('ca-comments'), o); }
 function getDismissed(){ try{ return JSON.parse(localStorage.getItem(skey('ca-dismissed'))||'[]'); }catch(e){ return []; } }
-function saveDismissed(a){ localStorage.setItem(skey('ca-dismissed'), JSON.stringify(a)); }
+function saveDismissed(a){ localStorage.setItem(skey('ca-dismissed'), JSON.stringify(a)); cloudPush(skey('ca-dismissed'), a); }
 function getActiveFailed(){ const d=getDismissed(); return getFailed().filter(q=>!d.includes(q.id)); }
 
 /* ===== CUENTAS DE ALUMNOS (roster gestionado por la profesora) ===== */
 function getStudents(){ try{ return JSON.parse(localStorage.getItem('ca-students')||'[]'); }catch(e){ return []; } }
-function saveStudents(a){ localStorage.setItem('ca-students', JSON.stringify(a)); }
+function saveStudents(a){ localStorage.setItem('ca-students', JSON.stringify(a)); cloudPush('ca-students', a); }
 function sanitizeEmailKey(email){ return (email||'').toLowerCase().trim().replace(/[^a-z0-9]/g,'_'); }
 function genPassword(){
   const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
@@ -1136,7 +1189,7 @@ function genPassword(){
 }
 
 function getImpugnaciones(){ try{ return JSON.parse(localStorage.getItem('ca-impugnaciones')||'[]'); }catch(e){ return []; } }
-function saveImpugnaciones(a){ localStorage.setItem('ca-impugnaciones', JSON.stringify(a)); }
+function saveImpugnaciones(a){ localStorage.setItem('ca-impugnaciones', JSON.stringify(a)); cloudPush('ca-impugnaciones', a); }
 
 /* ===== ESTADO ===== */
 const ADMIN_PASSWORD = "codigoazul2026";
@@ -1167,7 +1220,7 @@ document.getElementById('cardAlumno').addEventListener('click',()=>showEntryChoi
 document.getElementById('cardProfesora').addEventListener('click',()=>showEntryChoice('profesora'));
 document.querySelectorAll('.entry-back').forEach(b=>b.addEventListener('click', backToChoices));
 
-function enterApp(role, alumnoNombre, alumnoEmail){
+async function enterApp(role, alumnoNombre, alumnoEmail){
   currentRole = role;
   sessionStorage.setItem('ca-role', role);
   if(role==='alumno'){
@@ -1190,15 +1243,21 @@ function enterApp(role, alumnoNombre, alumnoEmail){
   }
   document.querySelectorAll('.teacher-tab').forEach(t=>{ t.style.display = role==='profesora' ? 'block' : 'none'; });
   // recargar banco de preguntas propias y estadísticas correspondientes a este usuario
+  await cloudSyncDown();
   customQ=getCustom(); stats=getStats();
   buildAllGrids(role==='profesora');
 }
 
-document.getElementById('entrarAlumnoBtn').addEventListener('click',()=>{
+document.getElementById('entrarAlumnoBtn').addEventListener('click', async ()=>{
   const email=document.getElementById('alumnoEmail').value.trim().toLowerCase();
   const pass=document.getElementById('alumnoPass').value;
-  const student=getStudents().find(s=>s.email.toLowerCase()===email && s.password===pass);
   const err=document.getElementById('alumnoErr');
+  const btn=document.getElementById('entrarAlumnoBtn');
+  const textoOriginal=btn.textContent;
+  btn.textContent='Comprobando…'; btn.disabled=true;
+  await cloudSyncGlobal(); // trae el listado de alumnos más reciente antes de validar
+  btn.textContent=textoOriginal; btn.disabled=false;
+  const student=getStudents().find(s=>s.email.toLowerCase()===email && s.password===pass);
   if(!student){
     err.style.display='block';
     return;
@@ -1219,6 +1278,27 @@ document.getElementById('entrarProfBtn').addEventListener('click',()=>{
   }
 });
 document.getElementById('profPass').addEventListener('keydown',e=>{ if(e.key==='Enter') document.getElementById('entrarProfBtn').click(); });
+
+document.getElementById('syncNowBtn').addEventListener('click', async ()=>{
+  const btn=document.getElementById('syncNowBtn');
+  const original=btn.textContent;
+  btn.textContent='🔄 Sincronizando…'; btn.disabled=true;
+  if(!cloudEnabled()){
+    toast('La sincronización en la nube todavía no está configurada.');
+    btn.textContent=original; btn.disabled=false;
+    return;
+  }
+  await cloudSyncDown();
+  customQ=getCustom(); stats=getStats();
+  buildAllGrids(currentRole==='profesora');
+  const activeTab=document.querySelector('.tab-btn.active')?.dataset.tab;
+  if(activeTab==='stats') renderStats();
+  if(activeTab==='saved') renderSaved();
+  if(activeTab==='alumnos') renderAlumnos();
+  if(activeTab==='impugnaciones') renderImpugnaciones();
+  btn.textContent=original; btn.disabled=false;
+  toast('✓ Datos actualizados desde la nube.');
+});
 
 document.getElementById('logoutBtn').addEventListener('click',()=>{
   sessionStorage.removeItem('ca-role');
@@ -1269,22 +1349,25 @@ document.getElementById('savePwdBtn').addEventListener('click',()=>{
     enterApp('alumno', sessionStorage.getItem('ca-alumno-nombre'), sessionStorage.getItem('ca-student-email'));
   } else if(savedRole==='profesora'){
     enterApp('profesora');
+  } else {
+    // sin sesión activa todavía: precalienta el listado de alumnos por si se hace login enseguida
+    cloudSyncGlobal();
   }
 })();
 
 /* ===== TABS ===== */
 document.querySelectorAll('.tab-btn').forEach(b=>{
-  b.addEventListener('click',()=>{
+  b.addEventListener('click', async ()=>{
     document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
     b.classList.add('active');
     document.getElementById('panel-'+b.dataset.tab).classList.add('active');
-    if(b.dataset.tab==='stats') renderStats();
-    if(b.dataset.tab==='saved') renderSaved();
+    if(b.dataset.tab==='stats'){ await cloudSyncDown(); renderStats(); }
+    if(b.dataset.tab==='saved'){ await cloudSyncDown(); renderSaved(); }
     if(b.dataset.tab==='add'){ if(adminLoggedIn) showAddPanel(); else showAddGate(); }
     if(b.dataset.tab==='repaso') renderRepasoIntro();
-    if(b.dataset.tab==='impugnaciones') renderImpugnaciones();
-    if(b.dataset.tab==='alumnos') renderAlumnos();
+    if(b.dataset.tab==='impugnaciones'){ await cloudSyncDown(); renderImpugnaciones(); }
+    if(b.dataset.tab==='alumnos'){ await cloudSyncDown(); renderAlumnos(); }
   });
 });
 
@@ -1440,11 +1523,14 @@ function renderQuestion(){
       const saved=JSON.parse(localStorage.getItem(skey('ca-saved-qs'))||'[]');
       if(!saved.find(x=>x.id===q.id)) saved.push(q);
       localStorage.setItem(skey('ca-saved-qs'), JSON.stringify(saved));
+      cloudPush(skey('ca-saved-qs'), saved);
       bm.push(q.id);
     } else {
       bm.splice(idx,1);
       const saved=JSON.parse(localStorage.getItem(skey('ca-saved-qs'))||'[]');
-      localStorage.setItem(skey('ca-saved-qs'), JSON.stringify(saved.filter(x=>x.id!==q.id)));
+      const savedAfter=saved.filter(x=>x.id!==q.id);
+      localStorage.setItem(skey('ca-saved-qs'), JSON.stringify(savedAfter));
+      cloudPush(skey('ca-saved-qs'), savedAfter);
     }
     saveBookmarks(bm);
     const btn=document.getElementById('bmBtn');
@@ -1785,7 +1871,9 @@ function renderSaved(){
     const bm=getBookmarks().filter(id=>id!==b.dataset.id);
     saveBookmarks(bm);
     const saved=JSON.parse(localStorage.getItem(skey('ca-saved-qs'))||'[]');
-    localStorage.setItem(skey('ca-saved-qs'), JSON.stringify(saved.filter(x=>x.id!==b.dataset.id)));
+    const savedAfter=saved.filter(x=>x.id!==b.dataset.id);
+    localStorage.setItem(skey('ca-saved-qs'), JSON.stringify(savedAfter));
+    cloudPush(skey('ca-saved-qs'), savedAfter);
     document.getElementById('sq-'+b.dataset.id)?.remove();
     if(!document.querySelectorAll('.saved-q-card').length)
       area.innerHTML='<div class="saved-empty">No tienes preguntas guardadas.</div>';

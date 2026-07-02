@@ -335,6 +335,7 @@
     <div class="brand">CÓDIGO <span>AZUL</span></div>
     <div class="top-right">
       <span class="role-badge" id="roleBadge"></span>
+      <button class="logout-link" id="syncNowBtn" title="Traer los datos más recientes de la nube">🔄 Sincronizar</button>
       <button class="logout-link" id="changePassLink" style="display:none;">Cambiar contraseña</button>
       <a href="index.html" class="back-link">← Volver a la web</a>
       <button class="logout-link" id="logoutBtn">Cerrar sesión</button>
@@ -373,7 +374,47 @@
 
 </div><!-- /appShell -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* ============================================================
+   SINCRONIZACION EN LA NUBE (Supabase) - OPCIONAL
+   ============================================================
+   Si dejas los valores de abajo tal cual, la app funciona exactamente
+   igual que antes: todo se queda en este navegador (localStorage).
+   Usa el MISMO proyecto de Supabase (misma URL y misma clave) que
+   hayas configurado en tests-codigo-azul.html, para que alumnos y
+   recursos se compartan entre ambas páginas.
+*/
+const SUPABASE_URL = "https://mbfnmjvgjhllourorntt.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1iZm5tanZnamhsbG91cm9ybnR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMDA2MTQsImV4cCI6MjA5ODU3NjYxNH0.EUtz9kiqigyrXe17zVw2B0GeCmdYG48dKoj5jd9vycE";
+const supabaseClient = (typeof window!=='undefined' && window.supabase && SUPABASE_URL.indexOf('PEGA_AQUI')===-1)
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
+function cloudEnabled(){ return !!supabaseClient; }
+
+async function cloudPull(keys){
+  if(!cloudEnabled() || !keys.length) return {};
+  try{
+    const { data, error } = await supabaseClient.from('kv_store').select('key,value').in('key', keys);
+    if(error){ console.warn('[nube] error al leer', error); return {}; }
+    const out={};
+    (data||[]).forEach(row=>{ out[row.key]=row.value; });
+    return out;
+  }catch(e){ console.warn('[nube] excepcion al leer', e); return {}; }
+}
+function cloudPush(key, value){
+  if(!cloudEnabled()) return;
+  supabaseClient.from('kv_store')
+    .upsert({ key, value, updated_at:new Date().toISOString() }, { onConflict:'key' })
+    .then(({error})=>{ if(error) console.warn('[nube] error al guardar', key, error); });
+}
+const CLOUD_GLOBAL_KEYS = ['ca-students','ca-recursos'];
+async function cloudSyncGlobal(){
+  const data = await cloudPull(CLOUD_GLOBAL_KEYS);
+  Object.keys(data).forEach(k=> localStorage.setItem(k, JSON.stringify(data[k])));
+}
+/* ============================================================ */
+
 /* ===== DATOS (mismos temas y mismo orden que en Tests) ===== */
 const BLOQUES = {
   juridicas: [
@@ -443,9 +484,9 @@ let currentRole = null;
 function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); }
 
 function getRecursos(){ try{ return JSON.parse(localStorage.getItem('ca-recursos')||'[]'); }catch(e){ return []; } }
-function saveRecursos(arr){ localStorage.setItem('ca-recursos', JSON.stringify(arr)); }
+function saveRecursos(arr){ localStorage.setItem('ca-recursos', JSON.stringify(arr)); cloudPush('ca-recursos', arr); }
 function getStudents(){ try{ return JSON.parse(localStorage.getItem('ca-students')||'[]'); }catch(e){ return []; } }
-function saveStudents(a){ localStorage.setItem('ca-students', JSON.stringify(a)); }
+function saveStudents(a){ localStorage.setItem('ca-students', JSON.stringify(a)); cloudPush('ca-students', a); }
 
 /* ===== ENTRADA / LOGIN (idéntico a Tests: mismas cuentas de alumno) ===== */
 function showEntryChoice(which){
@@ -462,7 +503,7 @@ document.getElementById('cardAlumno').addEventListener('click',()=>showEntryChoi
 document.getElementById('cardProfesora').addEventListener('click',()=>showEntryChoice('profesora'));
 document.querySelectorAll('.entry-back').forEach(b=>b.addEventListener('click', backToChoices));
 
-function enterApp(role, alumnoNombre, alumnoEmail){
+async function enterApp(role, alumnoNombre, alumnoEmail){
   currentRole = role;
   sessionStorage.setItem('ca-role', role);
   if(role==='alumno'){
@@ -483,14 +524,20 @@ function enterApp(role, alumnoNombre, alumnoEmail){
     changeLink.style.display='inline-block';
   }
   document.querySelectorAll('.teacher-tab').forEach(t=>{ t.style.display = role==='profesora' ? 'block' : 'none'; });
+  await cloudSyncGlobal();
   buildAllAccordions();
 }
 
-document.getElementById('entrarAlumnoBtn').addEventListener('click',()=>{
+document.getElementById('entrarAlumnoBtn').addEventListener('click', async ()=>{
   const email=document.getElementById('alumnoEmail').value.trim().toLowerCase();
   const pass=document.getElementById('alumnoPass').value;
-  const student=getStudents().find(s=>s.email.toLowerCase()===email && s.password===pass);
   const err=document.getElementById('alumnoErr');
+  const btn=document.getElementById('entrarAlumnoBtn');
+  const textoOriginal=btn.textContent;
+  btn.textContent='Comprobando…'; btn.disabled=true;
+  await cloudSyncGlobal();
+  btn.textContent=textoOriginal; btn.disabled=false;
+  const student=getStudents().find(s=>s.email.toLowerCase()===email && s.password===pass);
   if(!student){ err.style.display='block'; return; }
   err.style.display='none';
   enterApp('alumno', student.name, student.email);
@@ -550,12 +597,29 @@ document.getElementById('savePwdBtn').addEventListener('click',()=>{
   toast('✓ Contraseña actualizada.');
 });
 
+document.getElementById('syncNowBtn').addEventListener('click', async ()=>{
+  const btn=document.getElementById('syncNowBtn');
+  const original=btn.textContent;
+  btn.textContent='🔄 Sincronizando…'; btn.disabled=true;
+  if(!cloudEnabled()){
+    toast('La sincronización en la nube todavía no está configurada.');
+    btn.textContent=original; btn.disabled=false;
+    return;
+  }
+  await cloudSyncGlobal();
+  buildAllAccordions();
+  btn.textContent=original; btn.disabled=false;
+  toast('✓ Datos actualizados desde la nube.');
+});
+
 (function restoreSession(){
   const savedRole = sessionStorage.getItem('ca-role');
   if(savedRole==='alumno'){
     enterApp('alumno', sessionStorage.getItem('ca-alumno-nombre'), sessionStorage.getItem('ca-student-email'));
   } else if(savedRole==='profesora'){
     enterApp('profesora');
+  } else {
+    cloudSyncGlobal();
   }
 })();
 
