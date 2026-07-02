@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda — De camino al aprobado · Escala Básica CNP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E1B2E; --ink-soft:#16263F; --paper:#F4F1E9; --paper-dim:#E9E4D6;
+    --blue:#2B4C7E; --signal:#3D7DFF; --brass:#B8924A; --good:#2E8B57; --bad:#C1473A;
+    --line:rgba(14,27,46,0.14);
+    --display:'Barlow Condensed',sans-serif; --body:'Source Sans 3',sans-serif; --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:1.5;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+
+  .top-bar{background:var(--ink);color:var(--paper);padding:0;border-bottom:3px solid var(--signal);}
+  .top-bar .inner{max-width:1080px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:64px;}
+  .brand{font-family:var(--display);font-weight:800;font-size:18px;text-transform:uppercase;letter-spacing:.02em;}
+  .brand span{color:var(--signal);}
+  .back-link{font-family:var(--mono);font-size:12px;color:var(--brass);letter-spacing:.06em;opacity:.8;}
+  .back-link:hover{opacity:1;}
+
+  .hero{background:var(--ink);color:var(--paper);padding:56px 24px 48px;}
+  .hero .inner{max-width:1080px;margin:0 auto;}
+  .eyebrow{font-family:var(--mono);font-size:12px;color:var(--signal);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+  .hero h1{font-family:var(--display);font-size:40px;font-weight:800;text-transform:uppercase;line-height:1.05;margin-bottom:14px;}
+  .hero p{font-size:16px;color:rgba(244,241,233,.75);max-width:620px;}
+
+  .pay-badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+  .pay-badge{
+    font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;
+    color:rgba(244,241,233,.8);border:1px solid rgba(255,255,255,.2);border-radius:20px;
+    padding:7px 14px;display:inline-flex;align-items:center;gap:6px;
+  }
+
+  .main{max-width:1080px;margin:0 auto;padding:48px 24px 80px;}
+  .section-tag{font-family:var(--mono);font-size:12px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;}
+  h2{font-family:var(--display);font-size:30px;font-weight:700;text-transform:uppercase;margin-bottom:8px;}
+  .sub{font-size:15px;color:#3a4a63;margin-bottom:36px;max-width:640px;}
+
+  .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;}
+  .plan-card{
+    background:#fff;border:1px solid var(--line);border-radius:6px;padding:30px 26px;
+    display:flex;flex-direction:column;gap:14px;position:relative;
+  }
+  .plan-card.featured{border-color:var(--signal);box-shadow:0 4px 24px rgba(61,125,255,.12);}
+  .plan-badge{
+    position:absolute;top:-12px;right:24px;background:var(--signal);color:var(--ink);
+    font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;
+    padding:5px 12px;border-radius:20px;font-weight:700;
+  }
+  .plan-name{font-family:var(--display);font-size:22px;font-weight:700;text-transform:uppercase;}
+  .plan-desc{font-size:14px;color:#3a4a63;flex:1;}
+  .plan-price{font-family:var(--display);font-size:38px;font-weight:800;color:var(--ink);}
+  .plan-price span{font-family:var(--mono);font-size:13px;font-weight:400;color:#5a6a82;}
+  .plan-features{list-style:none;display:flex;flex-direction:column;gap:8px;font-size:13.5px;color:#3a4a63;}
+  .plan-features li{display:flex;gap:8px;align-items:flex-start;}
+  .plan-features li::before{content:"✓";color:var(--good);font-weight:700;flex-shrink:0;}
+
+  .btn{font-family:var(--body);font-weight:700;font-size:14.5px;padding:14px 22px;border-radius:2px;border:1px solid transparent;cursor:pointer;display:inline-block;text-align:center;transition:transform .12s;}
+  .btn:hover{transform:translateY(-1px);}
+  .btn-primary{background:var(--signal);color:var(--ink);border-color:var(--signal);}
+  .btn-primary:hover{background:#5b91ff;}
+  .btn-ghost{background:transparent;border-color:var(--line);color:var(--ink);}
+
+  .pay-note{font-family:var(--mono);font-size:11px;color:#5a6a82;text-align:center;margin-top:2px;}
+
+  .trust-strip{
+    margin-top:56px;padding:28px 26px;background:var(--paper-dim);border-radius:6px;
+    display:flex;gap:28px;flex-wrap:wrap;
+  }
+  .trust-item{flex:1;min-width:200px;}
+  .trust-item .t-title{font-family:var(--display);font-size:16px;text-transform:uppercase;margin-bottom:4px;}
+  .trust-item .t-desc{font-size:13px;color:#3a4a63;}
+
+  footer{background:var(--ink);color:rgba(244,241,233,.6);padding:28px 24px;font-family:var(--mono);font-size:12px;text-align:center;}
+
+  @media(max-width:700px){
+    .hero h1{font-size:30px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="inner">
+    <div class="brand">CÓDIGO <span>AZUL</span></div>
+    <a href="index.html" class="back-link">← Volver a la web</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="inner">
+    <div class="eyebrow">Tienda · Pago 100% seguro</div>
+    <h1>Tienda</h1>
+    <p>Elige el plan que mejor encaje contigo. El pago se hace en una ventana segura aparte, gestionada por nuestra pasarela de pagos, con tarjeta, Apple Pay o Bizum.</p>
+    <div class="pay-badges">
+      <span class="pay-badge">💳 Tarjeta</span>
+      <span class="pay-badge"> Apple Pay</span>
+      <span class="pay-badge">📱 Bizum</span>
+    </div>
+  </div>
+</section>
+
+<div class="main">
+  <div class="section-tag">Planes de tutoría</div>
+  <h2>Elige tu plan</h2>
+  <p class="sub">La mensualidad incluye la preparación total: físicas, teoría, psicotécnicos y, cuando llegue el momento, entrevista y biodata.</p>
+
+  <div class="plans">
+    <div class="plan-card">
+      <div class="plan-name">Mensualidad</div>
+      <div class="plan-price">85€ <span>/ mes</span></div>
+      <p class="plan-desc">Preparación completa, mes a mes y sin permanencia.</p>
+      <ul class="plan-features">
+        <li>Preparación total: físicas, teoría y psicotécnicos</li>
+        <li>Entrevista personal y biodata cuando llegue el momento</li>
+        <li>Seguimiento individual semanal</li>
+        <li>Comunicación directa entre sesiones</li>
+      </ul>
+      <a class="btn btn-primary" href="#" data-payment-link="1" target="_blank" rel="noopener">Pagar y reservar →</a>
+      <div class="pay-note">Se abre en una ventana nueva y segura</div>
+    </div>
+
+    <div class="plan-card">
+      <div class="plan-name">Pago trimestral</div>
+      <div class="plan-price">240€ <span>/ 3 meses</span></div>
+      <p class="plan-desc">Equivale a 80€/mes. La misma preparación completa, comprometiéndote a un trimestre.</p>
+      <ul class="plan-features">
+        <li>Preparación total: físicas, teoría y psicotécnicos</li>
+        <li>Entrevista personal y biodata cuando llegue el momento</li>
+        <li>Seguimiento individual semanal</li>
+        <li>Comunicación directa entre sesiones</li>
+      </ul>
+      <a class="btn btn-primary" href="#" data-payment-link="2" target="_blank" rel="noopener">Pagar y reservar →</a>
+      <div class="pay-note">Se abre en una ventana nueva y segura</div>
+    </div>
+
+    <div class="plan-card featured">
+      <div class="plan-badge">Mejor precio</div>
+      <div class="plan-name">Pago semestral</div>
+      <div class="plan-price">450€ <span>/ 6 meses</span></div>
+      <p class="plan-desc">Equivale a 75€/mes: el precio por mes más bajo de los tres planes de preparación completa.</p>
+      <ul class="plan-features">
+        <li>Preparación total: físicas, teoría y psicotécnicos</li>
+        <li>Entrevista personal y biodata cuando llegue el momento</li>
+        <li>Seguimiento individual semanal</li>
+        <li>Comunicación directa entre sesiones</li>
+      </ul>
+      <a class="btn btn-primary" href="#" data-payment-link="3" target="_blank" rel="noopener">Pagar y reservar →</a>
+      <div class="pay-note">Se abre en una ventana nueva y segura</div>
+    </div>
+
+    <div class="plan-card">
+      <div class="plan-name">Solo físicas</div>
+      <div class="plan-price">40€ <span>/ mes</span></div>
+      <p class="plan-desc">Si ya llevas la teoría por tu cuenta y solo necesitas preparar la parte física.</p>
+      <ul class="plan-features">
+        <li>Preparación física mensual</li>
+        <li>Seguimiento individual de tu progreso</li>
+        <li>Ajuste de la planificación según tu nivel</li>
+      </ul>
+      <a class="btn btn-primary" href="#" data-payment-link="4" target="_blank" rel="noopener">Pagar y reservar →</a>
+      <div class="pay-note">Se abre en una ventana nueva y segura</div>
+    </div>
+  </div>
+
+  <div class="trust-strip">
+    <div class="trust-item">
+      <div class="t-title">🔒 Pago seguro</div>
+      <div class="t-desc">Gestionado por una pasarela de pago externa certificada. Código Azul nunca ve ni guarda tus datos de tarjeta.</div>
+
+    </div>
+    <div class="trust-item">
+      <div class="t-title">✉️ Confirmación al instante</div>
+      <div class="t-desc">Tras el pago recibirás un correo de confirmación y nos puedes escribir para cuadrar horario.</div>
+    </div>
+    <div class="trust-item">
+      <div class="t-title">↩️ ¿Dudas antes de pagar?</div>
+      <div class="t-desc">Escríbenos a <a href="mailto:info.codigoazul@gmail.com" style="text-decoration:underline;">info.codigoazul@gmail.com</a> y te ayudamos a elegir plan.</div>
+    </div>
+  </div>
+</div>
+
+<footer>CÓDIGO AZUL · PREPARACIÓN INDIVIDUALIZADA ESCALA BÁSICA CNP · © 2026</footer>
+
+<script>
+/*
+  ===================================================================
+  CONFIGURA AQUÍ TUS ENLACES DE PAGO REALES (Stripe Payment Links)
+  ===================================================================
+  1. Crea una cuenta gratuita en https://dashboard.stripe.com/register
+  2. En el Dashboard: Payment Links → "+ Nuevo" → crea un producto y precio.
+  3. En "Métodos de pago" activa: Tarjeta, Apple Pay/Google Pay y Bizum.
+  4. Copia el enlace que te da Stripe (algo como https://buy.stripe.com/xxxxxxxx)
+     y pégalo abajo, sustituyendo cada "#" por tu enlace real.
+  No hace falta tocar nada más del código: los botones ya están conectados
+  a estas tres variables.
+*/
+const PAYMENT_LINKS = {
+  1: "https://buy.stripe.com/PEGA_AQUI_TU_ENLACE_MENSUALIDAD",
+  2: "https://buy.stripe.com/PEGA_AQUI_TU_ENLACE_TRIMESTRAL",
+  3: "https://buy.stripe.com/PEGA_AQUI_TU_ENLACE_SEMESTRAL",
+  4: "https://buy.stripe.com/PEGA_AQUI_TU_ENLACE_SOLO_FISICAS"
+};
+
+document.querySelectorAll('[data-payment-link]').forEach(btn=>{
+  const link = PAYMENT_LINKS[btn.dataset.paymentLink];
+  if(link && !link.includes('PEGA_AQUI')){
+    btn.href = link;
+  } else {
+    btn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      alert('Este plan todavía no tiene enlace de pago configurado. Sustituye el valor en PAYMENT_LINKS dentro del código de esta página por tu enlace real de Stripe.');
+    });
+  }
+});
+</script>
+</body>
+</html>
