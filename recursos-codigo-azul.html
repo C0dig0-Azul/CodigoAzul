@@ -68,7 +68,28 @@
   .recurso-btn::before{content:"↓";font-size:15px;}
   .recurso-btn.proximamente{color:#8a94a6;cursor:default;}
   .recurso-btn.proximamente::before{content:"⏳";font-size:13px;}
-  .recursos-empty{font-family:var(--mono);font-size:13px;color:#5a6a82;padding:32px;text-align:center;border:1px dashed var(--line);border-radius:4px;}
+  .recursos-empty{font-family:var(--mono);font-size:13px;color:#5a6a82;padding:24px;text-align:center;border:1px dashed var(--line);border-radius:4px;}
+  .recurso-del{margin-top:2px;font-family:var(--mono);font-size:10.5px;color:var(--bad);background:none;border:none;cursor:pointer;text-decoration:underline;align-self:flex-start;}
+
+  /* TEMAS EN DESPLEGABLE (misma estructura que Tests, sin subepígrafes) */
+  .bloque-title{
+    font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.07em;
+    color:var(--paper);background:var(--blue);padding:8px 14px;border-radius:2px;margin:28px 0 10px;
+  }
+  .topics-list{display:flex;flex-direction:column;gap:2px;margin-bottom:6px;}
+  .topic-row{border:1px solid var(--line);border-radius:3px;background:#fff;overflow:hidden;}
+  .topic-row:hover{border-color:rgba(61,125,255,.35);}
+  .topic-header{display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;}
+  .topic-label{font-size:13.5px;font-weight:600;flex:1;line-height:1.4;}
+  .expand-btn{
+    font-family:var(--mono);font-size:11px;color:var(--blue);background:none;border:1px solid var(--line);
+    border-radius:2px;padding:3px 8px;cursor:pointer;flex-shrink:0;transition:transform .2s;
+  }
+  .expand-btn.open{transform:rotate(180deg);}
+  .topic-content{display:none;padding:16px;border-top:1px dashed var(--line);}
+  .topic-content.open{display:block;}
+  .add-recurso-form{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);}
+  .add-recurso-form .field{margin-bottom:12px;}
 
   /* ADD / GESTIONAR RECURSOS */
   .field{margin-bottom:16px;}
@@ -203,36 +224,16 @@
   </div>
 </header>
 
-<div class="tab-bar">
-  <div class="inner">
-    <button class="tab-btn active" data-tab="material">Material de estudio</button>
-    <button class="tab-btn teacher-tab" data-tab="gestionar" id="tabGestionar">⚙ Gestionar recursos</button>
-  </div>
-</div>
-
 <!-- MATERIAL -->
-<section class="panel active" id="panel-material">
+<section id="panel-material" style="max-width:1080px;margin:0 auto;padding:32px 24px 60px;">
   <h2>Material de estudio</h2>
-  <p class="sub">Resúmenes, esquemas y apuntes descargables organizados por tema. Actualizados periódicamente.</p>
-  <div id="recursosInner"></div>
-</section>
-
-<!-- GESTIONAR (solo profesor) -->
-<section class="panel" id="panel-gestionar">
-  <h2>Gestionar recursos</h2>
-  <p class="sub">Añade material nuevo o elimina el que ya no quieras que vean los alumnos.</p>
-  <div class="field"><label for="rTitulo">Título</label><input type="text" id="rTitulo" placeholder="Ej: Resumen Constitución"></div>
-  <div class="config-row">
-    <div class="field" style="flex:1;min-width:180px;margin-bottom:0;"><label for="rTipo">Tipo</label><select id="rTipo"><option>PDF</option><option>Esquema</option><option>Test</option><option>Apuntes</option><option>Tabla resumen</option></select></div>
-    <div class="field" style="flex:2;min-width:220px;margin-bottom:0;"><label for="rTema">Tema del temario</label><select id="rTema"></select></div>
-  </div>
-  <div class="field" style="margin-top:16px;"><label for="rDesc">Descripción breve</label><textarea id="rDesc" rows="2" placeholder="Ej: Esquema completo de estructura y derechos fundamentales."></textarea></div>
-  <div class="field"><label for="rUrl">Enlace de descarga (Google Drive u otro)</label><input type="text" id="rUrl" placeholder="https://drive.google.com/..."></div>
-  <button class="btn btn-primary" id="rSaveBtn">Guardar recurso</button>
-  <div class="custom-list">
-    <h3 style="font-family:var(--display);font-size:20px;text-transform:uppercase;margin-bottom:14px;">Recursos publicados</h3>
-    <div id="adminList"></div>
-  </div>
+  <p class="sub">Resúmenes, esquemas y apuntes descargables organizados por tema. Pulsa sobre un tema para ver sus recursos.</p>
+  <div class="bloque-title">Bloque I — Ciencias Jurídicas</div>
+  <div class="topics-list" id="grid-bloque1"></div>
+  <div class="bloque-title">Bloque II — Materias Específicas</div>
+  <div class="topics-list" id="grid-bloque2"></div>
+  <div class="bloque-title">Bloque III — Ciencias Sociales</div>
+  <div class="topics-list" id="grid-bloque3"></div>
 </section>
 
 <div id="toast"></div>
@@ -254,8 +255,65 @@
 </div><!-- /appShell -->
 
 <script>
-/* ===== DATOS ===== */
-const TEMAS_RECURSOS = ["Tema 1. El Derecho: concepto, normas jurídicas y nacionalidad española","Tema 2. La Constitución Española (I): derechos y deberes fundamentales","Tema 3. La Constitución Española (II): Corona, Cortes, Gobierno, Poder Judicial","Tema 4. La Unión Europea e instituciones","Tema 5. Organización y funcionamiento de la AGE","Tema 6. Los funcionarios públicos","Tema 7. El Ministerio del Interior","Tema 8. La Dirección General de la Policía","Tema 9. Ley Orgánica 2/1986 de FCSE","Tema 10. Entrada, circulación y residencia de extranjeros","Tema 11. Infracciones en materia de extranjería","Tema 12. La protección internacional","Tema 13. Seguridad privada","Tema 14. Ley Orgánica 4/2015 de seguridad ciudadana","Tema 15. Protección de Infraestructuras Críticas y Ciberseguridad","Tema 16. Derecho Penal Parte General","Tema 17. Derecho Penal Especial: homicidio, lesiones, libertad sexual","Tema 18. Delitos contra el patrimonio","Tema 19. Delitos contra el orden público","Tema 20. Delitos informáticos","Tema 21. Derecho Procesal Penal y detención","Tema 22. Estatuto de la víctima del delito","Tema 23. Políticas de igualdad y violencia de género","Tema 24. Introducción a la PRL","Tema 25. Marco normativo de la PRL","Tema 26. Protección de datos personales","Tema 27. Derechos Humanos","Tema 28. Globalización y antiglobalización","Tema 29. Actitudes y valores sociales","Tema 30. Principios éticos y contravalores","Tema 31. Inmigración y movimientos migratorios","Tema 32. Geografía humana y demografía","Tema 33. La seguridad y la delincuencia","Tema 34. Drogodependencias","Tema 35. Desarrollo sostenible","Tema 36. Gramática de la lengua española","Tema 37. Ortografía de la lengua española","Tema 38. Fundamentos de sistemas operativos","Tema 39. Redes informáticas","Tema 40. Inteligencia y OSINT","Tema 41. Ciberdelincuencia","Tema 42. Armas de fuego y balística","Tema 43. El vehículo prioritario","Tema 44. Seguridad en la conducción de vehículos prioritarios","Tema 45. PRL en Seguridad Vial","General — varios temas"];
+/* ===== DATOS (mismos temas y mismo orden que en Tests) ===== */
+const BLOQUES = {
+  juridicas: [
+    "Tema 1. El Derecho: concepto y acepciones. Las normas jurídicas: concepto, estructura, clases y caracteres. Principio de jerarquía normativa. La persona en sentido jurídico: capacidad jurídica y de obrar. Nacionalidad española. El domicilio. La vecindad civil.",
+    "Tema 2. La Constitución Española (I): estructura y caracteres. Valores y principios: Estado democrático, de derecho, social, Monarquía parlamentaria y Estado autonomista. Derechos y deberes fundamentales: libertades públicas y sus garantías. Suspensión de derechos. El Defensor del Pueblo.",
+    "Tema 3. La Constitución Española (II): La Corona. Las Cortes Generales. El Gobierno y la Administración. Relaciones Gobierno-Cortes. El Poder Judicial. Organización territorial del Estado. El Tribunal Constitucional. La reforma constitucional.",
+    "Tema 4. La Unión Europea: referencia histórica. El Derecho derivado. Instituciones de la UE. Cooperación policial internacional. El Tribunal Europeo de Derechos Humanos y el Tribunal de Justicia de la UE.",
+    "Tema 5. La organización y funcionamiento de la AGE: principios de organización, funcionamiento y relaciones con los ciudadanos; órganos superiores y directivos en la organización central. El Gobierno: composición, organización y funciones; el Gobierno en funciones.",
+    "Tema 6. Los funcionarios públicos: concepto y clases. Adquisición y pérdida de la condición de funcionario.",
+    "Tema 7. El Ministerio del Interior: estructura orgánica básica. La Secretaría de Estado de Seguridad: estructura y funciones.",
+    "Tema 8. La Dirección General de la Policía. Estructura orgánica y funciones de los servicios centrales y territoriales de la Policía Nacional. Funciones, escalas y categorías; sistemas de acceso; régimen disciplinario y situaciones administrativas.",
+    "Tema 9. La Ley Orgánica 2/1986, de FCSE: disposiciones generales; principios básicos de actuación; disposiciones estatutarias comunes. FCSE del Estado: derechos de representación colectiva; Consejo de Policía; Policía Judicial; Policías de CC.AA.; Policías Locales.",
+    "Tema 10. Entrada, libre circulación y residencia en España de ciudadanos de la UE y del EEE. Derechos y libertades de los extranjeros en España. La entrada y salida del territorio español. Autorización de estancia y de residencia.",
+    "Tema 11. Infracciones en materia de extranjería y régimen sancionador. Infracciones leves, graves y muy graves. Sanciones. Prescripción. Efectos de la expulsión, devolución y denegación de entrada.",
+    "Tema 12. La protección internacional. Reglas procedimentales para el reconocimiento. Menores y personas vulnerables. Centros de acogida a refugiados. Apátridas y desplazados.",
+    "Tema 13. Disposiciones generales en materia de seguridad privada. Coordinación. Empresas de seguridad privada y despachos de detectives privados. Personal de seguridad privada. Servicios y medidas de seguridad.",
+    "Tema 14. La Ley Orgánica 4/2015 de protección de la seguridad ciudadana. Disposiciones generales. Documentación e identificación personal. Mantenimiento y restablecimiento de la seguridad ciudadana. Potestades especiales de policía administrativa. Régimen sancionador.",
+    "Tema 15. Medidas para la Protección de Infraestructuras Críticas. El Catálogo Nacional de Infraestructuras Críticas. El Sistema de Protección de Infraestructuras Críticas. Ciberseguridad.",
+    "Tema 16. Derecho Penal Parte General: principios informadores. La infracción penal. Concepto material de delito. Grados de ejecución. Responsabilidad criminal. Consecuencias jurídicas. Vigencia temporal y espacial. Edad penal. Circunstancias modificativas.",
+    "Tema 17. Derecho Penal Especial: Del homicidio y sus formas. Del aborto. De las lesiones. Delitos contra la libertad. Torturas e integridad moral. Delitos contra la libertad sexual.",
+    "Tema 18. Delitos contra el patrimonio y orden socioeconómico. El hurto. El robo. La extorsión. Robo y hurto de uso de vehículos. Usurpación. Defraudaciones: estafas, apropiación indebida, defraudaciones de fluido.",
+    "Tema 19. Delitos contra el orden público: atentados contra la autoridad, sus agentes y funcionarios, resistencia y desobediencia. Desórdenes públicos. Tenencia, tráfico y depósito de armas, municiones o explosivos.",
+    "Tema 20. Delitos informáticos. Especial consideración al derecho a la intimidad. La prueba digital en el proceso penal.",
+    "Tema 21. Noción de Derecho Procesal Penal. Jurisdicción y competencia. Órganos de la jurisdicción penal. La denuncia. La detención: concepto, duración y derechos del detenido. Habeas corpus. Procedimiento integral de la detención policial. El Ministerio Fiscal. La Policía Judicial.",
+    "Tema 22. La Ley 4/2015 del Estatuto de la víctima del delito. Ámbito. Concepto de víctima. Derechos básicos. Protección de las víctimas. Medidas de protección.",
+    "Tema 23. Políticas de igualdad en la AGE. LO 3/2007 para la igualdad efectiva de mujeres y hombres. Planes para la igualdad. Políticas contra la violencia de género. LO 1/2004 de medidas de protección integral contra la violencia de género. Integración de personas con discapacidad. Ley 4/2023 para las personas trans y derechos LGTBI.",
+    "Tema 24. Introducción a la Prevención de Riesgos Laborales. Concepto de trabajo, salud y condiciones de trabajo. Riesgos laborales. Principios generales de la actividad preventiva. Prevención y protección. Consecuencias de los riesgos. Daños a la salud.",
+    "Tema 25. Marco normativo básico en prevención de riesgos laborales: Ley 31/1995; RD 39/1997; RD 2/2006 sobre PRL en el CNP; RD 67/2010 sobre adaptación en la AGE. Derechos y deberes básicos en materia de PRL.",
+    "Tema 26. Protección de datos de carácter personal: LO 3/2018 de Protección de Datos Personales y garantía de los derechos digitales. LO 7/2021 de protección de datos para fines de prevención, detección, investigación y enjuiciamiento de infracciones penales."
+  ],
+  sociales: [
+    "Tema 27. Derechos Humanos. Declaración Universal de Derechos Humanos. Convenio Europeo para la Protección de los Derechos Humanos. Convenio contra la Tortura. Protocolo facultativo de la Convención contra la tortura. Mecanismo Nacional de Prevención de la Tortura del Defensor del Pueblo.",
+    "Tema 28. Globalización y antiglobalización: conceptos, características y consecuencias. Reacciones a la globalización. El Movimiento Antiglobalización: organizaciones, objetivos e historia. El Foro Social Mundial.",
+    "Tema 29. Actitudes y valores sociales. Formación de actitudes: concepto, componentes y funciones. Estereotipos, prejuicios y discriminación. Actitudes de la personalidad autoritaria: xenofobia y dogmatismo. Los grupos sociales.",
+    "Tema 30. Principios éticos de la sociedad actual. Transmisión de valores: proceso de socialización. Libertad-responsabilidad. Igualdad-solidaridad. Tolerancia. Contravalores: racismo, fanatismo, fundamentalismo, sectarismo, hooliganismo. Delitos de odio.",
+    "Tema 31. Inmigración. Movimientos migratorios: concepto y causas. Tipos y efectos. Las grandes migraciones en la historia. Las migraciones en la actualidad. Integración social como factor de cohesión social.",
+    "Tema 32. Concepto de geografía humana. La ciudad. Población, estructura y grupos sociales. La demografía: densidad, tasas de natalidad y mortalidad, crecimiento vegetativo. La sociedad de masas. Contaminación y protección del medio ambiente.",
+    "Tema 33. La seguridad: concepto. Seguridad individual y colectiva. Seguridad pública y privada. La inseguridad. Teorías explicativas de la delincuencia: modelos explicativos y clases de delincuencia.",
+    "Tema 34. Drogodependencias. Conceptos de droga, consumidor, métodos de administración, adicción, dependencia, tolerancia, politoxicomanías. Clasificación de las drogas. Últimas tendencias en el consumo de drogas en nuestra sociedad.",
+    "Tema 35. El desarrollo sostenible: concepto. Coordinación y cooperación internacional. Sociedad y desarrollo sostenible. Instrumentos de gestión ambiental.",
+    "Tema 36. Gramática de la lengua española. Morfología: sufijos, sustantivos, pronombres, adjetivos, adverbios, verbos, preposiciones y conjunciones. Sintaxis: la oración, sus partes y tipos. Análisis sintáctico.",
+    "Tema 37. Ortografía de la lengua española. Reglas ortográficas. Uso de las letras o grafemas. Uso de la tilde, signos ortográficos y letras mayúsculas y minúsculas. Representación gráfica de las unidades léxicas. Ortografía de expresiones de otras lenguas, nombres propios y expresiones numéricas."
+  ],
+  tecnicas: [
+    "Tema 38. Fundamentos de sistemas operativos: funciones. Tipologías: MS/DOS, UNIX, Linux, Windows, MAC OS. Sistemas operativos móviles: iOS, Android. Sistemas de almacenamiento. Sistemas de archivos.",
+    "Tema 39. Redes informáticas: Modelo OSI. Modelo TCP/IP. Dispositivos de red: hubs, switches, routers, firewall, DHCP, DNS, proxy. Direccionamiento IP: clases de redes; IPv4; IPv6.",
+    "Tema 40. Inteligencia: dato, información e inteligencia. Tipologías de Inteligencia. Ciclo de la Inteligencia. Inteligencia de Fuentes Abiertas (OSINT). Surface Web. Deep Web. Dark Web. Dark Net.",
+    "Tema 41. Ciberdelincuencia y agentes de la amenaza: Botnet, Business E-mail Compromise, cartas nigerianas, Cryptojacking, denegación de servicio, ingeniería social, inyección SQL, malware, pharming, phishing, spear phishing, ransomware, skimming, spoofing, spyware, troyano, XSS, Zero-day. Cibercriminales. Crimen as Service. Hacktivistas. Insider threat. APTs. Cyber Kill Chain.",
+    "Tema 42. Origen de las armas de fuego. Definición, clasificación, categorías y funcionamiento. Reglamento de armas. Cartucho: definición y componentes. Armas prohibidas. Documentación para tenencia y porte. Balística forense.",
+    "Tema 43. El vehículo prioritario: definición. Facultades de los conductores. Comportamiento de los demás conductores ante vehículos prioritarios. La conducción en situación de emergencia. Utilización de las señales de emergencia.",
+    "Tema 44. La seguridad en la conducción de vehículos prioritarios. Seguridad Activa y Pasiva: definición y sistemas en turismo y motocicleta. Influencia de los sistemas de seguridad en los accidentes. Repercusión en la conducción policial y traslado de detenidos.",
+    "Tema 45. Prevención de Riesgos Laborales en Seguridad Vial. Factores del tráfico y siniestralidad vial: factor humano, ambiental y vehículo. Riesgos laborales en la conducción de vehículos prioritarios. Equipos de Protección Individual. Estrategias y mantenimiento preventivo."
+  ]
+};
+const DISPLAY_BLOQUES = {
+  bloque1: [...BLOQUES.juridicas.slice(0,6), ...BLOQUES.juridicas.slice(15,26)],
+  bloque2: [...BLOQUES.juridicas.slice(6,15), ...BLOQUES.sociales.slice(9,11), ...BLOQUES.tecnicas],
+  bloque3: BLOQUES.sociales.slice(0,9)
+};
 
 /* Misma contraseña de profesor y mismo listado de alumnos que en Tests, para que
    una única cuenta creada por la profesora sirva en ambas plataformas. */
@@ -306,7 +364,7 @@ function enterApp(role, alumnoNombre, alumnoEmail){
     changeLink.style.display='inline-block';
   }
   document.querySelectorAll('.teacher-tab').forEach(t=>{ t.style.display = role==='profesora' ? 'block' : 'none'; });
-  renderRecursos();
+  buildAllAccordions();
 }
 
 document.getElementById('entrarAlumnoBtn').addEventListener('click',()=>{
@@ -343,7 +401,6 @@ document.getElementById('logoutBtn').addEventListener('click',()=>{
   document.getElementById('profPass').value='';
   document.getElementById('alumnoEmail').value='';
   document.getElementById('alumnoPass').value='';
-  switchTab('material');
 });
 
 /* Cambiar contraseña (alumno/a) */
@@ -383,64 +440,95 @@ document.getElementById('savePwdBtn').addEventListener('click',()=>{
   }
 })();
 
-/* ===== TABS ===== */
-function switchTab(name){
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===name));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+name));
-  if(name==='gestionar'){ buildTemaSelect(); renderAdminList(); }
-}
-document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
-
-/* ===== RECURSOS (vista alumno/profesor) ===== */
-function renderRecursos(){
-  const container=document.getElementById('recursosInner');
-  const recursos=getRecursos();
-  if(!recursos.length){ container.innerHTML='<div class="recursos-empty">Próximamente habrá recursos disponibles para descarga.</div>'; return; }
-  const porTema={};
-  recursos.forEach(r=>{ if(!porTema[r.tema]) porTema[r.tema]=[]; porTema[r.tema].push(r); });
-  container.innerHTML=Object.entries(porTema).map(([tema,items])=>`
-    <div class="recursos-bloque">
-      <div class="recursos-bloque-titulo">${tema}</div>
-      <div class="recursos-grid">${items.map(r=>`
-        <div class="recurso-card">
-          <div class="recurso-tipo">${r.tipo}</div>
-          <div class="recurso-titulo">${r.titulo}</div>
-          <div class="recurso-desc">${r.desc}</div>
-          <a class="recurso-btn${!r.url||r.url==='#'?' proximamente':''}" href="${r.url||'#'}" target="_blank" rel="noopener">${!r.url||r.url==='#'?'Próximamente':'Descargar'}</a>
-        </div>`).join('')}
+/* ===== TEMAS EN DESPLEGABLE (misma estructura que Tests, sin subepígrafes) ===== */
+function buildTopicAccordion(containerId, topics){
+  const g=document.getElementById(containerId);
+  g.innerHTML='';
+  topics.forEach(t=>{
+    const row=document.createElement('div');
+    row.className='topic-row';
+    const shortLabel=t.split('. ')[0]+'. '+(t.split('. ')[1]||'');
+    row.innerHTML=`
+      <div class="topic-header">
+        <span class="topic-label">${shortLabel}</span>
+        <button class="expand-btn" type="button" title="Ver recursos de este tema">▼</button>
       </div>
-    </div>`).join('');
+      <div class="topic-content"></div>`;
+    const header=row.querySelector('.topic-header');
+    const btn=row.querySelector('.expand-btn');
+    const content=row.querySelector('.topic-content');
+    header.addEventListener('click',()=>{
+      const opening=!content.classList.contains('open');
+      content.classList.toggle('open');
+      btn.classList.toggle('open');
+      if(opening){ renderTopicContent(t, content); }
+    });
+    g.appendChild(row);
+  });
 }
 
-/* ===== GESTIONAR RECURSOS (solo profesor) ===== */
-function buildTemaSelect(){ document.getElementById('rTema').innerHTML=TEMAS_RECURSOS.map(t=>`<option value="${t}">${t}</option>`).join(''); }
-
-function renderAdminList(){
-  const list=document.getElementById('adminList');
-  const recursos=getRecursos();
-  if(!recursos.length){ list.innerHTML='<div class="empty-state">Aún no hay recursos añadidos.</div>'; return; }
-  list.innerHTML=recursos.map((r,i)=>`
-    <div class="custom-item">
-      <div><strong>${r.titulo}</strong> <span style="font-family:var(--mono);font-size:11px;color:var(--brass);">${r.tipo}</span><div class="custom-item-tema">${r.tema}</div></div>
-      <button class="del-btn" data-idx="${i}">Eliminar</button>
-    </div>`).join('');
-  list.querySelectorAll('.del-btn').forEach(b=>b.addEventListener('click',()=>{
-    const r=getRecursos(); r.splice(parseInt(b.dataset.idx),1); saveRecursos(r);
-    renderAdminList(); renderRecursos(); toast('Recurso eliminado.');
-  }));
+function buildAllAccordions(){
+  buildTopicAccordion('grid-bloque1', DISPLAY_BLOQUES.bloque1);
+  buildTopicAccordion('grid-bloque2', DISPLAY_BLOQUES.bloque2);
+  buildTopicAccordion('grid-bloque3', DISPLAY_BLOQUES.bloque3);
 }
 
-document.getElementById('rSaveBtn').addEventListener('click',()=>{
-  const titulo=document.getElementById('rTitulo').value.trim();
-  const tipo=document.getElementById('rTipo').value;
-  const tema=document.getElementById('rTema').value;
-  const desc=document.getElementById('rDesc').value.trim();
-  const url=document.getElementById('rUrl').value.trim();
-  if(!titulo||!desc){ toast('Rellena al menos el título y la descripción.'); return; }
-  const r=getRecursos(); r.push({titulo,tipo,tema,desc,url:url||'#'}); saveRecursos(r);
-  document.getElementById('rTitulo').value=''; document.getElementById('rDesc').value=''; document.getElementById('rUrl').value='';
-  renderAdminList(); renderRecursos(); toast('✓ Recurso publicado.');
-});
+/* Contenido de un tema: recursos existentes + (si es profesor) formulario para añadir más */
+function renderTopicContent(topic, container){
+  const recursos=getRecursos().filter(r=>r.tema===topic);
+  let html='';
+  if(recursos.length){
+    html+=`<div class="recursos-grid">`+recursos.map(r=>`
+      <div class="recurso-card">
+        <div class="recurso-tipo">${r.tipo}</div>
+        <div class="recurso-titulo">${r.titulo}</div>
+        <div class="recurso-desc">${r.desc}</div>
+        <a class="recurso-btn${!r.url||r.url==='#'?' proximamente':''}" href="${r.url||'#'}" target="_blank" rel="noopener">${!r.url||r.url==='#'?'Próximamente':'Descargar'}</a>
+        ${currentRole==='profesora'?`<button class="recurso-del" data-id="${r.id}">Eliminar recurso</button>`:''}
+      </div>`).join('')+`</div>`;
+  } else {
+    html+=`<div class="recursos-empty">Todavía no hay recursos en este tema.</div>`;
+  }
+  if(currentRole==='profesora'){
+    html+=`
+      <div class="add-recurso-form">
+        <div class="field"><label>Título</label><input type="text" class="rTitulo" placeholder="Ej: Resumen del tema"></div>
+        <div class="field"><label>Tipo</label>
+          <select class="rTipo"><option>PDF</option><option>Esquema</option><option>Test</option><option>Apuntes</option><option>Tabla resumen</option></select>
+        </div>
+        <div class="field"><label>Descripción breve</label><textarea class="rDesc" rows="2" placeholder="Ej: Esquema completo de este tema"></textarea></div>
+        <div class="field"><label>Enlace de descarga (Google Drive u otro)</label><input type="text" class="rUrl" placeholder="https://drive.google.com/..."></div>
+        <button class="btn btn-primary add-btn" type="button">+ Añadir recurso a este tema</button>
+      </div>`;
+  }
+  container.innerHTML=html;
+
+  if(currentRole==='profesora'){
+    container.querySelectorAll('.recurso-del').forEach(b=>b.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      const arr=getRecursos().filter(r=>r.id!==b.dataset.id);
+      saveRecursos(arr);
+      toast('Recurso eliminado.');
+      renderTopicContent(topic, container);
+    }));
+    const addBtn=container.querySelector('.add-btn');
+    addBtn.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      const titulo=container.querySelector('.rTitulo').value.trim();
+      const tipo=container.querySelector('.rTipo').value;
+      const desc=container.querySelector('.rDesc').value.trim();
+      const url=container.querySelector('.rUrl').value.trim();
+      if(!titulo||!desc){ toast('Rellena al menos el título y la descripción.'); return; }
+      const arr=getRecursos();
+      arr.push({ id:'r-'+Date.now()+'-'+Math.random().toString(36).slice(2,7), titulo, tipo, tema:topic, desc, url:url||'#' });
+      saveRecursos(arr);
+      toast('✓ Recurso publicado.');
+      renderTopicContent(topic, container);
+    });
+    // evitar que un clic dentro del formulario cierre el desplegable
+    container.addEventListener('click', e=>e.stopPropagation());
+  }
+}
 </script>
 </body>
 </html>
